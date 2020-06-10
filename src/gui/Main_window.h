@@ -7,4 +7,6 @@ class Main_window : public QMainWindow
 
 public:
     Main_window();
+
+    void setup_workspace();
 };
