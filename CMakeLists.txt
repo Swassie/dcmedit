@@ -25,6 +25,8 @@ add_executable(dcm-viewer
 
 set_target_properties(dcm-viewer PROPERTIES CXX_STANDARD 17)
 target_compile_options(dcm-viewer PRIVATE -Wall -Wextra -pedantic)
-target_include_directories(dcm-viewer PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(dcm-viewer PRIVATE src)
 
 target_link_libraries(dcm-viewer Qt5::Widgets)
+
+add_subdirectory(test)
