@@ -1,6 +1,5 @@
 #include "logging/Log.h"
 #include "logging/Logger.h"
-#include <iostream>
 #include <stdexcept>
 
 Log* g_log;
@@ -62,14 +61,13 @@ std::string to_string(Log_level log_level) {
 }
 
 void Log::log(std::string message, Log_level log_level) {
-    message = "[" + to_string(log_level) + "]: " + message;
     if(!g_log) {
-        std::cerr << "Log not created. Message: " << message << std::endl;
         return;
     }
     if(static_cast<int>(log_level) < static_cast<int>(g_log->m_log_level)) {
         return;
     }
+    message = "[" + to_string(log_level) + "]: " + message;
     for(const auto& logger : g_log->m_loggers) {
         logger->log(message, log_level);
     }

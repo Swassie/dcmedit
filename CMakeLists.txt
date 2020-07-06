@@ -5,9 +5,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(DCMTK REQUIRED)
 
 add_executable(dcm-viewer
   src/main.cpp
+  src/Dataset.cpp
+  src/Dataset.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/run_gui.cpp
@@ -25,8 +28,15 @@ add_executable(dcm-viewer
 
 set_target_properties(dcm-viewer PROPERTIES CXX_STANDARD 17)
 target_compile_options(dcm-viewer PRIVATE -Wall -Wextra -pedantic)
-target_include_directories(dcm-viewer PRIVATE src)
 
-target_link_libraries(dcm-viewer Qt5::Widgets)
+target_include_directories(dcm-viewer PRIVATE
+  src
+  "${DCMTK_INCLUDE_DIRS}"
+)
+
+target_link_libraries(dcm-viewer
+  Qt5::Widgets
+  "${DCMTK_LIBRARIES}"
+)
 
 add_subdirectory(test)
