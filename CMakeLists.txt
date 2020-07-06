@@ -16,6 +16,11 @@ add_executable(dcm-viewer
   src/gui/View.h
   src/gui/View_area.cpp
   src/gui/View_area.h
+  src/logging/Log.cpp
+  src/logging/Log.h
+  src/logging/Logger.h
+  src/logging/Console_logger.cpp
+  src/logging/Console_logger.h
 )
 
 set_target_properties(dcm-viewer PROPERTIES CXX_STANDARD 17)
