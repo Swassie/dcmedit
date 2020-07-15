@@ -11,19 +11,25 @@ add_executable(dcm-viewer
   src/main.cpp
   src/Dataset.cpp
   src/Dataset.h
+  src/gui/Image_view.cpp
+  src/gui/Image_view.h
+  src/gui/Menu_bar.cpp
+  src/gui/Menu_bar.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
-  src/gui/View.cpp
-  src/gui/View.h
-  src/gui/View_area.cpp
-  src/gui/View_area.h
+  src/gui/Start_view.cpp
+  src/gui/Start_view.h
+  src/gui/Workspace_view.cpp
+  src/gui/Workspace_view.h
   src/logging/Log.cpp
   src/logging/Log.h
   src/logging/Logger.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
+  src/util/Filesystem.cpp
+  src/util/Filesystem.h
 )
 
 set_target_properties(dcm-viewer PROPERTIES CXX_STANDARD 17)
@@ -37,6 +43,7 @@ target_include_directories(dcm-viewer PRIVATE
 target_link_libraries(dcm-viewer
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
+  stdc++fs
 )
 
 add_subdirectory(test)

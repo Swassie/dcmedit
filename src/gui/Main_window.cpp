@@ -1,38 +1,52 @@
 #include "Main_window.h"
+#include <dcmtk/dcmdata/dctk.h>
+#include <dcmtk/dcmimgle/dcmimage.h>
+#include <QFileDialog>
 #include <QMenuBar>
-#include "View_area.h"
+#include "gui/Menu_bar.h"
+#include "gui/Start_view.h"
+#include "gui/Workspace_view.h"
+#include "logging/Log.h"
+#include "util/Filesystem.h"
 
 Main_window::Main_window() {
     setMinimumSize(QSize(800, 600));
 }
 
+void Main_window::setup_start() {
+    auto start_view = new Start_view(*this);
+    start_view->setup();
+
+    setMenuBar(new QMenuBar(this));
+    Menu_bar::create_file_menu(*this);
+
+    setCentralWidget(start_view);
+}
+
 void Main_window::setup_workspace() {
-    View_area* view_area = new View_area;
-    QMenu* view_menu = menuBar()->addMenu("&View");
+    auto workspace_view = new Workspace_view(*m_dicom_file);
+    workspace_view->setup();
 
-    view_menu->addAction("1 view", [view_area] {
-        view_area->set_view_count(1);
-    }, QKeySequence("Ctrl+1"));
+    setMenuBar(new QMenuBar(this));
+    Menu_bar::create_file_menu(*this);
+    Menu_bar::create_view_menu(*this, *workspace_view);
 
-    view_menu->addAction("2 views", [view_area] {
-        view_area->set_view_count(2);
-    }, QKeySequence("Ctrl+2"));
+    setCentralWidget(workspace_view);
+}
 
-    view_menu->addAction("3 views", [view_area] {
-        view_area->set_view_count(3);
-    }, QKeySequence("Ctrl+3"));
+void Main_window::open_file() {
+    std::string file_path = QFileDialog::getOpenFileName(this, "Open file").toStdString();
+    if (file_path.empty()) {
+        return;
+    }
+    auto file_format = std::make_unique<DcmFileFormat>();
+    OFCondition status = file_format->loadFile(file_path.c_str());
 
-    view_menu->addAction("4 views", [view_area] {
-        view_area->set_view_count(4);
-    }, QKeySequence("Ctrl+4"));
-
-    view_menu->addAction("5 views", [view_area] {
-        view_area->set_view_count(5);
-    }, QKeySequence("Ctrl+5"));
-
-    view_menu->addAction("6 views", [view_area] {
-        view_area->set_view_count(6);
-    }, QKeySequence("Ctrl+6"));
-
-    setCentralWidget(view_area);
+    if(!status.good()) {
+        Log::info("Could not load file: " + file_path +
+                  ". Reason: " + status.text());
+        return;
+    }
+    m_dicom_file = std::move(file_format);
+    setup_workspace();
 }

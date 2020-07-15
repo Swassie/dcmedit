@@ -1,14 +1,16 @@
-#include "View_area.h"
+#include "Workspace_view.h"
+#include "gui/Image_view.h"
 #include <cassert>
 #include <QGridLayout>
-#include "View.h"
 
-View_area::View_area()
-{
-    set_view_count(6);
+Workspace_view::Workspace_view(DcmFileFormat& dicom_file)
+    : m_dicom_file(dicom_file) {}
+
+void Workspace_view::setup() {
+    set_view_count(2);
 }
 
-void View_area::set_view_count(size_t count) {
+void Workspace_view::set_view_count(const size_t count) {
     assert(count >= 1 && count <= 6);
     size_t current_count = m_views.size();
     if(count == current_count) {
@@ -17,7 +19,7 @@ void View_area::set_view_count(size_t count) {
     delete layout();
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            m_views.push_back(new View);
+            m_views.push_back(new Image_view(m_dicom_file));
         }
     }
     else {
@@ -29,7 +31,7 @@ void View_area::set_view_count(size_t count) {
     create_layout();
 }
 
-void View_area::create_layout() {
+void Workspace_view::create_layout() {
     switch(m_views.size()) {
     case 1:
         create_1_view_layout();
@@ -54,25 +56,25 @@ void View_area::create_layout() {
     }
 }
 
-void View_area::create_1_view_layout() {
+void Workspace_view::create_1_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
 }
 
-void View_area::create_2_view_layout() {
+void Workspace_view::create_2_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
 }
 
-void View_area::create_3_view_layout() {
+void Workspace_view::create_3_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
     layout->addWidget(m_views[2], 0, 2);
 }
 
-void View_area::create_4_view_layout() {
+void Workspace_view::create_4_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
@@ -80,7 +82,7 @@ void View_area::create_4_view_layout() {
     layout->addWidget(m_views[3], 1, 1);
 }
 
-void View_area::create_5_view_layout() {
+void Workspace_view::create_5_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
@@ -89,7 +91,7 @@ void View_area::create_5_view_layout() {
     layout->addWidget(m_views[4], 0, 2, 2, 1);
 }
 
-void View_area::create_6_view_layout() {
+void Workspace_view::create_6_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);

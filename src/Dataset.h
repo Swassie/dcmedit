@@ -8,7 +8,7 @@
 class Dataset
 {
 public:
-    static Dataset load_files(const std::vector<std::string>& file_paths);
+    static std::unique_ptr<Dataset> load_files(const std::vector<std::string>& file_paths);
 
     std::vector<DcmFileFormat*> get_files();
 

@@ -8,11 +8,11 @@ SCENARIO("Testing load_files") {
         std::vector<std::string> file_paths{TESTDATA "Dataset/1.dcm"};
 
 		WHEN("loading it") {
-            Dataset dataset = Dataset::load_files(file_paths);
+            std::unique_ptr<Dataset> dataset = Dataset::load_files(file_paths);
 
 			THEN("it is successfully loaded") {
 
-                std::vector<DcmFileFormat*> dataset_files = dataset.get_files();
+                std::vector<DcmFileFormat*> dataset_files = dataset->get_files();
 				REQUIRE(dataset_files.size() == 1);
 			}
 		}
@@ -31,12 +31,12 @@ SCENARIO("Testing load_files") {
 		WHEN("loading them") {
             // Suppress log errors about loading non-dicom file.
             OFLog::configure(OFLogger::OFF_LOG_LEVEL);
-            Dataset dataset = Dataset::load_files(file_paths);
+            std::unique_ptr<Dataset> dataset = Dataset::load_files(file_paths);
             OFLog::configure();
 
 			THEN("only the files belonging to the same series are loaded") {
 
-                std::vector<DcmFileFormat*> dataset_files = dataset.get_files();
+                std::vector<DcmFileFormat*> dataset_files = dataset->get_files();
 				REQUIRE(dataset_files.size() == 3);
 
                 OFString series_uid_a;

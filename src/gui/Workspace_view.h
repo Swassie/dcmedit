@@ -1,14 +1,16 @@
 #pragma once
 #include <vector>
 #include <QWidget>
-#include "View.h"
 
-class View_area : public QWidget
+class DcmFileFormat;
+
+class Workspace_view : public QWidget
 {
     Q_OBJECT
 
 public:
-    View_area();
+    Workspace_view(DcmFileFormat&);
+    void setup();
 
     void set_view_count(size_t count);
 
@@ -21,5 +23,6 @@ private:
     void create_5_view_layout();
     void create_6_view_layout();
 
-    std::vector<View*> m_views;
+    DcmFileFormat& m_dicom_file;
+    std::vector<QWidget*> m_views;
 };
