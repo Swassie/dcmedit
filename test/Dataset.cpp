@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "Dataset.h"
+
 #include <dcmtk/oflog/oflog.h>
 
 SCENARIO("Testing load_files") {

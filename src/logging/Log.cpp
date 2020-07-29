@@ -1,5 +1,7 @@
 #include "logging/Log.h"
+
 #include "logging/Logger.h"
+
 #include <stdexcept>
 
 Log* g_log;

@@ -1,6 +1,5 @@
 #pragma once
 #include <dcmtk/dcmdata/dctk.h>
-#include <dcmtk/dcmimgle/dcmimage.h>
 #include <memory>
 #include <string>
 #include <vector>

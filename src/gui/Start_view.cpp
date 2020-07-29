@@ -1,7 +1,9 @@
-#include "Start_view.h"
-#include <QPushButton>
-#include <QGridLayout>
+#include "gui/Start_view.h"
+
 #include "gui/Main_window.h"
+
+#include <QGridLayout>
+#include <QPushButton>
 
 Start_view::Start_view(Main_window& main_window)
     : m_main_window(main_window) {}

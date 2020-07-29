@@ -1,6 +1,8 @@
-#include "run_gui.h"
+#include "gui/run_gui.h"
+
+#include "gui/Main_window.h"
+
 #include <QApplication>
-#include "Main_window.h"
 
 int run_gui(int argc, char** argv) {
     QApplication app(argc, argv);

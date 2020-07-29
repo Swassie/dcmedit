@@ -1,5 +1,7 @@
-#include "Workspace_view.h"
+#include "gui/Workspace_view.h"
+
 #include "gui/Image_view.h"
+
 #include <cassert>
 #include <QGridLayout>
 

@@ -1,7 +1,9 @@
-#include "Menu_bar.h"
-#include <QMenuBar>
+#include "gui/Menu_bar.h"
+
 #include "gui/Main_window.h"
 #include "gui/Workspace_view.h"
+
+#include <QMenuBar>
 
 void Menu_bar::create_file_menu(Main_window& main_window) {
     QMenu* file_menu = main_window.menuBar()->addMenu("&File");

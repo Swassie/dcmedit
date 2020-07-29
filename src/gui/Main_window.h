@@ -1,7 +1,7 @@
 #pragma once
+#include <dcmtk/dcmdata/dctk.h>
 #include <memory>
 #include <QMainWindow>
-#include <dcmtk/dcmdata/dctk.h>
 
 class Main_window : public QMainWindow
 {

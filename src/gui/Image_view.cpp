@@ -1,4 +1,5 @@
-#include "Image_view.h"
+#include "gui/Image_view.h"
+
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
 #include <QImage>

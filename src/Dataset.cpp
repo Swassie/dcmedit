@@ -1,4 +1,5 @@
 #include "Dataset.h"
+
 #include "logging/Log.h"
 
 std::unique_ptr<Dataset> Dataset::load_files(const std::vector<std::string>& file_paths) {

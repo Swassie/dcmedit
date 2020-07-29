@@ -1,13 +1,15 @@
-#include "Main_window.h"
-#include <dcmtk/dcmdata/dctk.h>
-#include <dcmtk/dcmimgle/dcmimage.h>
-#include <QFileDialog>
-#include <QMenuBar>
+#include "gui/Main_window.h"
+
 #include "gui/Menu_bar.h"
 #include "gui/Start_view.h"
 #include "gui/Workspace_view.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
+
+#include <dcmtk/dcmdata/dctk.h>
+#include <dcmtk/dcmimgle/dcmimage.h>
+#include <QFileDialog>
+#include <QMenuBar>
 
 Main_window::Main_window() {
     setMinimumSize(QSize(800, 600));
