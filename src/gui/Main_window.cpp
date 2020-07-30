@@ -16,8 +16,8 @@ Main_window::Main_window() {
 }
 
 void Main_window::setup_start() {
-    auto start_view = new Start_view(*this);
-    start_view->setup();
+    auto start_view = new Start_view();
+    start_view->setup(*this);
 
     setMenuBar(new QMenuBar(this));
     Menu_bar::create_file_menu(*this);

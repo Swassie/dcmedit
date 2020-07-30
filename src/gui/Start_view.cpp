@@ -5,13 +5,10 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-Start_view::Start_view(Main_window& main_window)
-    : m_main_window(main_window) {}
-
-void Start_view::setup() {
+void Start_view::setup(Main_window& main_window) {
     QPushButton* button = new QPushButton("Open...", this);
     connect(button, &QPushButton::clicked,
-            &m_main_window, &Main_window::open_file);
+            &main_window, &Main_window::open_file);
 
     QGridLayout* layout = new QGridLayout(this);
     QMargins margins = layout->contentsMargins();
