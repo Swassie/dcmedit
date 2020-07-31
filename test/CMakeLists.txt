@@ -1,10 +1,15 @@
 add_executable(test-runner
   ../src/Dataset.cpp
+  ../src/gui/Gui_util.cpp
+  ../src/gui/Pan_tool.cpp
+  ../src/gui/Zoom_tool.cpp
   ../src/logging/Log.cpp
-  ../src/logging/Log.h
   ../third-party/catch.hpp
+  # Test files
   main.cpp
   Dataset.cpp
+  gui/Pan_tool_test.cpp
+  gui/Zoom_tool_test.cpp
 )
 
 set_target_properties(test-runner PROPERTIES CXX_STANDARD 17)
@@ -17,4 +22,7 @@ target_include_directories(test-runner PRIVATE
   "${DCMTK_INCLUDE_DIRS}"
 )
 
-target_link_libraries(test-runner "${DCMTK_LIBRARIES}")
+target_link_libraries(test-runner
+  Qt5::Widgets
+  "${DCMTK_LIBRARIES}"
+)

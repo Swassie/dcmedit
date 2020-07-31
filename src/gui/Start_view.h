@@ -5,8 +5,8 @@ class Main_window;
 
 class Start_view : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  void setup(Main_window&);
+    void setup(Main_window&);
 };

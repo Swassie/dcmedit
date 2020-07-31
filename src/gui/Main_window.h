@@ -1,4 +1,6 @@
 #pragma once
+#include "gui/Tool_bar.h"
+
 #include <dcmtk/dcmdata/dctk.h>
 #include <memory>
 #include <QMainWindow>
@@ -17,4 +19,5 @@ public:
 private:
 
     std::unique_ptr<DcmFileFormat> m_dicom_file;
+    std::unique_ptr<Tool_bar> m_tool_bar;
 };

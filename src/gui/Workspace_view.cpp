@@ -1,12 +1,10 @@
 #include "gui/Workspace_view.h"
 
-#include "gui/Image_view.h"
-
 #include <cassert>
 #include <QGridLayout>
 
-Workspace_view::Workspace_view(DcmFileFormat& dicom_file)
-    : m_dicom_file(dicom_file) {}
+Workspace_view::Workspace_view(const View_factory& view_factory)
+    : m_view_factory(view_factory) {}
 
 void Workspace_view::setup() {
     set_view_count(2);
@@ -21,7 +19,7 @@ void Workspace_view::set_view_count(const size_t count) {
     delete layout();
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            m_views.push_back(new Image_view(m_dicom_file));
+            m_views.push_back(m_view_factory.make_view().release());
         }
     }
     else {

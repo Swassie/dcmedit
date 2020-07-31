@@ -1,15 +1,15 @@
 #pragma once
+#include "gui/View_factory.h"
+
 #include <QWidget>
 #include <vector>
-
-class DcmFileFormat;
 
 class Workspace_view : public QWidget
 {
     Q_OBJECT
 
 public:
-    Workspace_view(DcmFileFormat&);
+    Workspace_view(const View_factory&);
     void setup();
 
     void set_view_count(size_t count);
@@ -23,6 +23,6 @@ private:
     void create_5_view_layout();
     void create_6_view_layout();
 
-    DcmFileFormat& m_dicom_file;
+    View_factory m_view_factory;
     std::vector<QWidget*> m_views;
 };

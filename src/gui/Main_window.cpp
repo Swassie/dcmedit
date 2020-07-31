@@ -2,6 +2,7 @@
 
 #include "gui/Menu_bar.h"
 #include "gui/Start_view.h"
+#include "gui/View_factory.h"
 #include "gui/Workspace_view.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
@@ -26,7 +27,11 @@ void Main_window::setup_start() {
 }
 
 void Main_window::setup_workspace() {
-    auto workspace_view = new Workspace_view(*m_dicom_file);
+    removeToolBar(m_tool_bar.get());
+    m_tool_bar = std::make_unique<Tool_bar>();
+    addToolBar(m_tool_bar.get());
+    View_factory view_factory(*m_dicom_file, *m_tool_bar);
+    auto workspace_view = new Workspace_view(view_factory);
     workspace_view->setup();
 
     setMenuBar(new QMenuBar(this));

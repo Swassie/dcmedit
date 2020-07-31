@@ -11,18 +11,29 @@ add_executable(dcm-viewer
   src/main.cpp
   src/Dataset.cpp
   src/Dataset.h
+  src/gui/Gui_util.cpp
+  src/gui/Gui_util.h
   src/gui/Image_view.cpp
   src/gui/Image_view.h
   src/gui/Menu_bar.cpp
   src/gui/Menu_bar.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
+  src/gui/Pan_tool.cpp
+  src/gui/Pan_tool.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
   src/gui/Start_view.cpp
   src/gui/Start_view.h
+  src/gui/Tool.h
+  src/gui/Tool_bar.cpp
+  src/gui/Tool_bar.h
+  src/gui/View_factory.cpp
+  src/gui/View_factory.h
   src/gui/Workspace_view.cpp
   src/gui/Workspace_view.h
+  src/gui/Zoom_tool.cpp
+  src/gui/Zoom_tool.h
   src/logging/Log.cpp
   src/logging/Log.h
   src/logging/Logger.h
