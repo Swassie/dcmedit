@@ -1,17 +1,20 @@
 #include "gui/Workspace_view.h"
 
+#include <algorithm>
 #include <cassert>
 #include <QGridLayout>
 
 Workspace_view::Workspace_view(const View_factory& view_factory)
-    : m_view_factory(view_factory) {}
+    : m_view_factory(view_factory) {
+    m_view_factory.set_workspace_view(this);
+}
 
 void Workspace_view::setup() {
     set_view_count(2);
 }
 
 void Workspace_view::set_view_count(const size_t count) {
-    assert(count >= 1 && count <= 6);
+    assert(count >= 1 && count <= 4);
     size_t current_count = m_views.size();
     if(count == current_count) {
         return;
@@ -19,7 +22,7 @@ void Workspace_view::set_view_count(const size_t count) {
     delete layout();
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            m_views.push_back(m_view_factory.make_view().release());
+            m_views.push_back(m_view_factory.make_default_view().release());
         }
     }
     else {
@@ -29,6 +32,25 @@ void Workspace_view::set_view_count(const size_t count) {
         }
     }
     create_layout();
+}
+
+void Workspace_view::replace_view(QWidget* old_view,
+                                  std::unique_ptr<QWidget> new_view) {
+    assert(old_view);
+    assert(new_view.get());
+
+    QLayout* layout = this->layout();
+    assert(layout);
+
+    QLayoutItem* layout_item = layout->replaceWidget(old_view, new_view.get());
+    assert(layout_item);
+    delete layout_item;
+    old_view->deleteLater();
+
+    auto it = std::find(m_views.begin(), m_views.end(), old_view);
+    assert(it != m_views.end());
+    *it = new_view.get();
+    new_view.release();
 }
 
 void Workspace_view::create_layout() {
@@ -45,12 +67,6 @@ void Workspace_view::create_layout() {
     case 4:
         create_4_view_layout();
         break;
-    case 5:
-        create_5_view_layout();
-        break;
-    case 6:
-        create_6_view_layout();
-        break;
     default:
         assert(false);
     }
@@ -65,6 +81,8 @@ void Workspace_view::create_2_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 1);
 }
 
 void Workspace_view::create_3_view_layout() {
@@ -72,6 +90,9 @@ void Workspace_view::create_3_view_layout() {
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
     layout->addWidget(m_views[2], 0, 2);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 1);
+    layout->setColumnStretch(2, 1);
 }
 
 void Workspace_view::create_4_view_layout() {
@@ -80,23 +101,8 @@ void Workspace_view::create_4_view_layout() {
     layout->addWidget(m_views[1], 0, 1);
     layout->addWidget(m_views[2], 1, 0);
     layout->addWidget(m_views[3], 1, 1);
-}
-
-void Workspace_view::create_5_view_layout() {
-    QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(m_views[0], 0, 0);
-    layout->addWidget(m_views[1], 0, 1);
-    layout->addWidget(m_views[2], 1, 0);
-    layout->addWidget(m_views[3], 1, 1);
-    layout->addWidget(m_views[4], 0, 2, 2, 1);
-}
-
-void Workspace_view::create_6_view_layout() {
-    QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(m_views[0], 0, 0);
-    layout->addWidget(m_views[1], 0, 1);
-    layout->addWidget(m_views[2], 0, 2);
-    layout->addWidget(m_views[3], 1, 0);
-    layout->addWidget(m_views[4], 1, 1);
-    layout->addWidget(m_views[5], 1, 2);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 1);
+    layout->setRowStretch(0, 1);
+    layout->setRowStretch(1, 1);
 }

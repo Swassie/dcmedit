@@ -13,6 +13,7 @@ public:
     void setup();
 
     void set_view_count(size_t count);
+    void replace_view(QWidget*, std::unique_ptr<QWidget>);
 
 private:
     void create_layout();

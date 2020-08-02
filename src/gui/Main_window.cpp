@@ -13,7 +13,7 @@
 #include <QMenuBar>
 
 Main_window::Main_window() {
-    setMinimumSize(QSize(800, 600));
+    setMinimumSize(800, 600);
 }
 
 void Main_window::setup_start() {
@@ -30,7 +30,9 @@ void Main_window::setup_workspace() {
     removeToolBar(m_tool_bar.get());
     m_tool_bar = std::make_unique<Tool_bar>();
     addToolBar(m_tool_bar.get());
-    View_factory view_factory(*m_dicom_file, *m_tool_bar);
+
+    m_element_model = std::make_unique<Data_element_model>(*m_dicom_file);
+    View_factory view_factory(*m_dicom_file, *m_tool_bar, *m_element_model);
     auto workspace_view = new Workspace_view(view_factory);
     workspace_view->setup();
 

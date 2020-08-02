@@ -1,4 +1,5 @@
 #pragma once
+#include "gui/Data_element_model.h"
 #include "gui/Tool_bar.h"
 
 #include <dcmtk/dcmdata/dctk.h>
@@ -19,5 +20,6 @@ public:
 private:
 
     std::unique_ptr<DcmFileFormat> m_dicom_file;
+    std::unique_ptr<Data_element_model> m_element_model;
     std::unique_ptr<Tool_bar> m_tool_bar;
 };

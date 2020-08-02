@@ -30,12 +30,4 @@ void Menu_bar::create_view_menu(Main_window& main_window, Workspace_view& worksp
     view_menu->addAction("4 views", [&workspace_view] {
         workspace_view.set_view_count(4);
     }, QKeySequence("Ctrl+4"));
-
-    view_menu->addAction("5 views", [&workspace_view] {
-        workspace_view.set_view_count(5);
-    }, QKeySequence("Ctrl+5"));
-
-    view_menu->addAction("6 views", [&workspace_view] {
-        workspace_view.set_view_count(6);
-    }, QKeySequence("Ctrl+6"));
 }

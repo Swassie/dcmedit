@@ -11,6 +11,10 @@ add_executable(dcm-viewer
   src/main.cpp
   src/Dataset.cpp
   src/Dataset.h
+  src/gui/Data_element_model.cpp
+  src/gui/Data_element_model.h
+  src/gui/Data_element_view.cpp
+  src/gui/Data_element_view.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
   src/gui/Image_view.cpp
@@ -30,6 +34,7 @@ add_executable(dcm-viewer
   src/gui/Tool_bar.h
   src/gui/View_factory.cpp
   src/gui/View_factory.h
+  src/gui/Menu.h
   src/gui/Workspace_view.cpp
   src/gui/Workspace_view.h
   src/gui/Zoom_tool.cpp
