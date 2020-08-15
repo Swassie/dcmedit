@@ -8,5 +8,5 @@ class Start_view : public QWidget
     Q_OBJECT
 
 public:
-    void setup(Main_window&);
+    Start_view(Main_window&);
 };

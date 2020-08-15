@@ -29,5 +29,9 @@ Data_element_model::Data_element_model(DcmFileFormat& dicom_file)
             item.reset(new QStandardItem(QString(value.c_str())));
             setItem(row, 3, item.release());
         }
+        else {
+            item.reset(new QStandardItem("Not yet implemented."));
+            setItem(row, 3, item.release());
+        }
     }
 }

@@ -27,6 +27,12 @@ Image_view::Image_view(DcmFileFormat& dicom_file,
 void Image_view::paintEvent(QPaintEvent*) {
     DicomImage image(&m_dicom_file, EXS_Unknown);
     const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData(8));
+    if(!pixel_data) {
+        QString status = DicomImage::getString(image.getStatus());
+        QPainter painter(this);
+        painter.drawText(rect(), "Could not render image.\nReason: " + status);
+        return;
+    }
     const size_t width = image.getWidth();
     const size_t height = image.getHeight();
     QImage q_image(pixel_data, width, height, width, QImage::Format_Grayscale8);

@@ -17,8 +17,7 @@ Main_window::Main_window() {
 }
 
 void Main_window::setup_start() {
-    auto start_view = new Start_view();
-    start_view->setup(*this);
+    auto start_view = new Start_view(*this);
 
     setMenuBar(new QMenuBar(this));
     Menu_bar::create_file_menu(*this);
@@ -34,7 +33,6 @@ void Main_window::setup_workspace() {
     m_element_model = std::make_unique<Data_element_model>(*m_dicom_file);
     View_factory view_factory(*m_dicom_file, *m_tool_bar, *m_element_model);
     auto workspace_view = new Workspace_view(view_factory);
-    workspace_view->setup();
 
     setMenuBar(new QMenuBar(this));
     Menu_bar::create_file_menu(*this);

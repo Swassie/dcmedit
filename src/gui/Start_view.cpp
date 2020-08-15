@@ -5,7 +5,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-void Start_view::setup(Main_window& main_window) {
+Start_view::Start_view(Main_window& main_window) {
     QPushButton* button = new QPushButton("Open...", this);
     connect(button, &QPushButton::clicked,
             &main_window, &Main_window::open_file);

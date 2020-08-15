@@ -7,10 +7,7 @@
 Workspace_view::Workspace_view(const View_factory& view_factory)
     : m_view_factory(view_factory) {
     m_view_factory.set_workspace_view(this);
-}
-
-void Workspace_view::setup() {
-    set_view_count(2);
+    set_view_count(1);
 }
 
 void Workspace_view::set_view_count(const size_t count) {
