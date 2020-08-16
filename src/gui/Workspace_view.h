@@ -12,6 +12,7 @@ public:
     Workspace_view(const View_factory&);
 
     void set_view_count(size_t count);
+    void show_default_layout();
     void replace_view(QWidget*, std::unique_ptr<QWidget>);
 
 private:

@@ -67,3 +67,10 @@ std::unique_ptr<Data_element_view> View_factory::make_element_view() {
 std::unique_ptr<QWidget> View_factory::make_default_view() {
     return make_image_view();
 }
+
+std::vector<std::unique_ptr<QWidget>> View_factory::make_default_layout() {
+    std::vector<std::unique_ptr<QWidget>> views;
+    views.push_back(make_image_view());
+    views.push_back(make_element_view());
+    return views;
+}

@@ -3,6 +3,7 @@
 #include "gui/Image_view.h"
 #include <memory>
 #include <QWidget>
+#include <vector>
 
 class DcmFileFormat;
 class Data_element_model;
@@ -19,6 +20,7 @@ public:
     std::unique_ptr<Image_view> make_image_view();
     std::unique_ptr<Data_element_view> make_element_view();
     std::unique_ptr<QWidget> make_default_view();
+    std::vector<std::unique_ptr<QWidget>> make_default_layout();
 
 private:
     DcmFileFormat& m_dicom_file;

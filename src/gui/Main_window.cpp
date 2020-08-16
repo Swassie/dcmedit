@@ -33,6 +33,7 @@ void Main_window::setup_workspace() {
     m_element_model = std::make_unique<Data_element_model>(*m_dicom_file);
     View_factory view_factory(*m_dicom_file, *m_tool_bar, *m_element_model);
     auto workspace_view = new Workspace_view(view_factory);
+    m_tool_bar->set_workspace_view(workspace_view);
 
     setMenuBar(new QMenuBar(this));
     Menu_bar::create_file_menu(*this);

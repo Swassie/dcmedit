@@ -7,7 +7,7 @@
 Workspace_view::Workspace_view(const View_factory& view_factory)
     : m_view_factory(view_factory) {
     m_view_factory.set_workspace_view(this);
-    set_view_count(1);
+    show_default_layout();
 }
 
 void Workspace_view::set_view_count(const size_t count) {
@@ -28,6 +28,18 @@ void Workspace_view::set_view_count(const size_t count) {
             m_views.pop_back();
         }
     }
+    create_layout();
+}
+
+void Workspace_view::show_default_layout() {
+    for(auto view : m_views) {
+        delete view;
+    }
+    m_views.clear();
+    for(auto& view : m_view_factory.make_default_layout()) {
+        m_views.push_back(view.release());
+    }
+    delete layout();
     create_layout();
 }
 
