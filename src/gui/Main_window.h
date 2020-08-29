@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Studio.h"
+#include "gui/studio/Studio.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <memory>
@@ -8,11 +8,10 @@
 class Main_window : public QMainWindow
 {
     Q_OBJECT
-
 public:
     Main_window();
 
-    void setup_initial_studio();
+    void setup_start_studio();
     void setup_dicom_studio();
 
     void open_file();

@@ -1,8 +1,8 @@
 add_executable(test-runner
   ../src/Dataset.cpp
   ../src/gui/Gui_util.cpp
-  ../src/gui/Pan_tool.cpp
-  ../src/gui/Zoom_tool.cpp
+  ../src/gui/tool/Pan_tool.cpp
+  ../src/gui/tool/Zoom_tool.cpp
   ../src/logging/Log.cpp
   ../third-party/catch.hpp
   # Test files

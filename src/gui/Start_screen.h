@@ -3,10 +3,9 @@
 
 class Main_window;
 
-class Initial_view : public QWidget
+class Start_screen : public QWidget
 {
     Q_OBJECT
-
 public:
-    Initial_view(Main_window&);
+    Start_screen(Main_window&);
 };

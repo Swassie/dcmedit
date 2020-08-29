@@ -1,16 +1,15 @@
-#include "gui/Workspace_view.h"
+#include "gui/View_manager.h"
 
 #include <algorithm>
 #include <cassert>
 #include <QGridLayout>
 
-Workspace_view::Workspace_view(std::unique_ptr<View_factory> view_factory)
-    : m_view_factory(std::move(view_factory)) {
-    m_view_factory->set_workspace_view(this);
-    show_default_layout();
+void View_manager::set_view_factory(std::unique_ptr<View_factory> view_factory) {
+    m_view_factory = std::move(view_factory);
 }
 
-void Workspace_view::set_view_count(const size_t count) {
+void View_manager::set_view_count(const size_t count) {
+    assert(m_view_factory);
     assert(count >= 1 && count <= 4);
     size_t current_count = m_views.size();
     if(count == current_count) {
@@ -31,7 +30,8 @@ void Workspace_view::set_view_count(const size_t count) {
     create_layout();
 }
 
-void Workspace_view::show_default_layout() {
+void View_manager::show_default_layout() {
+    assert(m_view_factory);
     for(auto view : m_views) {
         delete view;
     }
@@ -43,26 +43,25 @@ void Workspace_view::show_default_layout() {
     create_layout();
 }
 
-void Workspace_view::replace_view(QWidget* old_view,
-                                  std::unique_ptr<QWidget> new_view) {
-    assert(old_view);
+void View_manager::replace_view(QWidget& old_view,
+                                std::unique_ptr<QWidget> new_view) {
     assert(new_view.get());
 
     QLayout* layout = this->layout();
     assert(layout);
 
-    QLayoutItem* layout_item = layout->replaceWidget(old_view, new_view.get());
+    QLayoutItem* layout_item = layout->replaceWidget(&old_view, new_view.get());
     assert(layout_item);
     delete layout_item;
-    old_view->deleteLater();
+    old_view.deleteLater();
 
-    auto it = std::find(m_views.begin(), m_views.end(), old_view);
+    auto it = std::find(m_views.begin(), m_views.end(), &old_view);
     assert(it != m_views.end());
     *it = new_view.get();
     new_view.release();
 }
 
-void Workspace_view::create_layout() {
+void View_manager::create_layout() {
     switch(m_views.size()) {
     case 1:
         create_1_view_layout();
@@ -81,12 +80,12 @@ void Workspace_view::create_layout() {
     }
 }
 
-void Workspace_view::create_1_view_layout() {
+void View_manager::create_1_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
 }
 
-void Workspace_view::create_2_view_layout() {
+void View_manager::create_2_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
@@ -94,7 +93,7 @@ void Workspace_view::create_2_view_layout() {
     layout->setColumnStretch(1, 1);
 }
 
-void Workspace_view::create_3_view_layout() {
+void View_manager::create_3_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);
@@ -104,7 +103,7 @@ void Workspace_view::create_3_view_layout() {
     layout->setColumnStretch(2, 1);
 }
 
-void Workspace_view::create_4_view_layout() {
+void View_manager::create_4_view_layout() {
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_views[0], 0, 0);
     layout->addWidget(m_views[1], 0, 1);

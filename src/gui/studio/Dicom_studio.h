@@ -1,6 +1,6 @@
 #pragma once
 #include "gui/Data_element_model.h"
-#include "gui/Studio.h"
+#include "gui/studio/Studio.h"
 
 class Main_window;
 class DcmFileFormat;

@@ -1,7 +1,7 @@
-#include "gui/Image_view.h"
+#include "gui/view/Image_view.h"
 
 #include "gui/Gui_util.h"
-#include "gui/Tool_bar.h"
+#include "gui/menu/Tool_bar.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
@@ -10,18 +10,15 @@
 #include <QPainter>
 
 Image_view::Image_view(DcmFileFormat& dicom_file,
-                       std::unique_ptr<Menu> menu,
                        Tool_bar& tool_bar,
                        std::unique_ptr<Pan_tool> pan_tool,
                        std::unique_ptr<Zoom_tool> zoom_tool)
     : m_dicom_file(dicom_file),
-      m_menu(std::move(menu)),
       m_tool_bar(tool_bar),
       m_current_tool(pan_tool.get()),
       m_pan_tool(std::move(pan_tool)),
       m_zoom_tool(std::move(zoom_tool)) {
     setMouseTracking(true);
-    m_menu->set_enclosing_view(this);
 }
 
 void Image_view::paintEvent(QPaintEvent*) {
@@ -51,21 +48,17 @@ void Image_view::mouseMoveEvent(QMouseEvent* event) {
     if(!Gui_util::is_left_mouse_pressed(*event)) {
         set_tool();
     }
-    auto has_changed = m_current_tool->mouse_move(*event);
+    bool has_changed = m_current_tool->mouse_move(*event);
     if(has_changed) {
         update();
     }
 }
 
 void Image_view::mousePressEvent(QMouseEvent* event) {
-    auto has_changed = m_current_tool->mouse_press(*event);
+    bool has_changed = m_current_tool->mouse_press(*event);
     if(has_changed) {
         update();
     }
-}
-
-void Image_view::contextMenuEvent(QContextMenuEvent* event) {
-    m_menu->popup(event->globalPos());
 }
 
 void Image_view::set_tool() {

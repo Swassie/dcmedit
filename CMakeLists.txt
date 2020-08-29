@@ -8,46 +8,58 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK REQUIRED)
 
 add_executable(dcm-viewer
-  src/main.cpp
   src/Dataset.cpp
   src/Dataset.h
   src/gui/Data_element_model.cpp
   src/gui/Data_element_model.h
-  src/gui/Data_element_view.cpp
-  src/gui/Data_element_view.h
-  src/gui/Dicom_studio.cpp
-  src/gui/Dicom_studio.h
+  src/gui/Dicom_view_factory.cpp
+  src/gui/Dicom_view_factory.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
-  src/gui/Image_view.cpp
-  src/gui/Image_view.h
-  src/gui/Initial_studio.cpp
-  src/gui/Initial_studio.h
-  src/gui/Initial_view.cpp
-  src/gui/Initial_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
-  src/gui/Pan_tool.cpp
-  src/gui/Pan_tool.h
+  src/gui/Start_screen.cpp
+  src/gui/Start_screen.h
+  src/gui/View_factory.h
+  src/gui/View_manager.cpp
+  src/gui/View_manager.h
+  src/gui/menu/File_menu.cpp
+  src/gui/menu/File_menu.h
+  src/gui/menu/Menu.cpp
+  src/gui/menu/Menu.h
+  src/gui/menu/Menu_bar.cpp
+  src/gui/menu/Menu_bar.h
+  src/gui/menu/Tool_bar.cpp
+  src/gui/menu/Tool_bar.h
+  src/gui/menu/View_menu.cpp
+  src/gui/menu/View_menu.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
-  src/gui/Studio.cpp
-  src/gui/Studio.h
-  src/gui/Tool.h
-  src/gui/Tool_bar.cpp
-  src/gui/Tool_bar.h
-  src/gui/View_factory.cpp
-  src/gui/View_factory.h
-  src/gui/Menu.h
-  src/gui/Workspace_view.cpp
-  src/gui/Workspace_view.h
-  src/gui/Zoom_tool.cpp
-  src/gui/Zoom_tool.h
+  src/gui/studio/Dicom_studio.cpp
+  src/gui/studio/Dicom_studio.h
+  src/gui/studio/Start_studio.cpp
+  src/gui/studio/Start_studio.h
+  src/gui/studio/Studio.cpp
+  src/gui/studio/Studio.h
+  src/gui/tool/Pan_tool.cpp
+  src/gui/tool/Pan_tool.h
+  src/gui/tool/Tool.h
+  src/gui/tool/Zoom_tool.cpp
+  src/gui/tool/Zoom_tool.h
+  src/gui/view/Data_element_view.cpp
+  src/gui/view/Data_element_view.h
+  src/gui/view/Image_view.cpp
+  src/gui/view/Image_view.h
+  src/gui/view/View.cpp
+  src/gui/view/View.h
+  src/gui/view/View_actions.cpp
+  src/gui/view/View_actions.h
+  src/logging/Console_logger.cpp
+  src/logging/Console_logger.h
   src/logging/Log.cpp
   src/logging/Log.h
   src/logging/Logger.h
-  src/logging/Console_logger.cpp
-  src/logging/Console_logger.h
+  src/main.cpp
   src/util/Filesystem.cpp
   src/util/Filesystem.h
 )

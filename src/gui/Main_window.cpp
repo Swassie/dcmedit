@@ -1,7 +1,7 @@
 #include "gui/Main_window.h"
 
-#include "gui/Dicom_studio.h"
-#include "gui/Initial_studio.h"
+#include "gui/studio/Dicom_studio.h"
+#include "gui/studio/Start_studio.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
 
@@ -13,11 +13,11 @@ Main_window::Main_window() {
     setMinimumSize(800, 600);
 }
 
-void Main_window::setup_initial_studio() {
+void Main_window::setup_start_studio() {
     if(m_studio) {
         removeToolBar(m_studio->get_tool_bar());
     }
-    m_studio = std::make_unique<Initial_studio>(*this);
+    m_studio = std::make_unique<Start_studio>(*this);
     setMenuBar(m_studio->take_menu_bar().release());
     setCentralWidget(m_studio->take_central_widget().release());
 }

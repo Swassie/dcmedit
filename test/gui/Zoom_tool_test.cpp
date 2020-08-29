@@ -1,4 +1,4 @@
-#include "gui/Zoom_tool.h"
+#include "gui/tool/Zoom_tool.h"
 
 #include "catch.hpp"
 #include <cmath>
