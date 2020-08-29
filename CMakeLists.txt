@@ -15,20 +15,24 @@ add_executable(dcm-viewer
   src/gui/Data_element_model.h
   src/gui/Data_element_view.cpp
   src/gui/Data_element_view.h
+  src/gui/Dicom_studio.cpp
+  src/gui/Dicom_studio.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
   src/gui/Image_view.cpp
   src/gui/Image_view.h
-  src/gui/Menu_bar.cpp
-  src/gui/Menu_bar.h
+  src/gui/Initial_studio.cpp
+  src/gui/Initial_studio.h
+  src/gui/Initial_view.cpp
+  src/gui/Initial_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/Pan_tool.cpp
   src/gui/Pan_tool.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
-  src/gui/Start_view.cpp
-  src/gui/Start_view.h
+  src/gui/Studio.cpp
+  src/gui/Studio.h
   src/gui/Tool.h
   src/gui/Tool_bar.cpp
   src/gui/Tool_bar.h

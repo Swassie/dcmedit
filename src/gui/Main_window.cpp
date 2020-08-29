@@ -1,45 +1,35 @@
 #include "gui/Main_window.h"
 
-#include "gui/Menu_bar.h"
-#include "gui/Start_view.h"
-#include "gui/View_factory.h"
-#include "gui/Workspace_view.h"
+#include "gui/Dicom_studio.h"
+#include "gui/Initial_studio.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
 #include <QFileDialog>
-#include <QMenuBar>
 
 Main_window::Main_window() {
     setMinimumSize(800, 600);
 }
 
-void Main_window::setup_start() {
-    auto start_view = new Start_view(*this);
-
-    setMenuBar(new QMenuBar(this));
-    Menu_bar::create_file_menu(*this);
-
-    setCentralWidget(start_view);
+void Main_window::setup_initial_studio() {
+    if(m_studio) {
+        removeToolBar(m_studio->get_tool_bar());
+    }
+    m_studio = std::make_unique<Initial_studio>(*this);
+    setMenuBar(m_studio->take_menu_bar().release());
+    setCentralWidget(m_studio->take_central_widget().release());
 }
 
-void Main_window::setup_workspace() {
-    removeToolBar(m_tool_bar.get());
-    m_tool_bar = std::make_unique<Tool_bar>();
-    addToolBar(m_tool_bar.get());
-
-    m_element_model = std::make_unique<Data_element_model>(*m_dicom_file);
-    View_factory view_factory(*m_dicom_file, *m_tool_bar, *m_element_model);
-    auto workspace_view = new Workspace_view(view_factory);
-    m_tool_bar->set_workspace_view(workspace_view);
-
-    setMenuBar(new QMenuBar(this));
-    Menu_bar::create_file_menu(*this);
-    Menu_bar::create_view_menu(*this, *workspace_view);
-
-    setCentralWidget(workspace_view);
+void Main_window::setup_dicom_studio() {
+    if(m_studio) {
+        removeToolBar(m_studio->get_tool_bar());
+    }
+    m_studio = std::make_unique<Dicom_studio>(*this, *m_dicom_file.get());
+    addToolBar(m_studio->get_tool_bar());
+    setMenuBar(m_studio->take_menu_bar().release());
+    setCentralWidget(m_studio->take_central_widget().release());
 }
 
 void Main_window::open_file() {
@@ -56,5 +46,5 @@ void Main_window::open_file() {
         return;
     }
     m_dicom_file = std::move(file_format);
-    setup_workspace();
+    setup_dicom_studio();
 }

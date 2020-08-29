@@ -28,7 +28,7 @@ public:
     }
 
 private:
-    View_factory m_view_factory;
+    View_factory& m_view_factory;
     Workspace_view& m_workspace_view;
 };
 

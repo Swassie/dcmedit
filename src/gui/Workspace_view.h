@@ -1,6 +1,7 @@
 #pragma once
 #include "gui/View_factory.h"
 
+#include <memory>
 #include <QWidget>
 #include <vector>
 
@@ -9,7 +10,7 @@ class Workspace_view : public QWidget
     Q_OBJECT
 
 public:
-    Workspace_view(const View_factory&);
+    Workspace_view(std::unique_ptr<View_factory>);
 
     void set_view_count(size_t count);
     void show_default_layout();
@@ -24,6 +25,6 @@ private:
     void create_5_view_layout();
     void create_6_view_layout();
 
-    View_factory m_view_factory;
+    std::unique_ptr<View_factory> m_view_factory;
     std::vector<QWidget*> m_views;
 };

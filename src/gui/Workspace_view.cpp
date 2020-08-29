@@ -4,9 +4,9 @@
 #include <cassert>
 #include <QGridLayout>
 
-Workspace_view::Workspace_view(const View_factory& view_factory)
-    : m_view_factory(view_factory) {
-    m_view_factory.set_workspace_view(this);
+Workspace_view::Workspace_view(std::unique_ptr<View_factory> view_factory)
+    : m_view_factory(std::move(view_factory)) {
+    m_view_factory->set_workspace_view(this);
     show_default_layout();
 }
 
@@ -19,7 +19,7 @@ void Workspace_view::set_view_count(const size_t count) {
     delete layout();
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            m_views.push_back(m_view_factory.make_default_view().release());
+            m_views.push_back(m_view_factory->make_default_view().release());
         }
     }
     else {
@@ -36,7 +36,7 @@ void Workspace_view::show_default_layout() {
         delete view;
     }
     m_views.clear();
-    for(auto& view : m_view_factory.make_default_layout()) {
+    for(auto& view : m_view_factory->make_default_layout()) {
         m_views.push_back(view.release());
     }
     delete layout();

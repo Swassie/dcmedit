@@ -1,6 +1,5 @@
 #pragma once
-#include "gui/Data_element_model.h"
-#include "gui/Tool_bar.h"
+#include "gui/Studio.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <memory>
@@ -13,13 +12,12 @@ class Main_window : public QMainWindow
 public:
     Main_window();
 
-    void setup_start();
-    void setup_workspace();
+    void setup_initial_studio();
+    void setup_dicom_studio();
 
     void open_file();
 private:
 
     std::unique_ptr<DcmFileFormat> m_dicom_file;
-    std::unique_ptr<Data_element_model> m_element_model;
-    std::unique_ptr<Tool_bar> m_tool_bar;
+    std::unique_ptr<Studio> m_studio;
 };
