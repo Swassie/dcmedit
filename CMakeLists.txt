@@ -33,6 +33,8 @@ add_executable(dcm-viewer
   src/gui/run_gui.h
   src/gui/Studio.cpp
   src/gui/Studio.h
+  src/gui/Test_studio.cpp
+  src/gui/Test_studio.h
   src/gui/Tool.h
   src/gui/Tool_bar.cpp
   src/gui/Tool_bar.h

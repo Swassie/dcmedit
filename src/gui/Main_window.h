@@ -14,6 +14,7 @@ public:
 
     void setup_initial_studio();
     void setup_dicom_studio();
+    void setup_test_studio();
 
     void open_file();
 private:

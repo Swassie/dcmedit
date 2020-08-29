@@ -2,6 +2,7 @@
 
 #include "gui/Dicom_studio.h"
 #include "gui/Initial_studio.h"
+#include "gui/Test_studio.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
 
@@ -27,6 +28,16 @@ void Main_window::setup_dicom_studio() {
         removeToolBar(m_studio->get_tool_bar());
     }
     m_studio = std::make_unique<Dicom_studio>(*this, *m_dicom_file.get());
+    addToolBar(m_studio->get_tool_bar());
+    setMenuBar(m_studio->take_menu_bar().release());
+    setCentralWidget(m_studio->take_central_widget().release());
+}
+
+void Main_window::setup_test_studio() {
+    if(m_studio) {
+        removeToolBar(m_studio->get_tool_bar());
+    }
+    m_studio = std::make_unique<Test_studio>(*this, *m_dicom_file.get());
     addToolBar(m_studio->get_tool_bar());
     setMenuBar(m_studio->take_menu_bar().release());
     setCentralWidget(m_studio->take_central_widget().release());

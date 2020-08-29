@@ -1,4 +1,4 @@
-#include "gui/Dicom_studio.h"
+#include "gui/Test_studio.h"
 
 #include "gui/Main_window.h"
 #include "gui/Tool_bar.h"
@@ -34,18 +34,22 @@ static std::unique_ptr<QMenuBar> create_menu_bar(Main_window& main_window,
     QAction* dicom_studio = studio_menu->addAction("Dicom studio", &main_window,
                                                    &Main_window::setup_dicom_studio);
     dicom_studio->setCheckable(true);
-    dicom_studio->setChecked(true);
     QAction* test_studio = studio_menu->addAction("Test studio", &main_window,
                                                   &Main_window::setup_test_studio);
     test_studio->setCheckable(true);
+    test_studio->setChecked(true);
     QActionGroup* studio_group = new QActionGroup(studio_menu);
     studio_group->addAction(dicom_studio);
     studio_group->addAction(test_studio);
 
+    QMenu* extra_features_menu = menu_bar->addMenu("&Extra features");
+    extra_features_menu->addAction("Feature 1", [] {});
+    extra_features_menu->addAction("Feature 2", [] {});
+
     return menu_bar;
 }
 
-Dicom_studio::Dicom_studio(Main_window& main_window, DcmFileFormat& dicom_file) {
+Test_studio::Test_studio(Main_window& main_window, DcmFileFormat& dicom_file) {
     auto tool_bar = std::make_unique<Tool_bar>();
 
     m_element_model = std::make_unique<Data_element_model>(dicom_file);
