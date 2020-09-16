@@ -1,6 +1,6 @@
 #pragma once
+#include "gui/Image_view_menu.h"
 #include "gui/Pan_tool.h"
-#include "gui/Menu.h"
 #include "gui/Zoom_tool.h"
 
 #include <memory>
@@ -16,7 +16,7 @@ class Image_view : public QWidget
 
 public:
     Image_view(DcmFileFormat&,
-               std::unique_ptr<Menu>,
+               std::unique_ptr<Image_view_menu>,
                Tool_bar&,
                std::unique_ptr<Pan_tool>,
                std::unique_ptr<Zoom_tool>);
@@ -30,7 +30,7 @@ private:
     void set_tool();
 
     DcmFileFormat& m_dicom_file;
-    std::unique_ptr<Menu> m_menu;
+    std::unique_ptr<Image_view_menu> m_menu;
     Tool_bar& m_tool_bar;
     Tool* m_current_tool;
     std::unique_ptr<Pan_tool> m_pan_tool;

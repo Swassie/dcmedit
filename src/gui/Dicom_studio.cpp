@@ -1,61 +1,41 @@
 #include "gui/Dicom_studio.h"
 
+#include "gui/Common_actions.h"
+#include "gui/Dicom_view_factory.h"
 #include "gui/Main_window.h"
 #include "gui/Tool_bar.h"
-#include "gui/View_factory.h"
 #include "gui/Workspace_view.h"
 
 static std::unique_ptr<QMenuBar> create_menu_bar(Main_window& main_window,
                                                  Workspace_view& workspace_view) {
     auto menu_bar = std::make_unique<QMenuBar>();
 
-    QMenu* file_menu = menu_bar->addMenu("&File");
-    file_menu->addAction("Open...", &main_window, &Main_window::open_file,
-                         QKeySequence("Ctrl+O"));
+    QMenu* file_menu = Common_actions::add_file_menu(*menu_bar);
+    Common_actions::add_open_file(*file_menu, main_window);
 
-    QMenu* view_menu = menu_bar->addMenu("&View");
-    view_menu->addAction("1 view", [&workspace_view] {
-        workspace_view.set_view_count(1);
-    }, QKeySequence("Ctrl+1"));
+    QMenu* view_menu = Common_actions::add_view_menu(*menu_bar);
+    Common_actions::add_view_counts(*view_menu, workspace_view);
 
-    view_menu->addAction("2 views", [&workspace_view] {
-        workspace_view.set_view_count(2);
-    }, QKeySequence("Ctrl+2"));
-
-    view_menu->addAction("3 views", [&workspace_view] {
-        workspace_view.set_view_count(3);
-    }, QKeySequence("Ctrl+3"));
-
-    view_menu->addAction("4 views", [&workspace_view] {
-        workspace_view.set_view_count(4);
-    }, QKeySequence("Ctrl+4"));
-
-    QMenu* studio_menu = menu_bar->addMenu("&Studio");
-    QAction* dicom_studio = studio_menu->addAction("Dicom studio", &main_window,
-                                                   &Main_window::setup_dicom_studio);
-    dicom_studio->setCheckable(true);
-    dicom_studio->setChecked(true);
-    QAction* test_studio = studio_menu->addAction("Test studio", &main_window,
-                                                  &Main_window::setup_test_studio);
-    test_studio->setCheckable(true);
-    QActionGroup* studio_group = new QActionGroup(studio_menu);
-    studio_group->addAction(dicom_studio);
-    studio_group->addAction(test_studio);
+    QMenu* studio_menu = Common_actions::add_studio_menu(*menu_bar);
+    Common_actions::add_studios(*studio_menu, main_window, Common_actions::Studio::dicom);
 
     return menu_bar;
 }
 
 Dicom_studio::Dicom_studio(Main_window& main_window, DcmFileFormat& dicom_file) {
-    auto tool_bar = std::make_unique<Tool_bar>();
+    auto workspace_view = std::make_unique<Workspace_view>();
+    auto tool_bar = std::make_unique<Tool_bar>(*workspace_view);
 
     m_element_model = std::make_unique<Data_element_model>(dicom_file);
-    auto view_factory = std::make_unique<View_factory>(dicom_file,
-                                                       *tool_bar,
-                                                       *m_element_model);
-    auto workspace_view = std::make_unique<Workspace_view>(std::move(view_factory));
-    tool_bar->set_workspace_view(workspace_view.get());
+    auto view_factory = std::make_unique<Dicom_view_factory>(dicom_file,
+                                                             *tool_bar,
+                                                             *m_element_model,
+                                                             *workspace_view);
 
-    m_menu_bar = create_menu_bar(main_window, *workspace_view.get());
+    workspace_view->set_view_factory(std::move(view_factory));
+    workspace_view->show_default_layout();
+
+    m_menu_bar = create_menu_bar(main_window, *workspace_view);
     m_tool_bar = std::move(tool_bar);
     m_central_widget = std::move(workspace_view);
 }

@@ -4,13 +4,12 @@
 #include <cassert>
 #include <QGridLayout>
 
-Workspace_view::Workspace_view(std::unique_ptr<View_factory> view_factory)
-    : m_view_factory(std::move(view_factory)) {
-    m_view_factory->set_workspace_view(this);
-    show_default_layout();
+void Workspace_view::set_view_factory(std::unique_ptr<View_factory> view_factory) {
+    m_view_factory = std::move(view_factory);
 }
 
 void Workspace_view::set_view_count(const size_t count) {
+    assert(m_view_factory);
     assert(count >= 1 && count <= 4);
     size_t current_count = m_views.size();
     if(count == current_count) {
@@ -32,6 +31,7 @@ void Workspace_view::set_view_count(const size_t count) {
 }
 
 void Workspace_view::show_default_layout() {
+    assert(m_view_factory);
     for(auto view : m_views) {
         delete view;
     }

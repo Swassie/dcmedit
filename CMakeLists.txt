@@ -11,16 +11,28 @@ add_executable(dcm-viewer
   src/main.cpp
   src/Dataset.cpp
   src/Dataset.h
+  src/gui/Common_actions.cpp
+  src/gui/Common_actions.h
+  src/gui/Context_menu.cpp
+  src/gui/Context_menu.h
   src/gui/Data_element_model.cpp
   src/gui/Data_element_model.h
   src/gui/Data_element_view.cpp
   src/gui/Data_element_view.h
+  src/gui/Data_element_view_menu.h
   src/gui/Dicom_studio.cpp
   src/gui/Dicom_studio.h
+  src/gui/Dicom_view_factory.cpp
+  src/gui/Dicom_view_factory.h
+  src/gui/Foo_view.cpp
+  src/gui/Foo_view.h
+  src/gui/Foo_view_menu.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
   src/gui/Image_view.cpp
   src/gui/Image_view.h
+  src/gui/Image_view_menu.cpp
+  src/gui/Image_view_menu.h
   src/gui/Initial_studio.cpp
   src/gui/Initial_studio.h
   src/gui/Initial_view.cpp
@@ -35,12 +47,12 @@ add_executable(dcm-viewer
   src/gui/Studio.h
   src/gui/Test_studio.cpp
   src/gui/Test_studio.h
+  src/gui/Test_view_factory.cpp
+  src/gui/Test_view_factory.h
   src/gui/Tool.h
   src/gui/Tool_bar.cpp
   src/gui/Tool_bar.h
-  src/gui/View_factory.cpp
   src/gui/View_factory.h
-  src/gui/Menu.h
   src/gui/Workspace_view.cpp
   src/gui/Workspace_view.h
   src/gui/Zoom_tool.cpp

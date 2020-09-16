@@ -5,11 +5,11 @@
 #include <QContextMenuEvent>
 
 Data_element_view::Data_element_view(Data_element_model& model,
-                                       std::unique_ptr<Menu> menu)
+                                       std::unique_ptr<Data_element_view_menu> menu)
     : m_menu(std::move(menu)) {
     setModel(&model);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_menu->set_enclosing_view(this);
+    m_menu->set_context(this);
 }
 
 void Data_element_view::contextMenuEvent(QContextMenuEvent* event) {

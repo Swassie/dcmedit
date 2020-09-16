@@ -6,9 +6,7 @@ class Workspace_view;
 class Tool_bar : public QToolBar
 {
 public:
-    Tool_bar();
-
-    void set_workspace_view(Workspace_view*);
+    Tool_bar(Workspace_view&);
 
     enum class Tool {
         pan,
@@ -23,5 +21,5 @@ private:
     void select_zoom_tool();
 
     Tool m_selected_tool;
-    Workspace_view* m_workspace_view;
+    Workspace_view& m_workspace_view;
 };

@@ -10,7 +10,7 @@
 #include <QPainter>
 
 Image_view::Image_view(DcmFileFormat& dicom_file,
-                       std::unique_ptr<Menu> menu,
+                       std::unique_ptr<Image_view_menu> menu,
                        Tool_bar& tool_bar,
                        std::unique_ptr<Pan_tool> pan_tool,
                        std::unique_ptr<Zoom_tool> zoom_tool)
@@ -21,7 +21,7 @@ Image_view::Image_view(DcmFileFormat& dicom_file,
       m_pan_tool(std::move(pan_tool)),
       m_zoom_tool(std::move(zoom_tool)) {
     setMouseTracking(true);
-    m_menu->set_enclosing_view(this);
+    m_menu->set_context(this);
 }
 
 void Image_view::paintEvent(QPaintEvent*) {
