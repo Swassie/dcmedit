@@ -1,12 +1,12 @@
 #pragma once
 #include <QToolBar>
 
-class Workspace_view;
+class View_manager;
 
 class Tool_bar : public QToolBar
 {
 public:
-    Tool_bar(Workspace_view&);
+    Tool_bar(View_manager&);
 
     enum class Tool {
         pan,
@@ -21,5 +21,5 @@ private:
     void select_zoom_tool();
 
     Tool m_selected_tool;
-    Workspace_view& m_workspace_view;
+    View_manager& m_view_manager;
 };

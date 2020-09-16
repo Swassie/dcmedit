@@ -53,8 +53,8 @@ add_executable(dcm-viewer
   src/gui/Tool_bar.cpp
   src/gui/Tool_bar.h
   src/gui/View_factory.h
-  src/gui/Workspace_view.cpp
-  src/gui/Workspace_view.h
+  src/gui/View_manager.cpp
+  src/gui/View_manager.h
   src/gui/Zoom_tool.cpp
   src/gui/Zoom_tool.h
   src/logging/Log.cpp

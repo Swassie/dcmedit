@@ -1,7 +1,7 @@
 #include "gui/Common_actions.h"
 
 #include "gui/Main_window.h"
-#include "gui/Workspace_view.h"
+#include "gui/View_manager.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -23,21 +23,21 @@ void Common_actions::add_open_file(QMenu& menu, Main_window& main_window) {
                    QKeySequence::Open);
 }
 
-void Common_actions::add_view_counts(QMenu& menu, Workspace_view& workspace_view) {
-    menu.addAction("1 view", [&workspace_view] {
-        workspace_view.set_view_count(1);
+void Common_actions::add_view_counts(QMenu& menu, View_manager& view_manager) {
+    menu.addAction("1 view", [&view_manager] {
+        view_manager.set_view_count(1);
     }, QKeySequence("Ctrl+1"));
 
-    menu.addAction("2 views", [&workspace_view] {
-        workspace_view.set_view_count(2);
+    menu.addAction("2 views", [&view_manager] {
+        view_manager.set_view_count(2);
     }, QKeySequence("Ctrl+2"));
 
-    menu.addAction("3 views", [&workspace_view] {
-        workspace_view.set_view_count(3);
+    menu.addAction("3 views", [&view_manager] {
+        view_manager.set_view_count(3);
     }, QKeySequence("Ctrl+3"));
 
-    menu.addAction("4 views", [&workspace_view] {
-        workspace_view.set_view_count(4);
+    menu.addAction("4 views", [&view_manager] {
+        view_manager.set_view_count(4);
     }, QKeySequence("Ctrl+4"));
 }
 

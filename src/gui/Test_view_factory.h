@@ -11,13 +11,13 @@
 class DcmFileFormat;
 class Data_element_model;
 class Tool_bar;
-class Workspace_view;
+class View_manager;
 
 class Test_view_factory : public View_factory
 {
 public:
     Test_view_factory(DcmFileFormat&, Tool_bar&, Data_element_model&,
-                      Workspace_view&);
+                      View_manager&);
 
     std::unique_ptr<Image_view> make_image_view() override;
     std::unique_ptr<Data_element_view> make_element_view() override;
@@ -29,5 +29,5 @@ private:
     DcmFileFormat& m_dicom_file;
     Tool_bar& m_tool_bar;
     Data_element_model& m_element_model;
-    Workspace_view& m_workspace_view;
+    View_manager& m_view_manager;
 };

@@ -1,6 +1,6 @@
 #include "gui/Foo_view.h"
 
-#include "gui/Workspace_view.h"
+#include "gui/View_manager.h"
 
 #include <QColor>
 #include <QComboBox>
@@ -10,8 +10,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-Foo_view::Foo_view(Workspace_view& workspace_view, std::unique_ptr<Foo_view_menu> menu)
-    : m_workspace_view(workspace_view),
+Foo_view::Foo_view(View_manager& view_manager, std::unique_ptr<Foo_view_menu> menu)
+    : m_view_manager(view_manager),
       m_menu(std::move(menu)),
       m_combo_box(new QComboBox(this)) {
     m_menu->set_context(this);
@@ -51,7 +51,7 @@ void Foo_view::set_background_color(QColor color) {
 
 void Foo_view::set_background_color_in_all_views() {
     QColor color = selected_color();
-    for(Foo_view* view : m_workspace_view.get_views_with_interface<Foo_view>()) {
+    for(Foo_view* view : m_view_manager.get_views_with_interface<Foo_view>()) {
         view->set_background_color(color);
     }
 }

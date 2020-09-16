@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <vector>
 
-class Workspace_view : public QWidget
+class View_manager : public QWidget
 {
     Q_OBJECT
 

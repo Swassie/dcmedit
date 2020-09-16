@@ -3,7 +3,7 @@
 class Main_window;
 class QMenu;
 class QMenuBar;
-class Workspace_view;
+class View_manager;
 
 namespace Common_actions
 {
@@ -16,6 +16,6 @@ namespace Common_actions
     QMenu* add_view_menu(QMenuBar&);
     QMenu* add_studio_menu(QMenuBar&);
     void add_open_file(QMenu&, Main_window&);
-    void add_view_counts(QMenu&, Workspace_view&);
+    void add_view_counts(QMenu&, View_manager&);
     void add_studios(QMenu&, Main_window&, Studio);
 }

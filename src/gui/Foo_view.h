@@ -6,14 +6,14 @@
 
 class QColor;
 class QComboBox;
-class Workspace_view;
+class View_manager;
 
 class Foo_view : public QWidget
 {
     Q_OBJECT
 
 public:
-    Foo_view(Workspace_view&, std::unique_ptr<Foo_view_menu>);
+    Foo_view(View_manager&, std::unique_ptr<Foo_view_menu>);
 
 private:
     QColor selected_color();
@@ -22,7 +22,7 @@ private:
 
     void contextMenuEvent(QContextMenuEvent*);
 
-    Workspace_view& m_workspace_view;
+    View_manager& m_view_manager;
     std::unique_ptr<Foo_view_menu> m_menu;
     QComboBox* m_combo_box;
 };
