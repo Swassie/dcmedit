@@ -20,7 +20,7 @@ QMenu* Common_actions::add_studio_menu(QMenuBar& menu_bar) {
 
 void Common_actions::add_open_file(QMenu& menu, Main_window& main_window) {
     menu.addAction("Open...", &main_window, &Main_window::open_file,
-                   QKeySequence("Ctrl+O"));
+                   QKeySequence::Open);
 }
 
 void Common_actions::add_view_counts(QMenu& menu, Workspace_view& workspace_view) {
