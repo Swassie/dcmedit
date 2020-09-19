@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Studio.h"
+#include "gui/studio/Studio.h"
 
 class Main_window;
 

@@ -1,4 +1,4 @@
-#include "gui/Initial_studio.h"
+#include "gui/studio/Initial_studio.h"
 
 #include "gui/Main_window.h"
 #include "gui/Initial_view.h"

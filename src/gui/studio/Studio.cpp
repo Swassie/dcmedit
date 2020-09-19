@@ -1,4 +1,4 @@
-#include "gui/Studio.h"
+#include "gui/studio/Studio.h"
 
 QToolBar* Studio::get_tool_bar() {
     return m_tool_bar.get();

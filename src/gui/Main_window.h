@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Studio.h"
+#include "gui/studio/Studio.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <memory>

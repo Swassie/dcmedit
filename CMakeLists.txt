@@ -14,8 +14,6 @@ add_executable(dcm-viewer
   src/gui/Data_element_model.h
   src/gui/Data_element_view.cpp
   src/gui/Data_element_view.h
-  src/gui/Dicom_studio.cpp
-  src/gui/Dicom_studio.h
   src/gui/Dicom_view_factory.cpp
   src/gui/Dicom_view_factory.h
   src/gui/Foo_view.cpp
@@ -24,18 +22,12 @@ add_executable(dcm-viewer
   src/gui/Gui_util.h
   src/gui/Image_view.cpp
   src/gui/Image_view.h
-  src/gui/Initial_studio.cpp
-  src/gui/Initial_studio.h
   src/gui/Initial_view.cpp
   src/gui/Initial_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/Pan_tool.cpp
   src/gui/Pan_tool.h
-  src/gui/Studio.cpp
-  src/gui/Studio.h
-  src/gui/Test_studio.cpp
-  src/gui/Test_studio.h
   src/gui/Test_view_factory.cpp
   src/gui/Test_view_factory.h
   src/gui/Tool.h
@@ -62,6 +54,14 @@ add_executable(dcm-viewer
   src/gui/menu/View_menu.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
+  src/gui/studio/Dicom_studio.cpp
+  src/gui/studio/Dicom_studio.h
+  src/gui/studio/Initial_studio.cpp
+  src/gui/studio/Initial_studio.h
+  src/gui/studio/Studio.cpp
+  src/gui/studio/Studio.h
+  src/gui/studio/Test_studio.cpp
+  src/gui/studio/Test_studio.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp

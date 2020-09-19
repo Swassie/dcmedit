@@ -1,4 +1,4 @@
-#include "gui/Test_studio.h"
+#include "gui/studio/Test_studio.h"
 
 #include "gui/Test_view_factory.h"
 #include "gui/Main_window.h"

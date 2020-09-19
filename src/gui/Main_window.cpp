@@ -1,8 +1,8 @@
 #include "gui/Main_window.h"
 
-#include "gui/Dicom_studio.h"
-#include "gui/Initial_studio.h"
-#include "gui/Test_studio.h"
+#include "gui/studio/Dicom_studio.h"
+#include "gui/studio/Initial_studio.h"
+#include "gui/studio/Test_studio.h"
 #include "logging/Log.h"
 #include "util/Filesystem.h"
 

@@ -1,4 +1,4 @@
-#include "gui/Dicom_studio.h"
+#include "gui/studio/Dicom_studio.h"
 
 #include "gui/Dicom_view_factory.h"
 #include "gui/Main_window.h"
