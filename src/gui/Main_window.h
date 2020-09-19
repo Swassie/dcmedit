@@ -12,7 +12,7 @@ class Main_window : public QMainWindow
 public:
     Main_window();
 
-    void setup_initial_studio();
+    void setup_start_studio();
     void setup_dicom_studio();
     void setup_test_studio();
 

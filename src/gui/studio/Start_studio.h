@@ -3,8 +3,8 @@
 
 class Main_window;
 
-class Initial_studio : public Studio
+class Start_studio : public Studio
 {
 public:
-    Initial_studio(Main_window&);
+    Start_studio(Main_window&);
 };

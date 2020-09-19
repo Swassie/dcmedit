@@ -22,10 +22,10 @@ add_executable(dcm-viewer
   src/gui/Gui_util.h
   src/gui/Image_view.cpp
   src/gui/Image_view.h
-  src/gui/Initial_view.cpp
-  src/gui/Initial_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
+  src/gui/Start_screen.cpp
+  src/gui/Start_screen.h
   src/gui/Test_view_factory.cpp
   src/gui/Test_view_factory.h
   src/gui/View_factory.h
@@ -51,8 +51,8 @@ add_executable(dcm-viewer
   src/gui/run_gui.h
   src/gui/studio/Dicom_studio.cpp
   src/gui/studio/Dicom_studio.h
-  src/gui/studio/Initial_studio.cpp
-  src/gui/studio/Initial_studio.h
+  src/gui/studio/Start_studio.cpp
+  src/gui/studio/Start_studio.h
   src/gui/studio/Studio.cpp
   src/gui/studio/Studio.h
   src/gui/studio/Test_studio.cpp

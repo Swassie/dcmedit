@@ -1,7 +1,7 @@
-#include "gui/studio/Initial_studio.h"
+#include "gui/studio/Start_studio.h"
 
 #include "gui/Main_window.h"
-#include "gui/Initial_view.h"
+#include "gui/Start_screen.h"
 #include "gui/menu/File_menu.h"
 #include "gui/menu/Menu_bar.h"
 
@@ -15,7 +15,7 @@ static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window) {
     return menu_bar;
 }
 
-Initial_studio::Initial_studio(Main_window& main_window) {
+Start_studio::Start_studio(Main_window& main_window) {
     m_menu_bar = create_menu_bar(main_window);
-    m_central_widget = std::make_unique<Initial_view>(main_window);
+    m_central_widget = std::make_unique<Start_screen>(main_window);
 }

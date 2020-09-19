@@ -1,11 +1,11 @@
-#include "gui/Initial_view.h"
+#include "gui/Start_screen.h"
 
 #include "gui/Main_window.h"
 
 #include <QGridLayout>
 #include <QPushButton>
 
-Initial_view::Initial_view(Main_window& main_window) {
+Start_screen::Start_screen(Main_window& main_window) {
     QPushButton* button = new QPushButton("Open...", this);
     connect(button, &QPushButton::clicked,
             &main_window, &Main_window::open_file);
