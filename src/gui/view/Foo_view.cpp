@@ -4,17 +4,14 @@
 
 #include <QColor>
 #include <QComboBox>
-#include <QContextMenuEvent>
 #include <QLabel>
 #include <QPalette>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-Foo_view::Foo_view(View_manager& view_manager, std::unique_ptr<Foo_view_menu> menu)
+Foo_view::Foo_view(View_manager& view_manager)
     : m_view_manager(view_manager),
-      m_menu(std::move(menu)),
       m_combo_box(new QComboBox(this)) {
-    m_menu->set_context(this);
     setAutoFillBackground(true);
     QVBoxLayout* layout = new QVBoxLayout(this);
 
@@ -54,8 +51,4 @@ void Foo_view::set_background_color_in_all_views() {
     for(Foo_view* view : m_view_manager.get_views_with_interface<Foo_view>()) {
         view->set_background_color(color);
     }
-}
-
-void Foo_view::contextMenuEvent(QContextMenuEvent* event) {
-    m_menu->popup(event->globalPos());
 }

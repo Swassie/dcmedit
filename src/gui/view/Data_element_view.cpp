@@ -2,16 +2,14 @@
 
 #include "gui/Data_element_model.h"
 
-#include <QContextMenuEvent>
+#include <QTableView>
+#include <QVBoxLayout>
 
-Data_element_view::Data_element_view(Data_element_model& model,
-                                       std::unique_ptr<Data_element_view_menu> menu)
-    : m_menu(std::move(menu)) {
-    setModel(&model);
-    setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_menu->set_context(this);
-}
-
-void Data_element_view::contextMenuEvent(QContextMenuEvent* event) {
-    m_menu->popup(event->globalPos());
+Data_element_view::Data_element_view(Data_element_model& model) {
+    QTableView* table_view = new QTableView(this);
+    table_view->setModel(&model);
+    table_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(table_view);
 }

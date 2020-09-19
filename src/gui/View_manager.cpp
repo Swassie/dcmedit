@@ -43,20 +43,19 @@ void View_manager::show_default_layout() {
     create_layout();
 }
 
-void View_manager::replace_view(QWidget* old_view,
-                                  std::unique_ptr<QWidget> new_view) {
-    assert(old_view);
+void View_manager::replace_view(QWidget& old_view,
+                                std::unique_ptr<QWidget> new_view) {
     assert(new_view.get());
 
     QLayout* layout = this->layout();
     assert(layout);
 
-    QLayoutItem* layout_item = layout->replaceWidget(old_view, new_view.get());
+    QLayoutItem* layout_item = layout->replaceWidget(&old_view, new_view.get());
     assert(layout_item);
     delete layout_item;
-    old_view->deleteLater();
+    old_view.deleteLater();
 
-    auto it = std::find(m_views.begin(), m_views.end(), old_view);
+    auto it = std::find(m_views.begin(), m_views.end(), &old_view);
     assert(it != m_views.end());
     *it = new_view.get();
     new_view.release();

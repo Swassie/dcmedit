@@ -5,6 +5,7 @@ class Main_window;
 
 class File_menu : public QMenu
 {
+    Q_OBJECT
 public:
     File_menu();
 

@@ -25,14 +25,8 @@ add_executable(dcm-viewer
   src/gui/View_factory.h
   src/gui/View_manager.cpp
   src/gui/View_manager.h
-  src/gui/menu/Context_menu.cpp
-  src/gui/menu/Context_menu.h
-  src/gui/menu/Data_element_view_menu.h
   src/gui/menu/File_menu.cpp
   src/gui/menu/File_menu.h
-  src/gui/menu/Foo_view_menu.h
-  src/gui/menu/Image_view_menu.cpp
-  src/gui/menu/Image_view_menu.h
   src/gui/menu/Menu_bar.cpp
   src/gui/menu/Menu_bar.h
   src/gui/menu/Studio_menu.cpp
@@ -62,6 +56,10 @@ add_executable(dcm-viewer
   src/gui/view/Foo_view.h
   src/gui/view/Image_view.cpp
   src/gui/view/Image_view.h
+  src/gui/view/View.cpp
+  src/gui/view/View.h
+  src/gui/view/View_util.cpp
+  src/gui/view/View_util.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp

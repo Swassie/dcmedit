@@ -1,20 +1,11 @@
 #pragma once
-#include "gui/menu/Data_element_view_menu.h"
-
-#include <memory>
-#include <QTableView>
+#include "gui/view/View.h"
 
 class Data_element_model;
 
-class Data_element_view : public QTableView
+class Data_element_view : public View
 {
     Q_OBJECT
-
 public:
-    Data_element_view(Data_element_model&, std::unique_ptr<Data_element_view_menu>);
-
-private:
-    void contextMenuEvent(QContextMenuEvent*) override;
-
-    std::unique_ptr<Data_element_view_menu> m_menu;
+    Data_element_view(Data_element_model&);
 };

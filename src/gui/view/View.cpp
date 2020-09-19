@@ -1,0 +1,9 @@
+#include "gui/view/View.h"
+
+#include <QContextMenuEvent>
+
+void View::contextMenuEvent(QContextMenuEvent* event) {
+    if(m_menu) {
+        m_menu->popup(event->globalPos());
+    }
+}

@@ -5,6 +5,7 @@ class View_manager;
 
 class Tool_bar : public QToolBar
 {
+    Q_OBJECT
 public:
     Tool_bar(View_manager&);
 

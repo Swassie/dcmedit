@@ -5,6 +5,7 @@ class Main_window;
 
 class Studio_menu : public QMenu
 {
+    Q_OBJECT
 public:
     enum class Studio {
         dicom,

@@ -5,6 +5,7 @@
 
 class Menu_bar : public QMenuBar
 {
+    Q_OBJECT
 public:
     void add_menu(std::unique_ptr<QMenu>);
 
