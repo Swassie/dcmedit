@@ -26,16 +26,11 @@ add_executable(dcm-viewer
   src/gui/Initial_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
-  src/gui/Pan_tool.cpp
-  src/gui/Pan_tool.h
   src/gui/Test_view_factory.cpp
   src/gui/Test_view_factory.h
-  src/gui/Tool.h
   src/gui/View_factory.h
   src/gui/View_manager.cpp
   src/gui/View_manager.h
-  src/gui/Zoom_tool.cpp
-  src/gui/Zoom_tool.h
   src/gui/menu/Context_menu.cpp
   src/gui/menu/Context_menu.h
   src/gui/menu/Data_element_view_menu.h
@@ -62,6 +57,11 @@ add_executable(dcm-viewer
   src/gui/studio/Studio.h
   src/gui/studio/Test_studio.cpp
   src/gui/studio/Test_studio.h
+  src/gui/tool/Pan_tool.cpp
+  src/gui/tool/Pan_tool.h
+  src/gui/tool/Tool.h
+  src/gui/tool/Zoom_tool.cpp
+  src/gui/tool/Zoom_tool.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp

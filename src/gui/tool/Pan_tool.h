@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Tool.h"
+#include "gui/tool/Tool.h"
 
 class Pan_tool : public Tool
 {

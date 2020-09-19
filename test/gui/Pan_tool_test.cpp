@@ -1,4 +1,4 @@
-#include "gui/Pan_tool.h"
+#include "gui/tool/Pan_tool.h"
 
 #include "catch.hpp"
 #include <QMouseEvent>
