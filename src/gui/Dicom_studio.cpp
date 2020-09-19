@@ -1,23 +1,29 @@
 #include "gui/Dicom_studio.h"
 
-#include "gui/Common_actions.h"
 #include "gui/Dicom_view_factory.h"
 #include "gui/Main_window.h"
-#include "gui/Tool_bar.h"
 #include "gui/View_manager.h"
+#include "gui/menu/File_menu.h"
+#include "gui/menu/Menu_bar.h"
+#include "gui/menu/Studio_menu.h"
+#include "gui/menu/Tool_bar.h"
+#include "gui/menu/View_menu.h"
 
-static std::unique_ptr<QMenuBar> create_menu_bar(Main_window& main_window,
+static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window,
                                                  View_manager& view_manager) {
-    auto menu_bar = std::make_unique<QMenuBar>();
+    auto menu_bar = std::make_unique<Menu_bar>();
 
-    QMenu* file_menu = Common_actions::add_file_menu(*menu_bar);
-    Common_actions::add_open_file(*file_menu, main_window);
+    auto file_menu = std::make_unique<File_menu>();
+    file_menu->add_open_file(main_window);
+    menu_bar->add_menu(std::move(file_menu));
 
-    QMenu* view_menu = Common_actions::add_view_menu(*menu_bar);
-    Common_actions::add_view_counts(*view_menu, view_manager);
+    auto view_menu = std::make_unique<View_menu>();
+    view_menu->add_view_counts(view_manager);
+    menu_bar->add_menu(std::move(view_menu));
 
-    QMenu* studio_menu = Common_actions::add_studio_menu(*menu_bar);
-    Common_actions::add_studios(*studio_menu, main_window, Common_actions::Studio::dicom);
+    auto studio_menu = std::make_unique<Studio_menu>();
+    studio_menu->add_studios(main_window, Studio_menu::Studio::dicom);
+    menu_bar->add_menu(std::move(studio_menu));
 
     return menu_bar;
 }

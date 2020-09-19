@@ -1,7 +1,7 @@
 #include "gui/Image_view.h"
 
 #include "gui/Gui_util.h"
-#include "gui/Tool_bar.h"
+#include "gui/menu/Tool_bar.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>

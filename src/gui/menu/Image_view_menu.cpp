@@ -1,4 +1,4 @@
-#include "gui/Image_view_menu.h"
+#include "gui/menu/Image_view_menu.h"
 
 void Image_view_menu::add_action_1() {
     addAction("NOP 1", [] {});

@@ -1,7 +1,7 @@
 #pragma once
-#include "gui/Image_view_menu.h"
 #include "gui/Pan_tool.h"
 #include "gui/Zoom_tool.h"
+#include "gui/menu/Image_view_menu.h"
 
 #include <memory>
 #include <QWidget>

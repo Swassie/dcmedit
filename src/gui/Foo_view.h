@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Foo_view_menu.h"
+#include "gui/menu/Foo_view_menu.h"
 
 #include <memory>
 #include <QWidget>

@@ -1,14 +1,14 @@
 #include "gui/Test_view_factory.h"
 
 #include "gui/Data_element_view.h"
-#include "gui/Data_element_view_menu.h"
 #include "gui/Foo_view.h"
-#include "gui/Foo_view_menu.h"
 #include "gui/Image_view.h"
-#include "gui/Image_view_menu.h"
 #include "gui/Pan_tool.h"
 #include "gui/View_manager.h"
 #include "gui/Zoom_tool.h"
+#include "gui/menu/Data_element_view_menu.h"
+#include "gui/menu/Foo_view_menu.h"
+#include "gui/menu/Image_view_menu.h"
 
 #include <memory>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "gui/Data_element_view_menu.h"
+#include "gui/menu/Data_element_view_menu.h"
 
 #include <memory>
 #include <QTableView>
