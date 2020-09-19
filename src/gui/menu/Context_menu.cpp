@@ -1,10 +1,10 @@
 #include "gui/menu/Context_menu.h"
 
-#include "gui/Image_view.h"
-#include "gui/Data_element_view.h"
-#include "gui/Foo_view.h"
 #include "gui/View_factory.h"
 #include "gui/View_manager.h"
+#include "gui/view/Data_element_view.h"
+#include "gui/view/Foo_view.h"
+#include "gui/view/Image_view.h"
 
 void Context_menu::add_switch_to_image_view(View_factory& view_factory,
                                             View_manager& view_manager) {

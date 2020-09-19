@@ -1,4 +1,4 @@
-#include "gui/Image_view.h"
+#include "gui/view/Image_view.h"
 
 #include "gui/Gui_util.h"
 #include "gui/menu/Tool_bar.h"

@@ -1,6 +1,4 @@
 #pragma once
-#include "gui/Data_element_view.h"
-#include "gui/Image_view.h"
 #include "gui/View_factory.h"
 
 #include <memory>

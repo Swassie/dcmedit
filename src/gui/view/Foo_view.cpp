@@ -1,4 +1,4 @@
-#include "gui/Foo_view.h"
+#include "gui/view/Foo_view.h"
 
 #include "gui/View_manager.h"
 

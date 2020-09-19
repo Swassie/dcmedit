@@ -1,4 +1,4 @@
-#include "gui/Data_element_view.h"
+#include "gui/view/Data_element_view.h"
 
 #include "gui/Data_element_model.h"
 

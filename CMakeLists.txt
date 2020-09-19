@@ -12,16 +12,10 @@ add_executable(dcm-viewer
   src/Dataset.h
   src/gui/Data_element_model.cpp
   src/gui/Data_element_model.h
-  src/gui/Data_element_view.cpp
-  src/gui/Data_element_view.h
   src/gui/Dicom_view_factory.cpp
   src/gui/Dicom_view_factory.h
-  src/gui/Foo_view.cpp
-  src/gui/Foo_view.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
-  src/gui/Image_view.cpp
-  src/gui/Image_view.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/Start_screen.cpp
@@ -62,6 +56,12 @@ add_executable(dcm-viewer
   src/gui/tool/Tool.h
   src/gui/tool/Zoom_tool.cpp
   src/gui/tool/Zoom_tool.h
+  src/gui/view/Data_element_view.cpp
+  src/gui/view/Data_element_view.h
+  src/gui/view/Foo_view.cpp
+  src/gui/view/Foo_view.h
+  src/gui/view/Image_view.cpp
+  src/gui/view/Image_view.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
