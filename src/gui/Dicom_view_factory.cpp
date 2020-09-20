@@ -1,12 +1,13 @@
 #include "gui/Dicom_view_factory.h"
 
 #include "gui/View_manager.h"
+#include "gui/menu/Menu.h"
 #include "gui/tool/Pan_tool.h"
 #include "gui/tool/Zoom_tool.h"
 #include "gui/view/Data_element_view.h"
 #include "gui/view/Foo_view.h"
 #include "gui/view/Image_view.h"
-#include "gui/view/View_util.h"
+#include "gui/view/View_actions.h"
 
 #include <cassert>
 #include <memory>
@@ -25,25 +26,21 @@ std::unique_ptr<Image_view> Dicom_view_factory::make_image_view() {
                                              m_tool_bar,
                                              std::make_unique<Pan_tool>(),
                                              std::make_unique<Zoom_tool>());
-    auto& view_ref = *view;
-    auto menu = std::make_unique<QMenu>();
+    auto menu = std::make_unique<Menu>();
     menu->addAction("NOP 1", [] {});
     menu->addAction("NOP 2", [] {});
     menu->addSeparator();
-    menu->addAction("Element view", [&] {
-        View_util::switch_to_element_view(view_ref, *this, m_view_manager);
-    }, QKeySequence("2"));
+    menu->add_action(View_actions::switch_to_element_view(*view, *this, m_view_manager));
+    view->addActions(menu->actions());
     view->set_menu(std::move(menu));
     return view;
 }
 
 std::unique_ptr<Data_element_view> Dicom_view_factory::make_element_view() {
     auto view = std::make_unique<Data_element_view>(m_element_model);
-    auto& view_ref = *view;
-    auto menu = std::make_unique<QMenu>();
-    menu->addAction("Image view", [&] {
-        View_util::switch_to_image_view(view_ref, *this, m_view_manager);
-    }, QKeySequence("1"));
+    auto menu = std::make_unique<Menu>();
+    menu->add_action(View_actions::switch_to_image_view(*view, *this, m_view_manager));
+    view->addActions(menu->actions());
     view->set_menu(std::move(menu));
     return view;
 }
