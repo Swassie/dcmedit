@@ -1,7 +1,7 @@
 #pragma once
+#include "gui/menu/Menu_bar.h"
+#include "gui/menu/Tool_bar.h"
 #include <memory>
-#include <QMenuBar>
-#include <QToolBar>
 #include <QWidget>
 
 class Studio
@@ -9,12 +9,12 @@ class Studio
 public:
     virtual ~Studio() = default;
 
-    QToolBar* get_tool_bar();
-    std::unique_ptr<QMenuBar> take_menu_bar();
+    Tool_bar* get_tool_bar();
+    std::unique_ptr<Menu_bar> take_menu_bar();
     std::unique_ptr<QWidget> take_central_widget();
 
 protected:
-    std::unique_ptr<QToolBar> m_tool_bar;
-    std::unique_ptr<QMenuBar> m_menu_bar;
+    std::unique_ptr<Tool_bar> m_tool_bar;
+    std::unique_ptr<Menu_bar> m_menu_bar;
     std::unique_ptr<QWidget> m_central_widget;
 };

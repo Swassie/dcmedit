@@ -2,22 +2,17 @@
 
 #include "gui/View_manager.h"
 
-Tool_bar::Tool_bar(View_manager& view_manager)
-    : m_selected_tool(Tool::pan),
-      m_view_manager(view_manager) {
-    addAction("Default layout", this, &Tool_bar::show_default_layout);
-    addAction("Pan", this, &Tool_bar::select_pan_tool);
-    addAction("Zoom", this, &Tool_bar::select_zoom_tool);
+Tool_bar::Tool_bar()
+    : m_selected_tool(Tool::pan) {}
+
+void Tool_bar::add_default_layout(View_manager& view_manager) {
+    addAction("Default layout", &view_manager, &View_manager::show_default_layout);
 }
 
-void Tool_bar::show_default_layout() {
-    m_view_manager.show_default_layout();
+void Tool_bar::add_pan() {
+    addAction("Pan", [this] {m_selected_tool = Tool::pan;});
 }
 
-void Tool_bar::select_pan_tool() {
-    m_selected_tool = Tool::pan;
-}
-
-void Tool_bar::select_zoom_tool() {
-    m_selected_tool = Tool::zoom;
+void Tool_bar::add_zoom() {
+    addAction("Zoom", [this] {m_selected_tool = Tool::zoom;});
 }
