@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(dcm-viewer)
+project(dcmed)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK REQUIRED)
 
-add_executable(dcm-viewer
+add_executable(dcmed
   src/Dataset.cpp
   src/Dataset.h
   src/gui/Data_element_model.cpp
@@ -64,15 +64,15 @@ add_executable(dcm-viewer
   src/util/Filesystem.h
 )
 
-set_target_properties(dcm-viewer PROPERTIES CXX_STANDARD 17)
-target_compile_options(dcm-viewer PRIVATE -Wall -Wextra -pedantic)
+set_target_properties(dcmed PROPERTIES CXX_STANDARD 17)
+target_compile_options(dcmed PRIVATE -Wall -Wextra -pedantic)
 
-target_include_directories(dcm-viewer PRIVATE
+target_include_directories(dcmed PRIVATE
   src
   "${DCMTK_INCLUDE_DIRS}"
 )
 
-target_link_libraries(dcm-viewer
+target_link_libraries(dcmed
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
   stdc++fs
