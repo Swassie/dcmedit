@@ -21,25 +21,36 @@ Image_view::Image_view(DcmFileFormat& dicom_file,
     setMouseTracking(true);
 }
 
+static QImage::Format get_image_format(const DicomImage& image) {
+    QImage::Format format = QImage::Format_Invalid;
+    if(image.getDepth() == 8) {
+        format = QImage::Format_Grayscale8;
+    }
+    else if(image.getDepth() == 16) {
+        format = QImage::Format_Grayscale16;
+    }
+    return format;
+}
+
 void Image_view::paintEvent(QPaintEvent*) {
     DicomImage image(&m_dicom_file, EXS_Unknown);
-    const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData(8));
+    const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData());
+    QPainter painter(this);
     if(!pixel_data) {
         QString status = DicomImage::getString(image.getStatus());
-        QPainter painter(this);
         painter.drawText(rect(), "Could not render image.\nReason: " + status);
         return;
     }
     const size_t width = image.getWidth();
     const size_t height = image.getHeight();
-    QImage q_image(pixel_data, width, height, width, QImage::Format_Grayscale8);
+    QImage::Format format = get_image_format(image);
+    QImage q_image(pixel_data, width, height, width, format);
     const QRect source = q_image.rect();
     QRect target = rect();
     auto zoom_factor = m_zoom_tool->get_zoom_factor();
     auto pan_scaling_factor = 1.0 / zoom_factor;
     target.moveTo(m_pan_tool->get_x() * pan_scaling_factor,
                   m_pan_tool->get_y() * pan_scaling_factor);
-    QPainter painter(this);
     painter.scale(zoom_factor, zoom_factor);
     painter.drawPixmap(target, QPixmap::fromImage(q_image), source);
 }

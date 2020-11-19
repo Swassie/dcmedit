@@ -19,10 +19,11 @@ class Log
 public:
     Log(Log_level);
     Log(const Log&) = delete;
-    Log& operator=(const Log&) = delete;
     Log(const Log&&) = delete;
+    Log& operator=(const Log&) = delete;
     Log& operator=(const Log&&) = delete;
     ~Log();
+
     static void log(std::string, Log_level);
     static void debug(const std::string&);
     static void info(const std::string&);
