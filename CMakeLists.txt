@@ -41,11 +41,9 @@ add_executable(dcmed
   src/gui/studio/Start_studio.h
   src/gui/studio/Studio.cpp
   src/gui/studio/Studio.h
-  src/gui/tool/Pan_tool.cpp
-  src/gui/tool/Pan_tool.h
   src/gui/tool/Tool.h
-  src/gui/tool/Zoom_tool.cpp
-  src/gui/tool/Zoom_tool.h
+  src/gui/tool/Transform_tool.cpp
+  src/gui/tool/Transform_tool.h
   src/gui/view/Data_element_view.cpp
   src/gui/view/Data_element_view.h
   src/gui/view/Image_view.cpp

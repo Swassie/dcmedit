@@ -1,7 +1,6 @@
 #pragma once
 #include "gui/view/View.h"
-#include "gui/tool/Pan_tool.h"
-#include "gui/tool/Zoom_tool.h"
+#include "gui/tool/Transform_tool.h"
 
 #include <memory>
 #include <QWidget>
@@ -16,8 +15,7 @@ class Image_view : public View
 public:
     Image_view(DcmFileFormat&,
                Tool_bar&,
-               std::unique_ptr<Pan_tool>,
-               std::unique_ptr<Zoom_tool>);
+               std::unique_ptr<Transform_tool>);
 
 private:
     void paintEvent(QPaintEvent*) override;
@@ -29,6 +27,5 @@ private:
     DcmFileFormat& m_dicom_file;
     Tool_bar& m_tool_bar;
     Tool* m_current_tool;
-    std::unique_ptr<Pan_tool> m_pan_tool;
-    std::unique_ptr<Zoom_tool> m_zoom_tool;
+    std::unique_ptr<Transform_tool> m_transform_tool;
 };

@@ -11,13 +11,11 @@
 
 Image_view::Image_view(DcmFileFormat& dicom_file,
                        Tool_bar& tool_bar,
-                       std::unique_ptr<Pan_tool> pan_tool,
-                       std::unique_ptr<Zoom_tool> zoom_tool)
+                       std::unique_ptr<Transform_tool> transform_tool)
     : m_dicom_file(dicom_file),
       m_tool_bar(tool_bar),
-      m_current_tool(pan_tool.get()),
-      m_pan_tool(std::move(pan_tool)),
-      m_zoom_tool(std::move(zoom_tool)) {
+      m_current_tool(transform_tool.get()),
+      m_transform_tool(std::move(transform_tool)) {
     setMouseTracking(true);
 }
 
@@ -45,14 +43,9 @@ void Image_view::paintEvent(QPaintEvent*) {
     const size_t height = image.getHeight();
     QImage::Format format = get_image_format(image);
     QImage q_image(pixel_data, width, height, width, format);
-    const QRect source = q_image.rect();
-    QRect target = rect();
-    auto zoom_factor = m_zoom_tool->get_zoom_factor();
-    auto pan_scaling_factor = 1.0 / zoom_factor;
-    target.moveTo(m_pan_tool->get_x() * pan_scaling_factor,
-                  m_pan_tool->get_y() * pan_scaling_factor);
-    painter.scale(zoom_factor, zoom_factor);
-    painter.drawPixmap(target, QPixmap::fromImage(q_image), source);
+    const QRect image_rect = q_image.rect();
+    painter.setTransform(m_transform_tool->get_transform());
+    painter.drawPixmap(image_rect, QPixmap::fromImage(q_image), image_rect);
 }
 
 void Image_view::mouseMoveEvent(QMouseEvent* event) {
@@ -75,10 +68,12 @@ void Image_view::mousePressEvent(QMouseEvent* event) {
 void Image_view::set_tool() {
     switch(m_tool_bar.get_selected_tool()) {
     case Tool_bar::Tool::pan:
-        m_current_tool = m_pan_tool.get();
+        m_transform_tool->set_translate_mode();
+        m_current_tool = m_transform_tool.get();
         break;
     case Tool_bar::Tool::zoom:
-        m_current_tool = m_zoom_tool.get();
+        m_transform_tool->set_scale_mode();
+        m_current_tool = m_transform_tool.get();
         break;
     }
 }

@@ -1,15 +1,13 @@
 add_executable(test-runner
   ../src/Dataset.cpp
   ../src/gui/Gui_util.cpp
-  ../src/gui/tool/Pan_tool.cpp
-  ../src/gui/tool/Zoom_tool.cpp
+  ../src/gui/tool/Transform_tool.cpp
   ../src/logging/Log.cpp
   ../third-party/catch.hpp
   # Test files
   main.cpp
   Dataset.cpp
-  gui/Pan_tool_test.cpp
-  gui/Zoom_tool_test.cpp
+  gui/tool/Transform_tool_test.cpp
 )
 
 set_target_properties(test-runner PROPERTIES CXX_STANDARD 17)

@@ -2,8 +2,7 @@
 
 #include "gui/View_manager.h"
 #include "gui/menu/Menu.h"
-#include "gui/tool/Pan_tool.h"
-#include "gui/tool/Zoom_tool.h"
+#include "gui/tool/Transform_tool.h"
 #include "gui/view/Data_element_view.h"
 #include "gui/view/Image_view.h"
 #include "gui/view/View_actions.h"
@@ -23,8 +22,7 @@ Dicom_view_factory::Dicom_view_factory(DcmFileFormat& dicom_file,
 std::unique_ptr<Image_view> Dicom_view_factory::make_image_view() {
     auto view = std::make_unique<Image_view>(m_dicom_file,
                                              m_tool_bar,
-                                             std::make_unique<Pan_tool>(),
-                                             std::make_unique<Zoom_tool>());
+                                             std::make_unique<Transform_tool>());
     auto menu = std::make_unique<Menu>();
     menu->add_action(View_actions::switch_to_element_view(*view, *this, m_view_manager));
     view->addActions(menu->actions());
