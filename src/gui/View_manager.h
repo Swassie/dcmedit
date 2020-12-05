@@ -18,8 +18,8 @@ public:
     template<class T>
     std::vector<T*> get_views_with_interface() {
         std::vector<T*> views;
-        for(auto view : m_views) {
-            T* casted_view = dynamic_cast<T*>(view);
+        for(auto& view : m_views) {
+            T* casted_view = dynamic_cast<T*>(view.get());
             if(casted_view) {
                 views.push_back(casted_view);
             }
@@ -37,5 +37,5 @@ private:
     void create_6_view_layout();
 
     std::unique_ptr<View_factory> m_view_factory;
-    std::vector<QWidget*> m_views;
+    std::vector<std::unique_ptr<QWidget>> m_views;
 };
