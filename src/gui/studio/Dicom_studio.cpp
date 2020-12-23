@@ -31,14 +31,12 @@ static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window,
     return menu_bar;
 }
 
-Dicom_studio::Dicom_studio(Main_window& main_window, DcmFileFormat& dicom_file) {
+Dicom_studio::Dicom_studio(Main_window& main_window, DcmDataset& dataset) {
     auto view_manager = std::make_unique<View_manager>();
     m_tool_bar = create_tool_bar(*view_manager);
 
-    m_element_model = std::make_unique<Data_element_model>(dicom_file);
-    auto view_factory = std::make_unique<Dicom_view_factory>(dicom_file,
+    auto view_factory = std::make_unique<Dicom_view_factory>(dataset,
                                                              *m_tool_bar,
-                                                             *m_element_model,
                                                              *view_manager);
 
     view_manager->set_view_factory(std::move(view_factory));

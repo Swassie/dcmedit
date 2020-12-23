@@ -9,10 +9,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-Image_view::Image_view(DcmFileFormat& dicom_file,
+Image_view::Image_view(DcmDataset& dataset,
                        Tool_bar& tool_bar,
                        std::unique_ptr<Transform_tool> transform_tool)
-    : m_dicom_file(dicom_file),
+    : m_dataset(dataset),
       m_tool_bar(tool_bar),
       m_current_tool(transform_tool.get()),
       m_transform_tool(std::move(transform_tool)) {
@@ -31,7 +31,7 @@ static QImage::Format get_image_format(const DicomImage& image) {
 }
 
 void Image_view::paintEvent(QPaintEvent*) {
-    DicomImage image(&m_dicom_file, EXS_Unknown);
+    DicomImage image(&m_dataset, EXS_Unknown);
     const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData());
     QPainter painter(this);
     if(!pixel_data) {

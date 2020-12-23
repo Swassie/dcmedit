@@ -1,7 +1,7 @@
 #pragma once
+#include "Dicom_file.h"
 #include "gui/studio/Studio.h"
 
-#include <dcmtk/dcmdata/dctk.h>
 #include <memory>
 #include <QMainWindow>
 
@@ -17,6 +17,6 @@ public:
     void open_file();
 private:
 
-    std::unique_ptr<DcmFileFormat> m_dicom_file;
+    std::unique_ptr<Dicom_file> m_file;
     std::unique_ptr<Studio> m_studio;
 };

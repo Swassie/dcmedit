@@ -26,7 +26,7 @@ void Main_window::setup_dicom_studio() {
     if(m_studio) {
         removeToolBar(m_studio->get_tool_bar());
     }
-    m_studio = std::make_unique<Dicom_studio>(*this, *m_dicom_file.get());
+    m_studio = std::make_unique<Dicom_studio>(*this, m_file->get_dataset());
     addToolBar(m_studio->get_tool_bar());
     setMenuBar(m_studio->take_menu_bar().release());
     setCentralWidget(m_studio->take_central_widget().release());
@@ -37,14 +37,6 @@ void Main_window::open_file() {
     if (file_path.empty()) {
         return;
     }
-    auto file_format = std::make_unique<DcmFileFormat>();
-    OFCondition status = file_format->loadFile(file_path.c_str());
-
-    if(!status.good()) {
-        Log::info("Could not load file: " + file_path +
-                  ". Reason: " + status.text());
-        return;
-    }
-    m_dicom_file = std::move(file_format);
+    m_file = std::make_unique<Dicom_file>(file_path);
     setup_dicom_studio();
 }

@@ -5,7 +5,7 @@
 #include <memory>
 #include <QWidget>
 
-class DcmFileFormat;
+class DcmDataset;
 class Tool;
 class Tool_bar;
 
@@ -13,7 +13,7 @@ class Image_view : public View
 {
     Q_OBJECT
 public:
-    Image_view(DcmFileFormat&,
+    Image_view(DcmDataset&,
                Tool_bar&,
                std::unique_ptr<Transform_tool>);
 
@@ -24,7 +24,7 @@ private:
 
     void set_tool();
 
-    DcmFileFormat& m_dicom_file;
+    DcmDataset& m_dataset;
     Tool_bar& m_tool_bar;
     Tool* m_current_tool;
     std::unique_ptr<Transform_tool> m_transform_tool;

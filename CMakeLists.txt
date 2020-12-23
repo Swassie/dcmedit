@@ -10,8 +10,8 @@ find_package(DCMTK REQUIRED)
 add_executable(dcmed
   src/Dataset.cpp
   src/Dataset.h
-  src/gui/Data_element_model.cpp
-  src/gui/Data_element_model.h
+  src/Dicom_file.cpp
+  src/Dicom_file.h
   src/gui/Dicom_view_factory.cpp
   src/gui/Dicom_view_factory.h
   src/gui/Gui_util.cpp
@@ -44,8 +44,12 @@ add_executable(dcmed
   src/gui/tool/Tool.h
   src/gui/tool/Transform_tool.cpp
   src/gui/tool/Transform_tool.h
-  src/gui/view/Data_element_view.cpp
-  src/gui/view/Data_element_view.h
+  src/gui/view/Dataset_table.cpp
+  src/gui/view/Dataset_table.h
+  src/gui/view/Dataset_view.cpp
+  src/gui/view/Dataset_view.h
+  src/gui/view/Edit_element_dialog.cpp
+  src/gui/view/Edit_element_dialog.h
   src/gui/view/Image_view.cpp
   src/gui/view/Image_view.h
   src/gui/view/View.cpp
