@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(dcmed)
+project(dcmedit)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK REQUIRED)
 
-add_executable(dcmed
+add_executable(dcmedit
   src/Dataset.cpp
   src/Dataset.h
   src/Dicom_file.cpp
@@ -66,15 +66,15 @@ add_executable(dcmed
   src/util/Filesystem.h
 )
 
-set_target_properties(dcmed PROPERTIES CXX_STANDARD 17)
-target_compile_options(dcmed PRIVATE -Wall -Wextra -pedantic)
+set_target_properties(dcmedit PROPERTIES CXX_STANDARD 17)
+target_compile_options(dcmedit PRIVATE -Wall -Wextra -pedantic)
 
-target_include_directories(dcmed PRIVATE
+target_include_directories(dcmedit PRIVATE
   src
   "${DCMTK_INCLUDE_DIRS}"
 )
 
-target_link_libraries(dcmed
+target_link_libraries(dcmedit
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
   stdc++fs
