@@ -1,4 +1,5 @@
 #include "gui/view/Dataset_table.h"
+#include "gui/view/Add_element_dialog.h"
 #include "gui/view/Edit_element_dialog.h"
 
 #include <dcmtk/dcmdata/dcelem.h>
@@ -8,6 +9,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QString>
 #include <QToolBar>
 #include <QVBoxLayout>
@@ -22,6 +24,9 @@ Dataset_table::Dataset_table(DcmItem &dataset, QStackedLayout& stack,
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
+    QPushButton* add_button = new QPushButton("Add");
+    connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
+    layout->addWidget(add_button);
     layout->addWidget(m_table.get());
     configure_table();
     populate_table();
@@ -71,13 +76,21 @@ void Dataset_table::populate_table() {
         m_table->setItem(row, 3, item);
         OFString value;
         if(element->getLengthField() <= max_value_display_length) {
-            element->getOFStringArray(value, OFFalse);
+            element->getOFStringArray(value, false);
         }
         else {
-            value = "<Value too large, click on \"Edit\" for more details.>";
+            value = "<Too large value, click on \"Edit\" for more details.>";
         }
         item = new QTableWidgetItem(QString(value.c_str()));
         m_table->setItem(row, 4, item);
+    }
+}
+
+void Dataset_table::add_element() {
+    Add_element_dialog add_dialog(this, m_dataset);
+    const int result = add_dialog.exec();
+    if(result == QDialog::Accepted) {
+        populate_table();
     }
 }
 

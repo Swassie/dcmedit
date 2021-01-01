@@ -44,6 +44,8 @@ add_executable(dcmedit
   src/gui/tool/Tool.h
   src/gui/tool/Transform_tool.cpp
   src/gui/tool/Transform_tool.h
+  src/gui/view/Add_element_dialog.cpp
+  src/gui/view/Add_element_dialog.h
   src/gui/view/Dataset_table.cpp
   src/gui/view/Dataset_table.h
   src/gui/view/Dataset_view.cpp

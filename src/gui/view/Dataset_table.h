@@ -17,6 +17,7 @@ private:
     void configure_table();
     void populate_table();
 
+    void add_element();
     void save_value_to_file(DcmElement&);
     void load_value_from_file(DcmElement&);
     void edit_value(DcmElement&);

@@ -15,5 +15,5 @@ private:
     void apply();
 
     DcmElement& m_element;
-    std::unique_ptr<QPlainTextEdit> m_text_edit;
+    std::unique_ptr<QPlainTextEdit> m_value_edit;
 };
