@@ -35,7 +35,16 @@ void Add_element_dialog::apply() {
         return;
     }
     const std::string value = m_value_edit->toPlainText().toStdString();
-    result = m_dataset.putAndInsertString(tag, value.c_str(), false);
+    if(tag.getEVR() == EVR_SQ) {
+        if(!value.empty()) {
+            QMessageBox::critical(this, "Invalid value", "Element with VR of SQ can't have any value.");
+            return;
+        }
+        result = m_dataset.insertEmptyElement(tag, false);
+    }
+    else {
+        result = m_dataset.putAndInsertString(tag, value.c_str(), false);
+    }
     if(result.bad()) {
         QMessageBox::critical(this, "Failed to create element", "Failed to add data element.\n"
                               "Reason: " + QString(result.text()));

@@ -1,32 +1,46 @@
 #include "gui/view/Dataset_table.h"
+
 #include "gui/view/Add_element_dialog.h"
 #include "gui/view/Edit_element_dialog.h"
+#include "gui/view/Sequence_table.h"
 
 #include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcitem.h>
 #include <dcmtk/dcmdata/dcistrmf.h>
+#include <dcmtk/dcmdata/dcsequen.h>
 #include <fstream>
 #include <QFile>
 #include <QFileDialog>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStackedLayout>
 #include <QString>
 #include <QToolBar>
 #include <QVBoxLayout>
 
 const int max_value_display_length = 100;
 
-Dataset_table::Dataset_table(DcmItem &dataset, QStackedLayout& stack,
-                             const std::string &path)
+Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
+                             const QString& path)
     : m_dataset(dataset),
       m_table_stack(stack),
       m_path(path),
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    QPushButton* add_button = new QPushButton("Add");
+    QHBoxLayout* header_layout = new QHBoxLayout();
+    QPushButton* back_button = new QPushButton("Go back");
+    connect(back_button, &QPushButton::clicked, this, &Dataset_table::pop_table);
+    header_layout->addWidget(back_button);
+    QPushButton* add_button = new QPushButton("Add element");
     connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
-    layout->addWidget(add_button);
+    header_layout->addWidget(add_button);
+    QLabel* path_label = new QLabel(m_path);
+    header_layout->addWidget(path_label);
+    header_layout->addStretch(1);
+    layout->addLayout(header_layout);
     layout->addWidget(m_table.get());
     configure_table();
     populate_table();
@@ -40,32 +54,34 @@ void Dataset_table::configure_table() {
 
 void Dataset_table::populate_table() {
     m_table->clearContents();
-    const auto element_count = m_dataset.card();
+    const auto element_count = m_dataset.getNumberOfValues();
     m_table->setRowCount(element_count);
 
     for(auto row = 0u; row < element_count; ++row) {
         DcmElement* element = m_dataset.getElement(row);
+        DcmTag tag = element->getTag();
 
         auto toolbar = new QToolBar();
-        QAction* save_action = toolbar->addAction("Save");
-        connect(save_action, &QAction::triggered, [this, element] {
-            save_value_to_file(*element);
-        });
-        QAction* load_action = toolbar->addAction("Load");
-        connect(load_action, &QAction::triggered, [this, element] {
-            load_value_from_file(*element);
-        });
-        QAction* edit_action = toolbar->addAction("Edit");
-        connect(edit_action, &QAction::triggered, [this, element] {
-            edit_value(*element);
-        });
+        if(tag.getEVR() != EVR_SQ) {
+            QAction* save_action = toolbar->addAction("Save");
+            connect(save_action, &QAction::triggered, [this, element] {
+                save_value_to_file(*element);
+            });
+            QAction* load_action = toolbar->addAction("Load");
+            connect(load_action, &QAction::triggered, [this, element] {
+                load_value_from_file(*element);
+            });
+            QAction* edit_action = toolbar->addAction("Edit");
+            connect(edit_action, &QAction::triggered, [this, element] {
+                edit_value(*element);
+            });
+        }
         QAction* delete_action = toolbar->addAction("Delete");
         connect(delete_action, &QAction::triggered, [this, element] {
             delete_element(*element);
         });
         m_table->setCellWidget(row, 0, toolbar);
 
-        DcmTag tag = element->getTag();
         QString tag_str = tag.toString().c_str();
         tag_str = tag_str + " " + tag.getTagName();
         auto item = new QTableWidgetItem(tag_str);
@@ -74,16 +90,30 @@ void Dataset_table::populate_table() {
         m_table->setItem(row, 2, item);
         item = new QTableWidgetItem(QString::number(element->getLengthField()));
         m_table->setItem(row, 3, item);
-        OFString value;
-        if(element->getLengthField() <= max_value_display_length) {
-            element->getOFStringArray(value, false);
+        if(tag.getEVR() == EVR_SQ) {
+            QPushButton* sequence_button = new QPushButton("Click to show sequence.");
+            connect(sequence_button, &QPushButton::clicked, [this, element] {
+                show_sequence(*element);
+            });
+            m_table->setCellWidget(row, 4, sequence_button);
         }
         else {
-            value = "<Too large value, click on \"Edit\" for more details.>";
+            OFString value;
+            if(element->getLengthField() <= max_value_display_length) {
+                element->getOFStringArray(value, false);
+            }
+            else {
+                value = "<Too large value, click on \"Edit\" for more details.>";
+            }
+            item = new QTableWidgetItem(QString(value.c_str()));
+            m_table->setItem(row, 4, item);
         }
-        item = new QTableWidgetItem(QString(value.c_str()));
-        m_table->setItem(row, 4, item);
     }
+}
+
+void Dataset_table::pop_table() {
+    m_table_stack.removeWidget(this);
+    deleteLater();
 }
 
 void Dataset_table::add_element() {
@@ -149,4 +179,18 @@ void Dataset_table::delete_element(DcmElement& element) {
     DcmElement* removed_element = m_dataset.remove(&element);
     delete removed_element;
     populate_table();
+}
+
+void Dataset_table::show_sequence(DcmElement& element) {
+    auto sequence = dynamic_cast<DcmSequenceOfItems*>(&element);
+    if(sequence) {
+        QString path = m_path;
+        if(!path.isEmpty()) {
+            path += ".";
+        }
+        path += element.getTag().toString().c_str();
+        auto table = new Sequence_table(*sequence, m_table_stack, path);
+        m_table_stack.addWidget(table);
+        m_table_stack.setCurrentWidget(table);
+    }
 }

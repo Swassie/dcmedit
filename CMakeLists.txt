@@ -54,6 +54,8 @@ add_executable(dcmedit
   src/gui/view/Edit_element_dialog.h
   src/gui/view/Image_view.cpp
   src/gui/view/Image_view.h
+  src/gui/view/Sequence_table.cpp
+  src/gui/view/Sequence_table.h
   src/gui/view/View.cpp
   src/gui/view/View.h
   src/gui/view/View_actions.cpp
