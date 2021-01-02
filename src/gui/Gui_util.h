@@ -1,5 +1,4 @@
 #pragma once
-
 class QMouseEvent;
 
 namespace Gui_util

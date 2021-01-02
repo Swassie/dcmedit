@@ -34,12 +34,13 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
     layout->addWidget(m_table.get());
     configure_table();
     populate_table();
+    m_table->resizeColumnsToContents();
 }
 
 void Sequence_table::configure_table() {
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_table->setColumnCount(3);
-    m_table->setHorizontalHeaderLabels({"", "Length", ""});
+    m_table->setHorizontalHeaderLabels({"Actions", "Length", "Value"});
 }
 
 void Sequence_table::populate_table() {
@@ -81,6 +82,9 @@ void Sequence_table::add_item() {
         return;
     }
     populate_table();
+    if(m_sequence.getNumberOfValues() == 1) {
+        m_table->resizeColumnsToContents();
+    }
 }
 
 void Sequence_table::delete_item(DcmItem& item) {

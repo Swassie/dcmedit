@@ -8,8 +8,6 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK REQUIRED)
 
 add_executable(dcmedit
-  src/Dataset.cpp
-  src/Dataset.h
   src/Dicom_file.cpp
   src/Dicom_file.h
   src/gui/Dicom_view_factory.cpp
@@ -66,8 +64,6 @@ add_executable(dcmedit
   src/logging/Log.h
   src/logging/Logger.h
   src/main.cpp
-  src/util/Filesystem.cpp
-  src/util/Filesystem.h
 )
 
 set_target_properties(dcmedit PROPERTIES CXX_STANDARD 17)
@@ -81,7 +77,6 @@ target_include_directories(dcmedit PRIVATE
 target_link_libraries(dcmedit
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
-  stdc++fs
 )
 
 add_subdirectory(test)

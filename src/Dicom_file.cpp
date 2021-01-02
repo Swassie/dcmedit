@@ -2,8 +2,6 @@
 
 #include "logging/Log.h"
 
-#include <dcmtk/ofstd/ofcond.h>
-#include <dcmtk/ofstd/ofstd.h>
 #include <stdexcept>
 
 Dicom_file::Dicom_file(std::string &path)

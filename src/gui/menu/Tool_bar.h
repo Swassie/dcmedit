@@ -7,16 +7,12 @@ class Tool_bar : public QToolBar
 {
     Q_OBJECT
 public:
-    Tool_bar();
+    Tool_bar(View_manager&);
 
     enum class Tool {
         pan,
         zoom
     };
-
-    void add_default_layout(View_manager&);
-    void add_pan();
-    void add_zoom();
 
     Tool get_selected_tool() const {return m_selected_tool;}
 

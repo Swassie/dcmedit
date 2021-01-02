@@ -42,7 +42,7 @@ void Image_view::paintEvent(QPaintEvent*) {
     const size_t width = image.getWidth();
     const size_t height = image.getHeight();
     QImage::Format format = get_image_format(image);
-    QImage q_image(pixel_data, width, height, width, format);
+    QImage q_image(pixel_data, width, height, format);
     const QRect image_rect = q_image.rect();
     painter.setTransform(m_transform_tool->get_transform());
     painter.drawPixmap(image_rect, QPixmap::fromImage(q_image), image_rect);

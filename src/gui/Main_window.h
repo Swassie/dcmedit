@@ -15,8 +15,8 @@ public:
     void setup_dicom_studio();
 
     void open_file();
-private:
 
+private:
     std::unique_ptr<Dicom_file> m_file;
     std::unique_ptr<Studio> m_studio;
 };

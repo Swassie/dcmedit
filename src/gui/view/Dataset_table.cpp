@@ -31,9 +31,11 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* header_layout = new QHBoxLayout();
-    QPushButton* back_button = new QPushButton("Go back");
-    connect(back_button, &QPushButton::clicked, this, &Dataset_table::pop_table);
-    header_layout->addWidget(back_button);
+    if(m_dataset.isNested()) {
+        QPushButton* back_button = new QPushButton("Go back");
+        connect(back_button, &QPushButton::clicked, this, &Dataset_table::pop_table);
+        header_layout->addWidget(back_button);
+    }
     QPushButton* add_button = new QPushButton("Add element");
     connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
     header_layout->addWidget(add_button);
@@ -44,12 +46,13 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
     layout->addWidget(m_table.get());
     configure_table();
     populate_table();
+    m_table->resizeColumnsToContents();
 }
 
 void Dataset_table::configure_table() {
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_table->setColumnCount(5);
-    m_table->setHorizontalHeaderLabels({"", "Tag", "VR", "Length", "Value"});
+    m_table->setHorizontalHeaderLabels({"Actions", "Tag", "VR", "Length", "Value"});
 }
 
 void Dataset_table::populate_table() {
@@ -119,8 +122,12 @@ void Dataset_table::pop_table() {
 void Dataset_table::add_element() {
     Add_element_dialog add_dialog(this, m_dataset);
     const int result = add_dialog.exec();
-    if(result == QDialog::Accepted) {
-        populate_table();
+    if(result != QDialog::Accepted) {
+        return;
+    }
+    populate_table();
+    if(m_dataset.getNumberOfValues() == 1) {
+        m_table->resizeColumnsToContents();
     }
 }
 

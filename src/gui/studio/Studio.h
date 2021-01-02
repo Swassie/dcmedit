@@ -1,6 +1,7 @@
 #pragma once
 #include "gui/menu/Menu_bar.h"
 #include "gui/menu/Tool_bar.h"
+
 #include <memory>
 #include <QWidget>
 

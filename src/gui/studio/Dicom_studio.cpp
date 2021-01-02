@@ -8,14 +8,6 @@
 #include "gui/menu/Tool_bar.h"
 #include "gui/menu/View_menu.h"
 
-static std::unique_ptr<Tool_bar> create_tool_bar(View_manager& view_manager) {
-    auto tool_bar = std::make_unique<Tool_bar>();
-    tool_bar->add_default_layout(view_manager);
-    tool_bar->add_pan();
-    tool_bar->add_zoom();
-    return tool_bar;
-}
-
 static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window,
                                                  View_manager& view_manager) {
     auto menu_bar = std::make_unique<Menu_bar>();
@@ -33,7 +25,7 @@ static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window,
 
 Dicom_studio::Dicom_studio(Main_window& main_window, DcmDataset& dataset) {
     auto view_manager = std::make_unique<View_manager>();
-    m_tool_bar = create_tool_bar(*view_manager);
+    m_tool_bar = std::make_unique<Tool_bar>(*view_manager);
 
     auto view_factory = std::make_unique<Dicom_view_factory>(dataset,
                                                              *m_tool_bar,
