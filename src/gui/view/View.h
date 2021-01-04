@@ -8,6 +8,7 @@ class View : public QWidget
     Q_OBJECT
 public:
     void set_menu(std::unique_ptr<QMenu> menu) {m_menu = std::move(menu);}
+    virtual void update_content();
 
 protected:
     void enterEvent(QEvent*) override;

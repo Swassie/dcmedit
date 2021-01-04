@@ -1,17 +1,21 @@
 #pragma once
+#include "gui/view/View.h"
+
 #include <memory>
 #include <QTableWidget>
-#include <QWidget>
 
 class DcmElement;
 class DcmItem;
 class QStackedLayout;
+class View_manager;
 
-class Dataset_table : public QWidget
+class Dataset_table : public View
 {
     Q_OBJECT
 public:
-    Dataset_table(DcmItem& dataset, QStackedLayout&, const QString& path);
+    Dataset_table(DcmItem& dataset, QStackedLayout&, const QString& path, View_manager&);
+
+    void update_content() override;
 
 private:
     void configure_table();
@@ -26,7 +30,9 @@ private:
     void show_sequence(DcmElement&);
 
     DcmItem& m_dataset;
+    DcmItem* m_root_item;
     QStackedLayout& m_table_stack;
     QString m_path;
+    View_manager& m_view_manager;
     std::unique_ptr<QTableWidget> m_table;
 };

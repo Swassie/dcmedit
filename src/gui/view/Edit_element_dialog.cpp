@@ -12,7 +12,7 @@ Edit_element_dialog::Edit_element_dialog(QWidget* parent, DcmElement& element)
       m_element(element),
       m_value_edit(new QPlainTextEdit()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
-    if(m_element.isaString() || m_element.getLengthField() <= max_binary_value_length) {
+    if(m_element.isaString() || m_element.getLength() <= max_binary_value_length) {
         OFString value;
         auto result = m_element.getOFStringArray(value, false);
         if(result.good()) {

@@ -1,4 +1,5 @@
 #include "gui/View_manager.h"
+#include "gui/view/View.h"
 
 #include <algorithm>
 #include <cassert>
@@ -47,6 +48,12 @@ void View_manager::replace_view(QWidget& old_view,
     it->release()->deleteLater();
     *it = std::move(new_view);
     create_layout();
+}
+
+void View_manager::update_content_in_views() {
+    for(View* view : get_views_with_interface<View>()) {
+        view->update_content();
+    }
 }
 
 void View_manager::create_layout() {

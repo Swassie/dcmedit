@@ -1,5 +1,6 @@
 #include "gui/view/Sequence_table.h"
 
+#include "gui/View_manager.h"
 #include "gui/view/Dataset_table.h"
 
 #include <dcmtk/dcmdata/dcitem.h>
@@ -13,10 +14,12 @@
 #include <QVBoxLayout>
 
 Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& stack,
-                               const QString& path)
+                               const QString& path, View_manager& view_manager)
     : m_sequence(sequence),
+      m_root_item(sequence.getRootItem()),
       m_table_stack(stack),
       m_path(path),
+      m_view_manager(view_manager),
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -35,6 +38,16 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
     configure_table();
     populate_table();
     m_table->resizeColumnsToContents();
+}
+
+void Sequence_table::update_content() {
+    /* Pop this table if it is no longer a part of the top-level dataset, i.e. it
+     * was removed by another view. */
+    if(m_sequence.getRootItem() != m_root_item) {
+        pop_table();
+        return;
+    }
+    populate_table();
 }
 
 void Sequence_table::configure_table() {
@@ -58,7 +71,7 @@ void Sequence_table::populate_table() {
         });
         m_table->setCellWidget(row, 0, toolbar);
 
-        auto table_item = new QTableWidgetItem(QString::number(item->getLengthField()));
+        auto table_item = new QTableWidgetItem(QString::number(item->getLength()));
         m_table->setItem(row, 1, table_item);
         QPushButton* item_button = new QPushButton("Click to show item.");
         connect(item_button, &QPushButton::clicked, [this, item, row] {
@@ -81,7 +94,7 @@ void Sequence_table::add_item() {
                               "Reason: " + QString(result.text()));
         return;
     }
-    populate_table();
+    m_view_manager.update_content_in_views();
     if(m_sequence.getNumberOfValues() == 1) {
         m_table->resizeColumnsToContents();
     }
@@ -89,14 +102,14 @@ void Sequence_table::add_item() {
 
 void Sequence_table::delete_item(DcmItem& item) {
     DcmItem* removed_item = m_sequence.remove(&item);
+    m_view_manager.update_content_in_views();
     delete removed_item;
-    populate_table();
 }
 
 void Sequence_table::show_item(DcmItem& item, int index) {
     QString path = m_path;
     path += "[" + QString::number(index) + "]";
-    auto table = new Dataset_table(item, m_table_stack, path);
+    auto table = new Dataset_table(item, m_table_stack, path, m_view_manager);
     m_table_stack.addWidget(table);
     m_table_stack.setCurrentWidget(table);
 }

@@ -15,6 +15,8 @@ public:
     void show_default_layout();
     void replace_view(QWidget&, std::unique_ptr<QWidget>);
 
+    void update_content_in_views();
+
     template<class T>
     std::vector<T*> get_views_with_interface() {
         std::vector<T*> views;

@@ -29,7 +29,7 @@ std::unique_ptr<Image_view> Dicom_view_factory::make_image_view() {
 }
 
 std::unique_ptr<Dataset_view> Dicom_view_factory::make_dataset_view() {
-    auto view = std::make_unique<Dataset_view>(m_dataset);
+    auto view = std::make_unique<Dataset_view>(m_dataset, m_view_manager);
     auto menu = std::make_unique<Menu>();
     menu->add_action(View_actions::switch_to_image_view(*view, *this, m_view_manager));
     view->addActions(menu->actions());

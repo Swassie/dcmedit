@@ -1,5 +1,6 @@
 #include "gui/view/Dataset_table.h"
 
+#include "gui/View_manager.h"
 #include "gui/view/Add_element_dialog.h"
 #include "gui/view/Edit_element_dialog.h"
 #include "gui/view/Sequence_table.h"
@@ -23,10 +24,12 @@
 const int max_value_display_length = 100;
 
 Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
-                             const QString& path)
+                             const QString& path, View_manager& view_manager)
     : m_dataset(dataset),
+      m_root_item(dataset.getRootItem()),
       m_table_stack(stack),
       m_path(path),
+      m_view_manager(view_manager),
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -47,6 +50,16 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
     configure_table();
     populate_table();
     m_table->resizeColumnsToContents();
+}
+
+void Dataset_table::update_content() {
+    /* Pop this table if it is no longer a part of the top-level dataset, i.e. it
+     * was removed by another view. */
+    if(m_dataset.getRootItem() != m_root_item) {
+        pop_table();
+        return;
+    }
+    populate_table();
 }
 
 void Dataset_table::configure_table() {
@@ -91,7 +104,8 @@ void Dataset_table::populate_table() {
         m_table->setItem(row, 1, item);
         item = new QTableWidgetItem(QString(tag.getVRName()));
         m_table->setItem(row, 2, item);
-        item = new QTableWidgetItem(QString::number(element->getLengthField()));
+        auto length = element->getLength();
+        item = new QTableWidgetItem(QString::number(length));
         m_table->setItem(row, 3, item);
         if(tag.getEVR() == EVR_SQ) {
             QPushButton* sequence_button = new QPushButton("Click to show sequence.");
@@ -102,7 +116,7 @@ void Dataset_table::populate_table() {
         }
         else {
             OFString value;
-            if(element->getLengthField() <= max_value_display_length) {
+            if(length <= max_value_display_length) {
                 element->getOFStringArray(value, false);
             }
             else {
@@ -125,7 +139,7 @@ void Dataset_table::add_element() {
     if(result != QDialog::Accepted) {
         return;
     }
-    populate_table();
+    m_view_manager.update_content_in_views();
     if(m_dataset.getNumberOfValues() == 1) {
         m_table->resizeColumnsToContents();
     }
@@ -171,21 +185,21 @@ void Dataset_table::load_value_from_file(DcmElement& element) {
                               "Reason: " + QString(result.text()));
         return;
     }
-    populate_table();
+    m_view_manager.update_content_in_views();
 }
 
 void Dataset_table::edit_value(DcmElement& element) {
     Edit_element_dialog edit_dialog(this, element);
     const int result = edit_dialog.exec();
     if(result == QDialog::Accepted) {
-        populate_table();
+        m_view_manager.update_content_in_views();
     }
 }
 
 void Dataset_table::delete_element(DcmElement& element) {
     DcmElement* removed_element = m_dataset.remove(&element);
+    m_view_manager.update_content_in_views();
     delete removed_element;
-    populate_table();
 }
 
 void Dataset_table::show_sequence(DcmElement& element) {
@@ -196,7 +210,7 @@ void Dataset_table::show_sequence(DcmElement& element) {
             path += ".";
         }
         path += element.getTag().toString().c_str();
-        auto table = new Sequence_table(*sequence, m_table_stack, path);
+        auto table = new Sequence_table(*sequence, m_table_stack, path, m_view_manager);
         m_table_stack.addWidget(table);
         m_table_stack.setCurrentWidget(table);
     }
