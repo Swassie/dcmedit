@@ -4,6 +4,7 @@
 #include "gui/Main_window.h"
 #include "gui/View_manager.h"
 #include "gui/menu/File_menu.h"
+#include "gui/menu/Help_menu.h"
 #include "gui/menu/Menu_bar.h"
 #include "gui/menu/Tool_bar.h"
 #include "gui/menu/View_menu.h"
@@ -19,6 +20,10 @@ static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window,
     auto view_menu = std::make_unique<View_menu>();
     view_menu->add_view_counts(view_manager);
     menu_bar->add_menu(std::move(view_menu));
+
+    auto help_menu = std::make_unique<Help_menu>();
+    help_menu->add_about(main_window);
+    menu_bar->add_menu(std::move(help_menu));
 
     return menu_bar;
 }

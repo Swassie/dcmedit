@@ -24,10 +24,12 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* header_layout = new QHBoxLayout();
-    QPushButton* back_button = new QPushButton("Go back");
+    QPushButton* back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
+    back_button->setToolTip("Go back");
     connect(back_button, &QPushButton::clicked, this, &Sequence_table::pop_table);
     header_layout->addWidget(back_button);
-    QPushButton* add_button = new QPushButton("Add item");
+    QPushButton* add_button = new QPushButton(QIcon(":/add.svg"), "");
+    add_button->setToolTip("Add item");
     connect(add_button, &QPushButton::clicked, this, &Sequence_table::add_item);
     header_layout->addWidget(add_button);
     QLabel* path_label = new QLabel(m_path);
@@ -65,8 +67,7 @@ void Sequence_table::populate_table() {
         DcmItem* item = m_sequence.getItem(row);
 
         auto toolbar = new QToolBar();
-        QAction* delete_action = toolbar->addAction("Delete");
-        connect(delete_action, &QAction::triggered, [this, item] {
+        toolbar->addAction(QIcon(":/delete.svg"), "Delete item", [this, item] {
             delete_item(*item);
         });
         m_table->setCellWidget(row, 0, toolbar);

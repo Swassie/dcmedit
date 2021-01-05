@@ -1,0 +1,13 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>add.svg</file>
+    <file>arrow_back.svg</file>
+    <file>delete.svg</file>
+    <file>edit.svg</file>
+    <file>home.svg</file>
+    <file>load.svg</file>
+    <file>pan.svg</file>
+    <file>save.svg</file>
+    <file>zoom.svg</file>
+</qresource>
+</RCC>

@@ -3,6 +3,7 @@
 #include "gui/Main_window.h"
 #include "gui/Start_screen.h"
 #include "gui/menu/File_menu.h"
+#include "gui/menu/Help_menu.h"
 #include "gui/menu/Menu_bar.h"
 
 static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window) {
@@ -11,6 +12,10 @@ static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window) {
     auto file_menu = std::make_unique<File_menu>();
     file_menu->add_open_file(main_window);
     menu_bar->add_menu(std::move(file_menu));
+
+    auto help_menu = std::make_unique<Help_menu>();
+    help_menu->add_about(main_window);
+    menu_bar->add_menu(std::move(help_menu));
 
     return menu_bar;
 }

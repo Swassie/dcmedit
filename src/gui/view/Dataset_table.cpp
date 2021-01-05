@@ -35,11 +35,13 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
     layout->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* header_layout = new QHBoxLayout();
     if(m_dataset.isNested()) {
-        QPushButton* back_button = new QPushButton("Go back");
+        QPushButton* back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
+        back_button->setToolTip("Go back");
         connect(back_button, &QPushButton::clicked, this, &Dataset_table::pop_table);
         header_layout->addWidget(back_button);
     }
-    QPushButton* add_button = new QPushButton("Add element");
+    QPushButton* add_button = new QPushButton(QIcon(":/add.svg"), "");
+    add_button->setToolTip("Add element");
     connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
     header_layout->addWidget(add_button);
     QLabel* path_label = new QLabel(m_path);
@@ -79,21 +81,17 @@ void Dataset_table::populate_table() {
 
         auto toolbar = new QToolBar();
         if(tag.getEVR() != EVR_SQ) {
-            QAction* save_action = toolbar->addAction("Save");
-            connect(save_action, &QAction::triggered, [this, element] {
+            toolbar->addAction(QIcon(":/save.svg"), "Save value", [this, element] {
                 save_value_to_file(*element);
             });
-            QAction* load_action = toolbar->addAction("Load");
-            connect(load_action, &QAction::triggered, [this, element] {
+            toolbar->addAction(QIcon(":/load.svg"), "Load value", [this, element] {
                 load_value_from_file(*element);
             });
-            QAction* edit_action = toolbar->addAction("Edit");
-            connect(edit_action, &QAction::triggered, [this, element] {
+            toolbar->addAction(QIcon(":/edit.svg"), "Edit value", [this, element] {
                 edit_value(*element);
             });
         }
-        QAction* delete_action = toolbar->addAction("Delete");
-        connect(delete_action, &QAction::triggered, [this, element] {
+        toolbar->addAction(QIcon(":/delete.svg"), "Delete element", [this, element] {
             delete_element(*element);
         });
         m_table->setCellWidget(row, 0, toolbar);

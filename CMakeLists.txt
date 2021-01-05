@@ -3,13 +3,17 @@ project(dcmedit)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK REQUIRED)
 
 add_executable(dcmedit
+  assets/assets.qrc
   src/Dicom_file.cpp
   src/Dicom_file.h
+  src/gui/About_dialog.cpp
+  src/gui/About_dialog.h
   src/gui/Dicom_view_factory.cpp
   src/gui/Dicom_view_factory.h
   src/gui/Gui_util.cpp
@@ -23,6 +27,8 @@ add_executable(dcmedit
   src/gui/View_manager.h
   src/gui/menu/File_menu.cpp
   src/gui/menu/File_menu.h
+  src/gui/menu/Help_menu.cpp
+  src/gui/menu/Help_menu.h
   src/gui/menu/Menu.cpp
   src/gui/menu/Menu.h
   src/gui/menu/Menu_bar.cpp
