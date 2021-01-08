@@ -13,6 +13,8 @@ static std::unique_ptr<QMenuBar> create_menu_bar(Main_window& main_window,
     auto file_menu = new Menu(menu_bar.get());
     file_menu->set_title_file();
     file_menu->add_open_file(main_window);
+    file_menu->add_save_file(main_window);
+    file_menu->add_save_file_as(main_window);
     menu_bar->addMenu(file_menu);
 
     auto view_menu = new Menu(menu_bar.get());

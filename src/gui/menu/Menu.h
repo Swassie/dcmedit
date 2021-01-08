@@ -15,6 +15,8 @@ public:
     // File menu.
     void set_title_file();
     void add_open_file(Main_window&);
+    void add_save_file(Main_window&);
+    void add_save_file_as(Main_window&);
 
     // View menu.
     void set_title_view();

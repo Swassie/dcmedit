@@ -21,8 +21,7 @@ About_dialog::About_dialog(QWidget* parent)
 }
 
 static QString get_about_text() {
-    return
-        R"END(
+    return R"END(
 # dcmedit
 Copyright 2020, 2021 Marcus Swanson
 
@@ -38,7 +37,9 @@ All rights reserved.
 ```
 
 ## Material icons
+```
 The Material icons are available under Apache license version 2.0.
+```
 
 ## Qt
 ```

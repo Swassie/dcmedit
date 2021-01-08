@@ -6,7 +6,7 @@
 #include <QPushButton>
 
 Start_screen::Start_screen(Main_window& main_window) {
-    QPushButton* button = new QPushButton("Open...");
+    QPushButton* button = new QPushButton("Open file");
     connect(button, &QPushButton::clicked,
             &main_window, &Main_window::open_file);
 

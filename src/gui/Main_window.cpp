@@ -3,11 +3,25 @@
 #include "gui/studio/Dicom_studio.h"
 #include "gui/studio/Start_studio.h"
 
+#include <QCoreApplication>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QMessageBox>
 
 Main_window::Main_window() {
     setMinimumSize(800, 600);
+    set_title();
+}
+
+void Main_window::set_title() {
+    QString title;
+    if(m_file) {
+        std::string path = m_file->get_path();
+        QFileInfo file_info(path.c_str());
+        title += file_info.fileName() + "[*] - ";
+    }
+    title += QCoreApplication::applicationName();
+    setWindowTitle(title);
 }
 
 void Main_window::setup_start_studio() {
@@ -36,4 +50,27 @@ void Main_window::open_file() {
         return;
     }
     setup_dicom_studio();
+    set_title();
+}
+
+void Main_window::save_file() {
+    try {
+        m_file->save_file();
+    }
+    catch(const std::exception& e) {
+        QMessageBox::critical(this, "Failed to save file", e.what());
+    }
+}
+
+void Main_window::save_file_as() {
+    std::string file_path = QFileDialog::getSaveFileName(this, "Save file as").toStdString();
+    if (file_path.empty()) {
+        return;
+    }
+    try {
+        m_file->save_file_as(file_path);
+    }
+    catch(const std::exception& e) {
+        QMessageBox::critical(this, "Failed to save file", e.what());
+    }
 }

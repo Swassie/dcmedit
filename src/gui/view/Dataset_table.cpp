@@ -144,7 +144,7 @@ void Dataset_table::add_element() {
 }
 
 void Dataset_table::save_value_to_file(DcmElement& element) {
-    const QString file_path = QFileDialog::getSaveFileName(this);
+    const QString file_path = QFileDialog::getSaveFileName(this, "Save value to file");
     if(file_path.isEmpty()) {
         return;
     }
@@ -166,7 +166,7 @@ void Dataset_table::save_value_to_file(DcmElement& element) {
 }
 
 void Dataset_table::load_value_from_file(DcmElement& element) {
-    QString file_path = QFileDialog::getOpenFileName(this);
+    QString file_path = QFileDialog::getOpenFileName(this, "Load value from file");
     if(file_path.isEmpty()) {
         return;
     }

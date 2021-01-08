@@ -19,3 +19,16 @@ Dicom_file::Dicom_file(std::string &path)
     }
     Log::debug("Loaded file: " + m_path);
 }
+
+void Dicom_file::save_file() {
+    save_file_as(m_path);
+}
+
+void Dicom_file::save_file_as(std::string path) {
+    OFCondition status = m_file.saveFile(path.c_str());
+    if(status.bad()) {
+        throw std::runtime_error("Failed to save file: " + path +
+                                 ". Reason: " + status.text());
+    }
+    Log::debug("Saved file: " + path);
+}

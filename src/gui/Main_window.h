@@ -11,10 +11,14 @@ class Main_window : public QMainWindow
 public:
     Main_window();
 
+    void set_title();
+
     void setup_start_studio();
     void setup_dicom_studio();
 
     void open_file();
+    void save_file();
+    void save_file_as();
 
 private:
     std::unique_ptr<Dicom_file> m_file;

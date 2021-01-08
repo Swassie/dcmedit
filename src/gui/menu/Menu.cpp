@@ -15,7 +15,15 @@ void Menu::set_title_file() {
 }
 
 void Menu::add_open_file(Main_window& main_window) {
-    addAction("Open...", &main_window, &Main_window::open_file, QKeySequence::Open);
+    addAction("Open file", &main_window, &Main_window::open_file, QKeySequence::Open);
+}
+
+void Menu::add_save_file(Main_window& main_window) {
+    addAction("Save file", &main_window, &Main_window::save_file, QKeySequence::Save);
+}
+
+void Menu::add_save_file_as(Main_window& main_window) {
+    addAction("Save file as", &main_window, &Main_window::save_file_as, QKeySequence::SaveAs);
 }
 
 void Menu::set_title_view() {

@@ -37,7 +37,7 @@ void Add_element_dialog::apply() {
     const std::string value = m_value_edit->toPlainText().toStdString();
     if(tag.getEVR() == EVR_SQ) {
         if(!value.empty()) {
-            QMessageBox::critical(this, "Invalid value", "Element with VR of SQ can't have any value.");
+            QMessageBox::critical(this, "Invalid value", "Element with VR of SQ can't have a value.");
             return;
         }
         result = m_dataset.insertEmptyElement(tag, false);

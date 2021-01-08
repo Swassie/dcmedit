@@ -55,7 +55,7 @@ void Sequence_table::update_content() {
 void Sequence_table::configure_table() {
     m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_table->setColumnCount(3);
-    m_table->setHorizontalHeaderLabels({"Actions", "Length", "Value"});
+    m_table->setHorizontalHeaderLabels({"Actions", "Length", "Item"});
 }
 
 void Sequence_table::populate_table() {
