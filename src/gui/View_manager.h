@@ -1,5 +1,6 @@
 #pragma once
 #include "gui/View_factory.h"
+#include "gui/view/View.h"
 
 #include <memory>
 #include <QWidget>
@@ -13,7 +14,7 @@ public:
 
     void set_view_count(size_t count);
     void show_default_layout();
-    void replace_view(QWidget&, std::unique_ptr<QWidget>);
+    void replace_view(View&, std::unique_ptr<View>);
 
     void update_content_in_views();
 
@@ -39,5 +40,5 @@ private:
     void create_6_view_layout();
 
     std::unique_ptr<View_factory> m_view_factory;
-    std::vector<std::unique_ptr<QWidget>> m_views;
+    std::vector<std::unique_ptr<View>> m_views;
 };

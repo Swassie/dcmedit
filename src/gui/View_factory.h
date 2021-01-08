@@ -3,16 +3,24 @@
 #include <vector>
 
 class Dataset_view;
+class DcmDataset;
 class Image_view;
-class QWidget;
+class Tool_bar;
+class View;
+class View_manager;
 
 class View_factory
 {
 public:
-    virtual ~View_factory() = default;
+    View_factory(DcmDataset&, Tool_bar&, View_manager&);
 
-    virtual std::unique_ptr<Image_view> make_image_view() = 0;
-    virtual std::unique_ptr<Dataset_view> make_dataset_view() = 0;
-    virtual std::unique_ptr<QWidget> make_default_view() = 0;
-    virtual std::vector<std::unique_ptr<QWidget>> make_default_layout() = 0;
+    std::unique_ptr<Image_view> make_image_view();
+    std::unique_ptr<Dataset_view> make_dataset_view();
+    std::unique_ptr<View> make_default_view();
+    std::vector<std::unique_ptr<View>> make_default_layout();
+
+private:
+    DcmDataset& m_dataset;
+    Tool_bar& m_tool_bar;
+    View_manager& m_view_manager;
 };

@@ -2,20 +2,20 @@
 
 #include "gui/Main_window.h"
 #include "gui/Start_screen.h"
-#include "gui/menu/File_menu.h"
-#include "gui/menu/Help_menu.h"
-#include "gui/menu/Menu_bar.h"
+#include "gui/menu/Menu.h"
 
-static std::unique_ptr<Menu_bar> create_menu_bar(Main_window& main_window) {
-    auto menu_bar = std::make_unique<Menu_bar>();
+static std::unique_ptr<QMenuBar> create_menu_bar(Main_window& main_window) {
+    auto menu_bar = std::make_unique<QMenuBar>();
 
-    auto file_menu = std::make_unique<File_menu>();
+    auto file_menu = new Menu(menu_bar.get());
+    file_menu->set_title_file();
     file_menu->add_open_file(main_window);
-    menu_bar->add_menu(std::move(file_menu));
+    menu_bar->addMenu(file_menu);
 
-    auto help_menu = std::make_unique<Help_menu>();
+    auto help_menu = new Menu(menu_bar.get());
+    help_menu->set_title_help();
     help_menu->add_about(main_window);
-    menu_bar->add_menu(std::move(help_menu));
+    menu_bar->addMenu(help_menu);
 
     return menu_bar;
 }

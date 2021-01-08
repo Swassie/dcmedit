@@ -14,29 +14,20 @@ add_executable(dcmedit
   src/Dicom_file.h
   src/gui/About_dialog.cpp
   src/gui/About_dialog.h
-  src/gui/Dicom_view_factory.cpp
-  src/gui/Dicom_view_factory.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
   src/gui/Main_window.cpp
   src/gui/Main_window.h
   src/gui/Start_screen.cpp
   src/gui/Start_screen.h
+  src/gui/View_factory.cpp
   src/gui/View_factory.h
   src/gui/View_manager.cpp
   src/gui/View_manager.h
-  src/gui/menu/File_menu.cpp
-  src/gui/menu/File_menu.h
-  src/gui/menu/Help_menu.cpp
-  src/gui/menu/Help_menu.h
   src/gui/menu/Menu.cpp
   src/gui/menu/Menu.h
-  src/gui/menu/Menu_bar.cpp
-  src/gui/menu/Menu_bar.h
   src/gui/menu/Tool_bar.cpp
   src/gui/menu/Tool_bar.h
-  src/gui/menu/View_menu.cpp
-  src/gui/menu/View_menu.h
   src/gui/run_gui.cpp
   src/gui/run_gui.h
   src/gui/studio/Dicom_studio.cpp
@@ -62,8 +53,6 @@ add_executable(dcmedit
   src/gui/view/Sequence_table.h
   src/gui/view/View.cpp
   src/gui/view/View.h
-  src/gui/view/View_actions.cpp
-  src/gui/view/View_actions.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp

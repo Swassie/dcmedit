@@ -38,9 +38,9 @@ void View_manager::show_default_layout() {
     create_layout();
 }
 
-void View_manager::replace_view(QWidget& old_view,
-                                std::unique_ptr<QWidget> new_view) {
-    assert(new_view.get());
+void View_manager::replace_view(View& old_view,
+                                std::unique_ptr<View> new_view) {
+    assert(new_view);
     auto it = std::find_if(m_views.begin(), m_views.end(), [&old_view](auto& view){
         return view.get() == &old_view;
     });
@@ -51,7 +51,7 @@ void View_manager::replace_view(QWidget& old_view,
 }
 
 void View_manager::update_content_in_views() {
-    for(View* view : get_views_with_interface<View>()) {
+    for(auto& view : m_views) {
         view->update_content();
     }
 }

@@ -81,10 +81,10 @@ void Dataset_table::populate_table() {
 
         auto toolbar = new QToolBar();
         if(tag.getEVR() != EVR_SQ) {
-            toolbar->addAction(QIcon(":/save.svg"), "Save value", [this, element] {
+            toolbar->addAction(QIcon(":/save.svg"), "Save value to file", [this, element] {
                 save_value_to_file(*element);
             });
-            toolbar->addAction(QIcon(":/load.svg"), "Load value", [this, element] {
+            toolbar->addAction(QIcon(":/load.svg"), "Load value from file", [this, element] {
                 load_value_from_file(*element);
             });
             toolbar->addAction(QIcon(":/edit.svg"), "Edit value", [this, element] {

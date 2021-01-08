@@ -1,13 +1,30 @@
 #pragma once
-#include <memory>
 #include <QMenu>
+
+class Main_window;
+class View;
+class View_factory;
+class View_manager;
 
 class Menu : public QMenu
 {
     Q_OBJECT
 public:
-    void add_action(std::unique_ptr<QAction>);
+    Menu(QWidget* parent = nullptr);
 
-private:
-    std::vector<std::unique_ptr<QAction>> m_actions;
+    // File menu.
+    void set_title_file();
+    void add_open_file(Main_window&);
+
+    // View menu.
+    void set_title_view();
+    void add_view_counts(View_manager&);
+
+    // Help menu.
+    void set_title_help();
+    void add_about(Main_window&);
+
+    // View context menu.
+    void add_switch_to_image_view(View&, View_factory&, View_manager&);
+    void add_switch_to_dataset_view(View&, View_factory&, View_manager&);
 };

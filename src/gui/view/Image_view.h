@@ -13,9 +13,7 @@ class Image_view : public View
 {
     Q_OBJECT
 public:
-    Image_view(DcmDataset&,
-               Tool_bar&,
-               std::unique_ptr<Transform_tool>);
+    Image_view(DcmDataset&, Tool_bar&, std::unique_ptr<Transform_tool>);
 
 private:
     void paintEvent(QPaintEvent*) override;
