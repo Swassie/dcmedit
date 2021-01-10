@@ -17,6 +17,7 @@ public:
     void add_open_file(Main_window&);
     void add_save_file(Main_window&);
     void add_save_file_as(Main_window&);
+    void add_quit(Main_window&);
 
     // View menu.
     void set_title_view();

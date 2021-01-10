@@ -4,6 +4,7 @@
 
 class Dataset_view;
 class DcmDataset;
+class Dicom_studio;
 class Image_view;
 class Tool_bar;
 class View;
@@ -12,7 +13,7 @@ class View_manager;
 class View_factory
 {
 public:
-    View_factory(DcmDataset&, Tool_bar&, View_manager&);
+    View_factory(DcmDataset&, Tool_bar&, View_manager&, Dicom_studio&);
 
     std::unique_ptr<Image_view> make_image_view();
     std::unique_ptr<Dataset_view> make_dataset_view();
@@ -23,4 +24,5 @@ private:
     DcmDataset& m_dataset;
     Tool_bar& m_tool_bar;
     View_manager& m_view_manager;
+    Dicom_studio& m_studio;
 };

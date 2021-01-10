@@ -6,12 +6,16 @@ class Dicom_file
 {
 public:
     Dicom_file(std::string&);
+
     DcmDataset& get_dataset() {return *m_file.getDataset();}
     std::string get_path() {return m_path;}
+    void set_unsaved_changes(bool value) {m_unsaved_changes = value;}
+
     void save_file();
     void save_file_as(std::string);
 
 private:
     std::string m_path;
     DcmFileFormat m_file;
+    bool m_unsaved_changes;
 };

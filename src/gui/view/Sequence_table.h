@@ -6,15 +6,15 @@
 
 class DcmItem;
 class DcmSequenceOfItems;
+class Dicom_studio;
 class QStackedLayout;
-class View_manager;
 
 class Sequence_table : public View
 {
     Q_OBJECT
 public:
     Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout&,
-                   const QString& path, View_manager&);
+                   const QString& path, Dicom_studio&);
 
     void update_content() override;
 
@@ -31,6 +31,6 @@ private:
     DcmItem* m_root_item;
     QStackedLayout& m_table_stack;
     QString m_path;
-    View_manager& m_view_manager;
+    Dicom_studio& m_studio;
     std::unique_ptr<QTableWidget> m_table;
 };

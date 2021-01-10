@@ -6,14 +6,14 @@
 
 class DcmElement;
 class DcmItem;
+class Dicom_studio;
 class QStackedLayout;
-class View_manager;
 
 class Dataset_table : public View
 {
     Q_OBJECT
 public:
-    Dataset_table(DcmItem& dataset, QStackedLayout&, const QString& path, View_manager&);
+    Dataset_table(DcmItem& dataset, QStackedLayout&, const QString& path, Dicom_studio&);
 
     void update_content() override;
 
@@ -33,6 +33,6 @@ private:
     DcmItem* m_root_item;
     QStackedLayout& m_table_stack;
     QString m_path;
-    View_manager& m_view_manager;
+    Dicom_studio& m_studio;
     std::unique_ptr<QTableWidget> m_table;
 };

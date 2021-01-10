@@ -34,7 +34,6 @@ add_executable(dcmedit
   src/gui/studio/Dicom_studio.h
   src/gui/studio/Start_studio.cpp
   src/gui/studio/Start_studio.h
-  src/gui/studio/Studio.cpp
   src/gui/studio/Studio.h
   src/gui/tool/Tool.h
   src/gui/tool/Transform_tool.cpp

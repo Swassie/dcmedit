@@ -5,7 +5,8 @@
 #include <stdexcept>
 
 Dicom_file::Dicom_file(std::string &path)
-    : m_path(path) {
+    : m_path(path),
+      m_unsaved_changes(false) {
     OFCondition status;
     if(OFStandard::fileExists(m_path.c_str())) {
         status = m_file.loadFile(m_path.c_str());
@@ -30,5 +31,6 @@ void Dicom_file::save_file_as(std::string path) {
         throw std::runtime_error("Failed to save file: " + path +
                                  ". Reason: " + status.text());
     }
+    m_unsaved_changes = false;
     Log::debug("Saved file: " + path);
 }

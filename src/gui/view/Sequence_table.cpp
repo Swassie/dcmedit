@@ -1,6 +1,6 @@
 #include "gui/view/Sequence_table.h"
 
-#include "gui/View_manager.h"
+#include "gui/studio/Dicom_studio.h"
 #include "gui/view/Dataset_table.h"
 
 #include <dcmtk/dcmdata/dcitem.h>
@@ -14,12 +14,12 @@
 #include <QVBoxLayout>
 
 Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& stack,
-                               const QString& path, View_manager& view_manager)
+                               const QString& path, Dicom_studio& studio)
     : m_sequence(sequence),
       m_root_item(sequence.getRootItem()),
       m_table_stack(stack),
       m_path(path),
-      m_view_manager(view_manager),
+      m_studio(studio),
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -95,7 +95,7 @@ void Sequence_table::add_item() {
                               "Reason: " + QString(result.text()));
         return;
     }
-    m_view_manager.update_content_in_views();
+    m_studio.file_was_modified();
     if(m_sequence.getNumberOfValues() == 1) {
         m_table->resizeColumnsToContents();
     }
@@ -103,14 +103,14 @@ void Sequence_table::add_item() {
 
 void Sequence_table::delete_item(DcmItem& item) {
     DcmItem* removed_item = m_sequence.remove(&item);
-    m_view_manager.update_content_in_views();
+    m_studio.file_was_modified();
     delete removed_item;
 }
 
 void Sequence_table::show_item(DcmItem& item, int index) {
     QString path = m_path;
     path += "[" + QString::number(index) + "]";
-    auto table = new Dataset_table(item, m_table_stack, path, m_view_manager);
+    auto table = new Dataset_table(item, m_table_stack, path, m_studio);
     m_table_stack.addWidget(table);
     m_table_stack.setCurrentWidget(table);
 }

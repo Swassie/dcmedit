@@ -26,6 +26,10 @@ void Menu::add_save_file_as(Main_window& main_window) {
     addAction("Save file as", &main_window, &Main_window::save_file_as, QKeySequence::SaveAs);
 }
 
+void Menu::add_quit(Main_window& main_window) {
+    addAction("Quit", &main_window, &Main_window::maybe_quit, QKeySequence::Quit);
+}
+
 void Menu::set_title_view() {
     setTitle("&View");
 }

@@ -12,6 +12,7 @@ public:
     Main_window();
 
     void set_title();
+    void maybe_quit();
 
     void setup_start_studio();
     void setup_dicom_studio();
@@ -19,6 +20,9 @@ public:
     void open_file();
     void save_file();
     void save_file_as();
+
+protected:
+    void closeEvent(QCloseEvent*) override;
 
 private:
     std::unique_ptr<Dicom_file> m_file;

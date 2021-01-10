@@ -1,6 +1,6 @@
 #include "gui/view/Dataset_table.h"
 
-#include "gui/View_manager.h"
+#include "gui/studio/Dicom_studio.h"
 #include "gui/view/Add_element_dialog.h"
 #include "gui/view/Edit_element_dialog.h"
 #include "gui/view/Sequence_table.h"
@@ -24,12 +24,12 @@
 const int max_value_display_length = 100;
 
 Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
-                             const QString& path, View_manager& view_manager)
+                             const QString& path, Dicom_studio& studio)
     : m_dataset(dataset),
       m_root_item(dataset.getRootItem()),
       m_table_stack(stack),
       m_path(path),
-      m_view_manager(view_manager),
+      m_studio(studio),
       m_table(new QTableWidget()) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -137,7 +137,7 @@ void Dataset_table::add_element() {
     if(result != QDialog::Accepted) {
         return;
     }
-    m_view_manager.update_content_in_views();
+    m_studio.file_was_modified();
     if(m_dataset.getNumberOfValues() == 1) {
         m_table->resizeColumnsToContents();
     }
@@ -183,20 +183,20 @@ void Dataset_table::load_value_from_file(DcmElement& element) {
                               "Reason: " + QString(result.text()));
         return;
     }
-    m_view_manager.update_content_in_views();
+    m_studio.file_was_modified();
 }
 
 void Dataset_table::edit_value(DcmElement& element) {
     Edit_element_dialog edit_dialog(this, element);
     const int result = edit_dialog.exec();
     if(result == QDialog::Accepted) {
-        m_view_manager.update_content_in_views();
+        m_studio.file_was_modified();
     }
 }
 
 void Dataset_table::delete_element(DcmElement& element) {
     DcmElement* removed_element = m_dataset.remove(&element);
-    m_view_manager.update_content_in_views();
+    m_studio.file_was_modified();
     delete removed_element;
 }
 
@@ -208,7 +208,7 @@ void Dataset_table::show_sequence(DcmElement& element) {
             path += ".";
         }
         path += element.getTag().toString().c_str();
-        auto table = new Sequence_table(*sequence, m_table_stack, path, m_view_manager);
+        auto table = new Sequence_table(*sequence, m_table_stack, path, m_studio);
         m_table_stack.addWidget(table);
         m_table_stack.setCurrentWidget(table);
     }

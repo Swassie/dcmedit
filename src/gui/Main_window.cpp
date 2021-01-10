@@ -1,8 +1,10 @@
 #include "gui/Main_window.h"
 
+#include "gui/Gui_util.h"
 #include "gui/studio/Dicom_studio.h"
 #include "gui/studio/Start_studio.h"
 
+#include <QCloseEvent>
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -24,20 +26,25 @@ void Main_window::set_title() {
     setWindowTitle(title);
 }
 
+void Main_window::maybe_quit() {
+    if(isWindowModified() && !Gui_util::should_unsaved_changes_be_discarded(this)) {
+        return;
+    }
+    QCoreApplication::quit();
+}
+
 void Main_window::setup_start_studio() {
     m_studio = std::make_unique<Start_studio>(*this);
-    setMenuBar(m_studio->take_menu_bar().release());
-    setCentralWidget(m_studio->take_central_widget().release());
 }
 
 void Main_window::setup_dicom_studio() {
-    m_studio = std::make_unique<Dicom_studio>(*this, m_file->get_dataset());
-    addToolBar(m_studio->get_tool_bar());
-    setMenuBar(m_studio->take_menu_bar().release());
-    setCentralWidget(m_studio->take_central_widget().release());
+    m_studio = std::make_unique<Dicom_studio>(*this, *m_file);
 }
 
 void Main_window::open_file() {
+    if(isWindowModified() && !Gui_util::should_unsaved_changes_be_discarded(this)) {
+        return;
+    }
     std::string file_path = QFileDialog::getOpenFileName(this, "Open file").toStdString();
     if (file_path.empty()) {
         return;
@@ -50,6 +57,7 @@ void Main_window::open_file() {
         return;
     }
     setup_dicom_studio();
+    setWindowModified(false);
     set_title();
 }
 
@@ -60,6 +68,7 @@ void Main_window::save_file() {
     catch(const std::exception& e) {
         QMessageBox::critical(this, "Failed to save file", e.what());
     }
+    setWindowModified(false);
 }
 
 void Main_window::save_file_as() {
@@ -72,5 +81,15 @@ void Main_window::save_file_as() {
     }
     catch(const std::exception& e) {
         QMessageBox::critical(this, "Failed to save file", e.what());
+    }
+    setWindowModified(false);
+}
+
+void Main_window::closeEvent(QCloseEvent* event) {
+    if(isWindowModified() && !Gui_util::should_unsaved_changes_be_discarded(this)) {
+        event->ignore();
+    }
+    else {
+        event->accept();
     }
 }
