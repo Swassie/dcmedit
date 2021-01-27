@@ -1,16 +1,15 @@
 #include "gui/Start_screen.h"
 
-#include "gui/Main_window.h"
+#include "gui/studio/Studio.h"
 
 #include <QGridLayout>
 #include <QPushButton>
 
-Start_screen::Start_screen(Main_window& main_window) {
-    QPushButton* button = new QPushButton("Open file");
-    connect(button, &QPushButton::clicked,
-            &main_window, &Main_window::open_file);
+Start_screen::Start_screen(Studio& studio) {
+    auto button = new QPushButton("Open files");
+    connect(button, &QPushButton::clicked, [&studio] {studio.open_files();});
 
-    QGridLayout* layout = new QGridLayout(this);
+    auto layout = new QGridLayout(this);
     QMargins margins = layout->contentsMargins();
     margins.setTop(30);
     margins.setLeft(30);

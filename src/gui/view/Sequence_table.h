@@ -28,7 +28,6 @@ private:
     void show_item(DcmItem&, int);
 
     DcmSequenceOfItems& m_sequence;
-    DcmItem* m_root_item;
     QStackedLayout& m_table_stack;
     QString m_path;
     Dicom_studio& m_studio;

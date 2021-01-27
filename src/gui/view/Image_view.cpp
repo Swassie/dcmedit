@@ -1,7 +1,9 @@
 #include "gui/view/Image_view.h"
 
+#include "Dicom_file.h"
 #include "gui/Gui_util.h"
 #include "gui/menu/Tool_bar.h"
+#include "gui/studio/Dicom_studio.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
@@ -9,10 +11,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-Image_view::Image_view(DcmDataset& dataset,
+Image_view::Image_view(Dicom_studio& studio,
                        Tool_bar& tool_bar,
                        std::unique_ptr<Transform_tool> transform_tool)
-    : m_dataset(dataset),
+    : m_studio(studio),
       m_tool_bar(tool_bar),
       m_current_tool(transform_tool.get()),
       m_transform_tool(std::move(transform_tool)) {
@@ -31,7 +33,8 @@ static QImage::Format get_image_format(const DicomImage& image) {
 }
 
 void Image_view::paintEvent(QPaintEvent*) {
-    DicomImage image(&m_dataset, EXS_Unknown);
+    DcmDataset& current_dataset = m_studio.get_current_file()->get_dataset();
+    DicomImage image(&current_dataset, EXS_Unknown);
     const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData());
     QPainter painter(this);
     if(!pixel_data) {

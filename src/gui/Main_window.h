@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <QMainWindow>
+#include <vector>
 
 class Main_window : public QMainWindow
 {
@@ -11,20 +12,14 @@ class Main_window : public QMainWindow
 public:
     Main_window();
 
-    void set_title();
-    void maybe_quit();
-
     void setup_start_studio();
-    void setup_dicom_studio();
+    void setup_dicom_studio(std::vector<std::unique_ptr<Dicom_file>>);
 
-    void open_file();
-    void save_file();
-    void save_file_as();
+    void maybe_quit();
 
 protected:
     void closeEvent(QCloseEvent*) override;
 
 private:
-    std::unique_ptr<Dicom_file> m_file;
     std::unique_ptr<Studio> m_studio;
 };

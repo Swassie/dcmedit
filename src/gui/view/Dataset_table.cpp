@@ -1,5 +1,6 @@
 #include "gui/view/Dataset_table.h"
 
+#include "Dicom_file.h"
 #include "gui/studio/Dicom_studio.h"
 #include "gui/view/Add_element_dialog.h"
 #include "gui/view/Edit_element_dialog.h"
@@ -26,7 +27,6 @@ const int max_value_display_length = 100;
 Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
                              const QString& path, Dicom_studio& studio)
     : m_dataset(dataset),
-      m_root_item(dataset.getRootItem()),
       m_table_stack(stack),
       m_path(path),
       m_studio(studio),
@@ -55,9 +55,10 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
 }
 
 void Dataset_table::update_content() {
-    /* Pop this table if it is no longer a part of the top-level dataset, i.e. it
-     * was removed by another view. */
-    if(m_dataset.getRootItem() != m_root_item) {
+    /* Pop this table if it is no longer a part of the current top-level dataset, i.e. it
+     * was removed by another view or the current file was changed. */
+    DcmDataset& current_dataset = m_studio.get_current_file()->get_dataset();
+    if(m_dataset.getRootItem() != current_dataset.getRootItem()) {
         pop_table();
         return;
     }

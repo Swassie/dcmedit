@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-Dicom_file::Dicom_file(std::string &path)
+Dicom_file::Dicom_file(const std::string &path)
     : m_path(path),
       m_unsaved_changes(false) {
     OFCondition status;

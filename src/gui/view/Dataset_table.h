@@ -30,7 +30,6 @@ private:
     void show_sequence(DcmElement&);
 
     DcmItem& m_dataset;
-    DcmItem* m_root_item;
     QStackedLayout& m_table_stack;
     QString m_path;
     Dicom_studio& m_studio;

@@ -9,15 +9,14 @@
 #include <cassert>
 #include <memory>
 
-View_factory::View_factory(DcmDataset& dataset, Tool_bar& tool_bar,
-                           View_manager& view_manager, Dicom_studio& studio)
-    : m_dataset(dataset),
+View_factory::View_factory(Dicom_studio& studio, Tool_bar& tool_bar,
+                           View_manager& view_manager)
+    : m_studio(studio),
       m_tool_bar(tool_bar),
-      m_view_manager(view_manager),
-      m_studio(studio) {}
+      m_view_manager(view_manager) {}
 
 std::unique_ptr<Image_view> View_factory::make_image_view() {
-    auto view = std::make_unique<Image_view>(m_dataset, m_tool_bar,
+    auto view = std::make_unique<Image_view>(m_studio, m_tool_bar,
                                              std::make_unique<Transform_tool>());
     auto menu = std::make_unique<Menu>();
     menu->add_switch_to_dataset_view(*view, *this, m_view_manager);
@@ -26,7 +25,7 @@ std::unique_ptr<Image_view> View_factory::make_image_view() {
 }
 
 std::unique_ptr<Dataset_view> View_factory::make_dataset_view() {
-    auto view = std::make_unique<Dataset_view>(m_dataset, m_studio);
+    auto view = std::make_unique<Dataset_view>(m_studio);
     auto menu = std::make_unique<Menu>();
     menu->add_switch_to_image_view(*view, *this, m_view_manager);
     view->set_menu(std::move(menu));

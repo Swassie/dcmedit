@@ -1,5 +1,6 @@
 #include "gui/view/Sequence_table.h"
 
+#include "Dicom_file.h"
 #include "gui/studio/Dicom_studio.h"
 #include "gui/view/Dataset_table.h"
 
@@ -16,7 +17,6 @@
 Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& stack,
                                const QString& path, Dicom_studio& studio)
     : m_sequence(sequence),
-      m_root_item(sequence.getRootItem()),
       m_table_stack(stack),
       m_path(path),
       m_studio(studio),
@@ -43,9 +43,10 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
 }
 
 void Sequence_table::update_content() {
-    /* Pop this table if it is no longer a part of the top-level dataset, i.e. it
-     * was removed by another view. */
-    if(m_sequence.getRootItem() != m_root_item) {
+    /* Pop this table if it is no longer a part of the current top-level dataset, i.e. it
+     * was removed by another view or the current file was changed. */
+    DcmDataset& current_dataset = m_studio.get_current_file()->get_dataset();
+    if(m_sequence.getRootItem() != current_dataset.getRootItem()) {
         pop_table();
         return;
     }

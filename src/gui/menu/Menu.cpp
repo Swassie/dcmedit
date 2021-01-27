@@ -6,6 +6,8 @@
 #include "gui/View_manager.h"
 #include "gui/view/Dataset_view.h"
 #include "gui/view/Image_view.h"
+#include "gui/studio/Dicom_studio.h"
+#include "gui/studio/Studio.h"
 
 Menu::Menu(QWidget* parent)
     : QMenu(parent) {}
@@ -14,16 +16,16 @@ void Menu::set_title_file() {
     setTitle("&File");
 }
 
-void Menu::add_open_file(Main_window& main_window) {
-    addAction("Open file", &main_window, &Main_window::open_file, QKeySequence::Open);
+void Menu::add_open_files(Studio& studio) {
+    addAction("Open files", [&studio] {studio.open_files();}, QKeySequence::Open);
 }
 
-void Menu::add_save_file(Main_window& main_window) {
-    addAction("Save file", &main_window, &Main_window::save_file, QKeySequence::Save);
+void Menu::add_save_file(Dicom_studio& studio) {
+    addAction("Save file", [&studio] {studio.save_file();}, QKeySequence::Save);
 }
 
-void Menu::add_save_file_as(Main_window& main_window) {
-    addAction("Save file as", &main_window, &Main_window::save_file_as, QKeySequence::SaveAs);
+void Menu::add_save_file_as(Dicom_studio& studio) {
+    addAction("Save file as", [&studio] {studio.save_file_as();}, QKeySequence::SaveAs);
 }
 
 void Menu::add_quit(Main_window& main_window) {

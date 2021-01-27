@@ -41,7 +41,7 @@ void View_manager::show_default_layout() {
 void View_manager::replace_view(View& old_view,
                                 std::unique_ptr<View> new_view) {
     assert(new_view);
-    auto it = std::find_if(m_views.begin(), m_views.end(), [&old_view](auto& view){
+    auto it = std::find_if(m_views.begin(), m_views.end(), [&old_view](auto& view) {
         return view.get() == &old_view;
     });
     assert(it != m_views.end());

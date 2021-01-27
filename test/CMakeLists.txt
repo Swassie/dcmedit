@@ -1,4 +1,5 @@
 add_executable(test-runner
+  ../src/Dicom_file.cpp
   ../src/gui/Gui_util.cpp
   ../src/gui/tool/Transform_tool.cpp
   ../src/logging/Log.cpp

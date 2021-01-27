@@ -1,7 +1,9 @@
 #pragma once
 #include <QMenu>
 
+class Dicom_studio;
 class Main_window;
+class Studio;
 class View;
 class View_factory;
 class View_manager;
@@ -14,9 +16,9 @@ public:
 
     // File menu.
     void set_title_file();
-    void add_open_file(Main_window&);
-    void add_save_file(Main_window&);
-    void add_save_file_as(Main_window&);
+    void add_open_files(Studio&);
+    void add_save_file(Dicom_studio&);
+    void add_save_file_as(Dicom_studio&);
     void add_quit(Main_window&);
 
     // View menu.

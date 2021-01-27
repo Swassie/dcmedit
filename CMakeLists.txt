@@ -14,6 +14,8 @@ add_executable(dcmedit
   src/Dicom_file.h
   src/gui/About_dialog.cpp
   src/gui/About_dialog.h
+  src/gui/File_tree.cpp
+  src/gui/File_tree.h
   src/gui/Gui_util.cpp
   src/gui/Gui_util.h
   src/gui/Main_window.cpp
