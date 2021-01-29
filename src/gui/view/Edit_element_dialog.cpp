@@ -11,17 +11,17 @@ Edit_element_dialog::Edit_element_dialog(QWidget* parent, DcmElement& element)
     : QDialog(parent),
       m_element(element),
       m_value_edit(new QPlainTextEdit()) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     if(m_element.isaString() || m_element.getLength() <= max_binary_value_length) {
         OFString value;
-        auto result = m_element.getOFStringArray(value, false);
-        if(result.good()) {
+        auto status = m_element.getOFStringArray(value, false);
+        if(status.good()) {
             m_value_edit->setPlainText(value.c_str());
             m_value_edit->selectAll();
         }
         else {
             m_value_edit->setPlaceholderText("Could not get value. Reason: " +
-                                             QString(result.text()));
+                                             QString(status.text()));
         }
     }
     else {
@@ -31,8 +31,7 @@ Edit_element_dialog::Edit_element_dialog(QWidget* parent, DcmElement& element)
         m_value_edit->setPlaceholderText(text);
     }
     layout->addWidget(m_value_edit.get());
-    QDialogButtonBox* button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
-                                                        QDialogButtonBox::Cancel);
+    auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(button_box, &QDialogButtonBox::accepted, this, &Edit_element_dialog::apply);
     connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
     layout->addWidget(button_box);
@@ -47,10 +46,10 @@ void Edit_element_dialog::apply() {
             return;
         }
     }
-    auto result = m_element.putString(value.c_str());
-    if(result.bad()) {
+    auto status = m_element.putString(value.c_str());
+    if(status.bad()) {
         QMessageBox::critical(this, "Edit failed", "Failed to edit the data element value.\n"
-                              "Reason: " + QString(result.text()));
+                              "Reason: " + QString(status.text()));
         return;
     }
     accept();

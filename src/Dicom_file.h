@@ -13,7 +13,7 @@ public:
     void set_unsaved_changes(bool value) {m_unsaved_changes = value;}
 
     void save_file();
-    void save_file_as(std::string);
+    void save_file_as(const std::string&);
 
 private:
     std::string m_path;

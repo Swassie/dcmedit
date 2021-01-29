@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-Dicom_file::Dicom_file(const std::string &path)
+Dicom_file::Dicom_file(const std::string& path)
     : m_path(path),
       m_unsaved_changes(false) {
     OFCondition status;
@@ -25,8 +25,11 @@ void Dicom_file::save_file() {
     save_file_as(m_path);
 }
 
-void Dicom_file::save_file_as(std::string path) {
-    OFCondition status = m_file.saveFile(path.c_str());
+void Dicom_file::save_file_as(const std::string& path) {
+    OFCondition status = m_file.getDataset()->loadAllDataIntoMemory();
+    if(status.good()) {
+        status = m_file.saveFile(path.c_str());
+    }
     if(status.bad()) {
         throw std::runtime_error("Failed to save file: " + path +
                                  ". Reason: " + status.text());

@@ -15,6 +15,7 @@ public:
     void populate_tree();
 
 private:
+    QTreeWidgetItem* get_or_create_item(QTreeWidgetItem*, const QString&);
     void item_activated(QTreeWidgetItem*, int);
     void mark_item(QTreeWidgetItem*);
 

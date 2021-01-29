@@ -17,6 +17,8 @@ public:
     void open_files() override;
     void save_file();
     void save_file_as();
+    void save_all_files();
+    void clear_all_files();
 
     void file_was_modified();
     auto& get_files() {return m_files;}
@@ -25,6 +27,7 @@ public:
     bool is_ok_to_quit() override;
 
 private:
+    void save_current_file(const std::string&);
     void set_window_title();
     std::unique_ptr<QMenuBar> create_menu_bar();
 

@@ -31,20 +31,20 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
       m_path(path),
       m_studio(studio),
       m_table(new QTableWidget()) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout* header_layout = new QHBoxLayout();
+    auto header_layout = new QHBoxLayout();
     if(m_dataset.isNested()) {
-        QPushButton* back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
+        auto back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
         back_button->setToolTip("Go back");
         connect(back_button, &QPushButton::clicked, this, &Dataset_table::pop_table);
         header_layout->addWidget(back_button);
     }
-    QPushButton* add_button = new QPushButton(QIcon(":/add.svg"), "");
+    auto add_button = new QPushButton(QIcon(":/add.svg"), "");
     add_button->setToolTip("Add element");
     connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
     header_layout->addWidget(add_button);
-    QLabel* path_label = new QLabel(m_path);
+    auto path_label = new QLabel(m_path);
     header_layout->addWidget(path_label);
     header_layout->addStretch(1);
     layout->addLayout(header_layout);
@@ -107,7 +107,7 @@ void Dataset_table::populate_table() {
         item = new QTableWidgetItem(QString::number(length));
         m_table->setItem(row, 3, item);
         if(tag.getEVR() == EVR_SQ) {
-            QPushButton* sequence_button = new QPushButton("Click to show sequence.");
+            auto sequence_button = new QPushButton("Click to show sequence.");
             connect(sequence_button, &QPushButton::clicked, [this, element] {
                 show_sequence(*element);
             });
@@ -134,8 +134,8 @@ void Dataset_table::pop_table() {
 
 void Dataset_table::add_element() {
     Add_element_dialog add_dialog(this, m_dataset);
-    const int result = add_dialog.exec();
-    if(result != QDialog::Accepted) {
+    const int status = add_dialog.exec();
+    if(status != QDialog::Accepted) {
         return;
     }
     m_studio.file_was_modified();
@@ -151,11 +151,11 @@ void Dataset_table::save_value_to_file(DcmElement& element) {
     }
     const size_t length = element.getLength();
     std::vector<char> buffer(length);
-    OFCondition result = element.getPartialValue(buffer.data(), 0, length,
+    OFCondition status = element.getPartialValue(buffer.data(), 0, length,
                                                  nullptr, EBO_LittleEndian);
-    if(result.bad()) {
+    if(status.bad()) {
         QMessageBox::critical(this, "Save failed", "Failed to get the data element value.\n"
-                              "Reason: " + QString(result.text()));
+                              "Reason: " + QString(status.text()));
         return;
     }
     std::ofstream file(file_path.toStdString(), std::ios_base::binary);
@@ -177,11 +177,11 @@ void Dataset_table::load_value_from_file(DcmElement& element) {
         QMessageBox::critical(this, "Load failed", "File size must be even.");
         return;
     }
-    OFCondition result = element.createValueFromTempFile(file_stream.newFactory(),
+    OFCondition status = element.createValueFromTempFile(file_stream.newFactory(),
                                                          file_size, EBO_LittleEndian);
-    if(result.bad()) {
+    if(status.bad()) {
         QMessageBox::critical(this, "Load failed", "Failed to load the data element value.\n"
-                              "Reason: " + QString(result.text()));
+                              "Reason: " + QString(status.text()));
         return;
     }
     m_studio.file_was_modified();
@@ -189,8 +189,8 @@ void Dataset_table::load_value_from_file(DcmElement& element) {
 
 void Dataset_table::edit_value(DcmElement& element) {
     Edit_element_dialog edit_dialog(this, element);
-    const int result = edit_dialog.exec();
-    if(result == QDialog::Accepted) {
+    const int status = edit_dialog.exec();
+    if(status == QDialog::Accepted) {
         m_studio.file_was_modified();
     }
 }

@@ -21,18 +21,18 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
       m_path(path),
       m_studio(studio),
       m_table(new QTableWidget()) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout* header_layout = new QHBoxLayout();
-    QPushButton* back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
+    auto header_layout = new QHBoxLayout();
+    auto back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
     back_button->setToolTip("Go back");
     connect(back_button, &QPushButton::clicked, this, &Sequence_table::pop_table);
     header_layout->addWidget(back_button);
-    QPushButton* add_button = new QPushButton(QIcon(":/add.svg"), "");
+    auto add_button = new QPushButton(QIcon(":/add.svg"), "");
     add_button->setToolTip("Add item");
     connect(add_button, &QPushButton::clicked, this, &Sequence_table::add_item);
     header_layout->addWidget(add_button);
-    QLabel* path_label = new QLabel(m_path);
+    auto path_label = new QLabel(m_path);
     header_layout->addWidget(path_label);
     header_layout->addStretch(1);
     layout->addLayout(header_layout);
@@ -75,7 +75,7 @@ void Sequence_table::populate_table() {
 
         auto table_item = new QTableWidgetItem(QString::number(item->getLength()));
         m_table->setItem(row, 1, table_item);
-        QPushButton* item_button = new QPushButton("Click to show item.");
+        auto item_button = new QPushButton("Click to show item.");
         connect(item_button, &QPushButton::clicked, [this, item, row] {
             show_item(*item, row + 1);
         });
@@ -90,10 +90,10 @@ void Sequence_table::pop_table() {
 
 void Sequence_table::add_item() {
     auto item = new DcmItem();
-    OFCondition result = m_sequence.append(item);
-    if(result.bad()) {
+    OFCondition status = m_sequence.append(item);
+    if(status.bad()) {
         QMessageBox::critical(this, "Failed to add item", "Failed to add item.\n"
-                              "Reason: " + QString(result.text()));
+                              "Reason: " + QString(status.text()));
         return;
     }
     m_studio.file_was_modified();

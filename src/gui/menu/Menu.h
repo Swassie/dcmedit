@@ -19,6 +19,8 @@ public:
     void add_open_files(Studio&);
     void add_save_file(Dicom_studio&);
     void add_save_file_as(Dicom_studio&);
+    void add_save_all_files(Dicom_studio&);
+    void add_clear_all_files(Dicom_studio&);
     void add_quit(Main_window&);
 
     // View menu.

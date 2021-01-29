@@ -28,6 +28,14 @@ void Menu::add_save_file_as(Dicom_studio& studio) {
     addAction("Save file as", [&studio] {studio.save_file_as();}, QKeySequence::SaveAs);
 }
 
+void Menu::add_save_all_files(Dicom_studio& studio) {
+    addAction("Save all files", [&studio] {studio.save_all_files();});
+}
+
+void Menu::add_clear_all_files(Dicom_studio& studio) {
+    addAction("Clear all files", [&studio] {studio.clear_all_files();});
+}
+
 void Menu::add_quit(Main_window& main_window) {
     addAction("Quit", &main_window, &Main_window::maybe_quit, QKeySequence::Quit);
 }

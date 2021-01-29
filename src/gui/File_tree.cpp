@@ -4,6 +4,7 @@
 #include "gui/studio/Dicom_studio.h"
 
 #include <dcmtk/dcmdata/dcdeftag.h>
+#include <QFileInfo>
 
 Q_DECLARE_METATYPE(Dicom_file*)
 
@@ -27,65 +28,48 @@ void File_tree::populate_tree() {
     m_file_items.clear();
 
     for(auto& file : m_studio.get_files()) {
-        QTreeWidgetItem* patient_item = nullptr;
         const char* temp = nullptr;
         file->get_dataset().findAndGetString(DCM_PatientID, temp);
-        QString patient_id(temp);
+        auto patient_item = get_or_create_item(m_file_tree->invisibleRootItem(), QString(temp));
 
-        for(int i = 0; i < m_file_tree->topLevelItemCount(); ++i) {
-            QTreeWidgetItem* item = m_file_tree->topLevelItem(i);
-            if(patient_id == item->text(0)) {
-                patient_item = item;
-                break;
-            }
-        }
-        if(!patient_item) {
-            patient_item = new QTreeWidgetItem(m_file_tree.get());
-            patient_item->setText(0, patient_id);
-        }
-
-        QTreeWidgetItem* study_item = nullptr;
         temp = nullptr;
         file->get_dataset().findAndGetString(DCM_StudyInstanceUID, temp);
-        QString study_uid(temp);
+        auto study_item = get_or_create_item(patient_item, QString(temp));
 
-        for(int i = 0; i < patient_item->childCount(); ++i) {
-            QTreeWidgetItem* item = patient_item->child(i);
-            if(study_uid == item->text(0)) {
-                study_item = item;
-                break;
-            }
-        }
-        if(!study_item) {
-            study_item = new QTreeWidgetItem(patient_item);
-            study_item->setText(0, study_uid);
-        }
-
-        QTreeWidgetItem* series_item = nullptr;
         temp = nullptr;
         file->get_dataset().findAndGetString(DCM_SeriesInstanceUID, temp);
-        QString series_uid(temp);
-
-        for(int i = 0; i < study_item->childCount(); ++i) {
-            QTreeWidgetItem* item = study_item->child(i);
-            if(series_uid == item->text(0)) {
-                series_item = item;
-                break;
-            }
-        }
-        if(!series_item) {
-            series_item = new QTreeWidgetItem(study_item);
-            series_item->setText(0, series_uid);
-        }
+        auto series_item = get_or_create_item(study_item, QString(temp));
 
         auto file_item = new QTreeWidgetItem(series_item);
-        file_item->setText(0, QString::fromStdString(file->get_path()));
+        QFileInfo file_info(QString::fromStdString(file->get_path()));
+        QString file_name = file_info.fileName();
+        if(file->has_unsaved_changes()) {
+            file_name += "*";
+        }
+        file_item->setText(0, file_name);
+        file_item->setToolTip(0, file_info.absoluteFilePath());
         file_item->setData(0, Qt::UserRole, QVariant::fromValue(file.get()));
         if(file.get() == m_studio.get_current_file()) {
             mark_item(file_item);
         }
         m_file_items.push_back(file_item);
     }
+}
+
+QTreeWidgetItem* File_tree::get_or_create_item(QTreeWidgetItem* parent, const QString& text) {
+    QTreeWidgetItem* item = nullptr;
+    for(int i = 0; i < parent->childCount(); ++i) {
+        QTreeWidgetItem* child = parent->child(i);
+        if(text == child->text(0)) {
+            item = child;
+            break;
+        }
+    }
+    if(!item) {
+        item = new QTreeWidgetItem(parent);
+        item->setText(0, text);
+    }
+    return item;
 }
 
 void File_tree::item_activated(QTreeWidgetItem* item, int) {

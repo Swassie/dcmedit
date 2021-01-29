@@ -60,14 +60,7 @@ void Dicom_studio::open_files() {
 }
 
 void Dicom_studio::save_file() {
-    try {
-        m_current_file->save_file();
-    }
-    catch(const std::exception& e) {
-        QMessageBox::critical(&m_main_window, "Failed to save file", e.what());
-        return;
-    }
-    m_main_window.setWindowModified(false);
+    save_current_file(m_current_file->get_path());
 }
 
 void Dicom_studio::save_file_as() {
@@ -75,14 +68,33 @@ void Dicom_studio::save_file_as() {
     if (file_path.empty()) {
         return;
     }
-    try {
-        m_current_file->save_file_as(file_path);
+    save_current_file(file_path);
+}
+
+void Dicom_studio::save_all_files() {
+    QStringList file_errors;
+    for(auto& file : m_files) {
+        try {
+            file->save_file();
+        }
+        catch(const std::exception& e) {
+            file_errors.push_back(e.what());
+        }
     }
-    catch(const std::exception& e) {
-        QMessageBox::critical(&m_main_window, "Failed to save file", e.what());
-        return;
+    if(!file_errors.isEmpty()) {
+        QMessageBox warning(QMessageBox::Warning, "Failed to save files",
+                            "Failed to save some files.", QMessageBox::Ok, &m_main_window);
+        warning.setDetailedText(file_errors.join("\n\n"));
+        warning.exec();
     }
-    m_main_window.setWindowModified(false);
+    m_main_window.setWindowModified(m_current_file->has_unsaved_changes());
+    m_file_tree->populate_tree();
+}
+
+void Dicom_studio::clear_all_files() {
+    if(is_ok_to_quit()) {
+        m_main_window.setup_start_studio();
+    }
 }
 
 void Dicom_studio::file_was_modified() {
@@ -116,6 +128,18 @@ bool Dicom_studio::is_ok_to_quit() {
     return true;
 }
 
+void Dicom_studio::save_current_file(const std::string& file_path) {
+    try {
+        m_current_file->save_file_as(file_path);
+    }
+    catch(const std::exception& e) {
+        QMessageBox::critical(&m_main_window, "Failed to save file", e.what());
+        return;
+    }
+    m_main_window.setWindowModified(false);
+    m_file_tree->populate_tree();
+}
+
 void Dicom_studio::set_window_title() {
     QString title = QString::fromStdString(m_current_file->get_path() + "[*] - ");
     title += QCoreApplication::applicationName();
@@ -130,12 +154,16 @@ std::unique_ptr<QMenuBar> Dicom_studio::create_menu_bar() {
     file_menu->add_open_files(*this);
     file_menu->add_save_file(*this);
     file_menu->add_save_file_as(*this);
+    file_menu->add_save_all_files(*this);
+    file_menu->add_clear_all_files(*this);
     file_menu->add_quit(m_main_window);
     menu_bar->addMenu(file_menu);
 
     auto view_menu = new Menu(menu_bar.get());
     view_menu->set_title_view();
     view_menu->add_view_counts(*m_view_manager);
+    view_menu->addSeparator();
+    view_menu->addAction(m_file_tree->toggleViewAction());
     menu_bar->addMenu(view_menu);
 
     auto help_menu = new Menu(menu_bar.get());
