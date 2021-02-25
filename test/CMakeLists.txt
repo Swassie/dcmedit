@@ -1,11 +1,13 @@
 add_executable(test-runner
   ../src/Dicom_file.cpp
+  ../src/Dicom_util.cpp
   ../src/gui/Gui_util.cpp
   ../src/gui/tool/Transform_tool.cpp
   ../src/logging/Log.cpp
   ../third-party/catch.hpp
   # Test files
   main.cpp
+  Dicom_util_test.cpp
   gui/tool/Transform_tool_test.cpp
 )
 

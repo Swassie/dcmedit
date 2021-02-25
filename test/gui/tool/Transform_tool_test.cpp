@@ -2,13 +2,8 @@
 
 #include "catch.hpp"
 
-#include <cmath>
 #include <QMouseEvent>
 #include <QTransform>
-
-static bool is_equal(double a, double b, double epsilon) {
-    return std::abs(a - b) < epsilon;
-}
 
 SCENARIO("Testing Transform_tool") {
 
@@ -25,10 +20,10 @@ SCENARIO("Testing Transform_tool") {
 
 			THEN("the tool reports the correct values") {
                 QTransform transform = transform_tool.get_transform();
-				REQUIRE(transform.m31() == 90);
-                REQUIRE(transform.m32() == 180);
-                REQUIRE(transform.m11() == 1);
-                REQUIRE(transform.m22() == 1);
+				CHECK(transform.m31() == 90);
+                CHECK(transform.m32() == 180);
+                CHECK(transform.m11() == 1);
+                CHECK(transform.m22() == 1);
 			}
 		}
 
@@ -50,10 +45,10 @@ SCENARIO("Testing Transform_tool") {
 
 			THEN("the tool reports the correct values") {
                 QTransform transform = transform_tool.get_transform();
-				REQUIRE(transform.m31() == 20);
-                REQUIRE(transform.m32() == 130);
-                REQUIRE(transform.m11() == 1);
-                REQUIRE(transform.m22() == 1);
+				CHECK(transform.m31() == 20);
+                CHECK(transform.m32() == 130);
+                CHECK(transform.m11() == 1);
+                CHECK(transform.m22() == 1);
 			}
 		}
 	}
@@ -71,10 +66,10 @@ SCENARIO("Testing Transform_tool") {
 
 			THEN("the tool reports the correct values") {
                 QTransform transform = transform_tool.get_transform();
-				REQUIRE(transform.m31() == 8);
-                REQUIRE(transform.m32() == 16);
-                REQUIRE(is_equal(transform.m11(), 0.2, 0.01));
-                REQUIRE(is_equal(transform.m22(), 0.2, 0.01));
+				CHECK(transform.m31() == 8);
+                CHECK(transform.m32() == 16);
+                CHECK(transform.m11() == Approx(0.2));
+                CHECK(transform.m22() == Approx(0.2));
 			}
 		}
 
@@ -96,10 +91,10 @@ SCENARIO("Testing Transform_tool") {
 
 			THEN("the tool reports the correct values") {
                 QTransform transform = transform_tool.get_transform();
-				REQUIRE(is_equal(transform.m31(), -97.7, 0.1));
-                REQUIRE(is_equal(transform.m32(), -195.4, 0.1));
-                REQUIRE(is_equal(transform.m11(), 2.2, 0.01));
-                REQUIRE(is_equal(transform.m22(), 2.2, 0.01));
+				CHECK(transform.m31() == Approx(-97.7).epsilon(0.1));
+                CHECK(transform.m32() == Approx(-195.4).epsilon(0.1));
+                CHECK(transform.m11() == Approx(2.2));
+                CHECK(transform.m22() == Approx(2.2));
 			}
 		}
 	}

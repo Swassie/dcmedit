@@ -19,6 +19,7 @@ public:
     void save_file_as();
     void save_all_files();
     void clear_all_files();
+    void batch_element();
 
     void file_was_modified();
     auto& get_files() {return m_files;}

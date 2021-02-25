@@ -1,6 +1,7 @@
 #include "gui/studio/Dicom_studio.h"
 
 #include "Dicom_file.h"
+#include "gui/dialog/Batch_dialog.h"
 #include "gui/Gui_util.h"
 #include "gui/Main_window.h"
 #include "gui/menu/Menu.h"
@@ -97,6 +98,18 @@ void Dicom_studio::clear_all_files() {
     }
 }
 
+void Dicom_studio::batch_element() {
+    std::vector<Dicom_file*> files;
+    for(auto& file : m_files) {
+        files.push_back(file.get());
+    }
+    Batch_dialog batch_dialog(&m_main_window, files);
+    batch_dialog.exec();
+    m_main_window.setWindowModified(m_current_file->has_unsaved_changes());
+    m_view_manager->update_content_in_views();
+    m_file_tree->populate_tree();
+}
+
 void Dicom_studio::file_was_modified() {
     m_current_file->set_unsaved_changes(true);
     m_main_window.setWindowModified(true);
@@ -165,6 +178,11 @@ std::unique_ptr<QMenuBar> Dicom_studio::create_menu_bar() {
     view_menu->addSeparator();
     view_menu->addAction(m_file_tree->toggleViewAction());
     menu_bar->addMenu(view_menu);
+
+    auto batch_menu = new Menu(menu_bar.get());
+    batch_menu->set_title_batch();
+    batch_menu->add_batch_element(*this);
+    menu_bar->addMenu(batch_menu);
 
     auto help_menu = new Menu(menu_bar.get());
     help_menu->set_title_help();

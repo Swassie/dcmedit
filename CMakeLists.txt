@@ -12,6 +12,8 @@ add_executable(dcmedit
   assets/assets.qrc
   src/Dicom_file.cpp
   src/Dicom_file.h
+  src/Dicom_util.cpp
+  src/Dicom_util.h
   src/gui/About_dialog.cpp
   src/gui/About_dialog.h
   src/gui/File_tree.cpp
@@ -26,6 +28,8 @@ add_executable(dcmedit
   src/gui/View_factory.h
   src/gui/View_manager.cpp
   src/gui/View_manager.h
+  src/gui/dialog/Batch_dialog.cpp
+  src/gui/dialog/Batch_dialog.h
   src/gui/menu/Menu.cpp
   src/gui/menu/Menu.h
   src/gui/menu/Tool_bar.cpp

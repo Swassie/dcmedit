@@ -62,6 +62,14 @@ void Menu::add_view_counts(View_manager& view_manager) {
     }, QKeySequence("Ctrl+4"));
 }
 
+void Menu::set_title_batch() {
+    setTitle("&Batch");
+}
+
+void Menu::add_batch_element(Dicom_studio& studio) {
+    addAction("Edit elements in all files", [&studio] {studio.batch_element();});
+}
+
 void Menu::set_title_help() {
     setTitle("&Help");
 }

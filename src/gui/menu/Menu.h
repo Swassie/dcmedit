@@ -27,6 +27,10 @@ public:
     void set_title_view();
     void add_view_counts(View_manager&);
 
+    // Batch menu.
+    void set_title_batch();
+    void add_batch_element(Dicom_studio&);
+
     // Help menu.
     void set_title_help();
     void add_about(Main_window&);
