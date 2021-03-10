@@ -163,7 +163,7 @@ std::unique_ptr<QMenuBar> Dicom_studio::create_menu_bar() {
     auto menu_bar = std::make_unique<QMenuBar>();
 
     auto file_menu = new Menu(menu_bar.get());
-    file_menu->set_title_file();
+    file_menu->setTitle("&File");
     file_menu->add_open_files(*this);
     file_menu->add_save_file(*this);
     file_menu->add_save_file_as(*this);
@@ -173,19 +173,19 @@ std::unique_ptr<QMenuBar> Dicom_studio::create_menu_bar() {
     menu_bar->addMenu(file_menu);
 
     auto view_menu = new Menu(menu_bar.get());
-    view_menu->set_title_view();
+    view_menu->setTitle("&View");
     view_menu->add_view_counts(*m_view_manager);
     view_menu->addSeparator();
     view_menu->addAction(m_file_tree->toggleViewAction());
     menu_bar->addMenu(view_menu);
 
     auto batch_menu = new Menu(menu_bar.get());
-    batch_menu->set_title_batch();
+    batch_menu->setTitle("&Batch");
     batch_menu->add_batch_element(*this);
     menu_bar->addMenu(batch_menu);
 
     auto help_menu = new Menu(menu_bar.get());
-    help_menu->set_title_help();
+    help_menu->setTitle("&Help");
     help_menu->add_about(m_main_window);
     menu_bar->addMenu(help_menu);
 

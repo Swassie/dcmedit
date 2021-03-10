@@ -31,6 +31,7 @@ Edit_element_dialog::Edit_element_dialog(QWidget* parent, DcmElement& element)
         m_value_edit->setPlaceholderText(text);
     }
     layout->addWidget(m_value_edit.get());
+
     auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(button_box, &QDialogButtonBox::accepted, this, &Edit_element_dialog::apply);
     connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);

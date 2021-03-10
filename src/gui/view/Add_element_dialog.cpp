@@ -12,12 +12,15 @@ Add_element_dialog::Add_element_dialog(QWidget* parent, DcmItem& dataset)
       m_tag_edit(new QLineEdit()),
       m_value_edit(new QPlainTextEdit()) {
     auto layout = new QVBoxLayout(this);
+
     QString tag_text("Enter tag. Either by keyword (e.g. \"PatientName\") or "
                      "by group and element number (e.g. \"0010,0010\").");
     m_tag_edit->setPlaceholderText(tag_text);
     layout->addWidget(m_tag_edit.get());
+
     m_value_edit->setPlaceholderText("Enter value. If VM > 1, separate values with '\\'.");
     layout->addWidget(m_value_edit.get());
+
     auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(button_box, &QDialogButtonBox::accepted, this, &Add_element_dialog::apply);
     connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);

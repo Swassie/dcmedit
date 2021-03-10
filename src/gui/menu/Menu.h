@@ -15,7 +15,6 @@ public:
     Menu(QWidget* parent = nullptr);
 
     // File menu.
-    void set_title_file();
     void add_open_files(Studio&);
     void add_save_file(Dicom_studio&);
     void add_save_file_as(Dicom_studio&);
@@ -24,15 +23,12 @@ public:
     void add_quit(Main_window&);
 
     // View menu.
-    void set_title_view();
     void add_view_counts(View_manager&);
 
     // Batch menu.
-    void set_title_batch();
     void add_batch_element(Dicom_studio&);
 
     // Help menu.
-    void set_title_help();
     void add_about(Main_window&);
 
     // View context menu.

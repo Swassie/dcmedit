@@ -14,6 +14,8 @@ add_executable(dcmedit
   src/Dicom_file.h
   src/Dicom_util.cpp
   src/Dicom_util.h
+  src/Version.cpp
+  src/Version.h
   src/gui/About_dialog.cpp
   src/gui/About_dialog.h
   src/gui/File_tree.cpp
@@ -65,6 +67,14 @@ add_executable(dcmedit
   src/logging/Logger.h
   src/main.cpp
 )
+
+set_property(SOURCE src/Version.cpp PROPERTY SKIP_AUTOGEN ON)
+
+add_custom_command(
+  OUTPUT "${CMAKE_SOURCE_DIR}/src/Version.cpp" phony_output
+  COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/version.cmake"
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+  VERBATIM)
 
 set_target_properties(dcmedit PROPERTIES CXX_STANDARD 17)
 target_compile_options(dcmedit PRIVATE -Wall -Wextra -pedantic)

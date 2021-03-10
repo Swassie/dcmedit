@@ -12,10 +12,6 @@
 Menu::Menu(QWidget* parent)
     : QMenu(parent) {}
 
-void Menu::set_title_file() {
-    setTitle("&File");
-}
-
 void Menu::add_open_files(Studio& studio) {
     addAction("Open files", [&studio] {studio.open_files();}, QKeySequence::Open);
 }
@@ -40,10 +36,6 @@ void Menu::add_quit(Main_window& main_window) {
     addAction("Quit", &main_window, &Main_window::maybe_quit, QKeySequence::Quit);
 }
 
-void Menu::set_title_view() {
-    setTitle("&View");
-}
-
 void Menu::add_view_counts(View_manager& view_manager) {
     addAction("1 view", [&view_manager] {
         view_manager.set_view_count(1);
@@ -62,16 +54,8 @@ void Menu::add_view_counts(View_manager& view_manager) {
     }, QKeySequence("Ctrl+4"));
 }
 
-void Menu::set_title_batch() {
-    setTitle("&Batch");
-}
-
 void Menu::add_batch_element(Dicom_studio& studio) {
     addAction("Edit elements in all files", [&studio] {studio.batch_element();});
-}
-
-void Menu::set_title_help() {
-    setTitle("&Help");
 }
 
 void Menu::add_about(Main_window& main_window) {

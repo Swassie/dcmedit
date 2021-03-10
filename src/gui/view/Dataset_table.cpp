@@ -33,6 +33,7 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
       m_table(new QTableWidget()) {
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
+
     auto header_layout = new QHBoxLayout();
     if(m_dataset.isNested()) {
         auto back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
@@ -44,6 +45,7 @@ Dataset_table::Dataset_table(DcmItem& dataset, QStackedLayout& stack,
     add_button->setToolTip("Add element");
     connect(add_button, &QPushButton::clicked, this, &Dataset_table::add_element);
     header_layout->addWidget(add_button);
+
     auto path_label = new QLabel(m_path);
     header_layout->addWidget(path_label);
     header_layout->addStretch(1);
@@ -99,13 +101,17 @@ void Dataset_table::populate_table() {
 
         QString tag_str = tag.toString().c_str();
         tag_str = tag_str + " " + tag.getTagName();
+
         auto item = new QTableWidgetItem(tag_str);
         m_table->setItem(row, 1, item);
+
         item = new QTableWidgetItem(QString(tag.getVRName()));
         m_table->setItem(row, 2, item);
+
         auto length = element->getLength();
         item = new QTableWidgetItem(QString::number(length));
         m_table->setItem(row, 3, item);
+
         if(tag.getEVR() == EVR_SQ) {
             auto sequence_button = new QPushButton("Click to show sequence.");
             connect(sequence_button, &QPushButton::clicked, [this, element] {

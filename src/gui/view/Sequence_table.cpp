@@ -23,15 +23,18 @@ Sequence_table::Sequence_table(DcmSequenceOfItems& sequence, QStackedLayout& sta
       m_table(new QTableWidget()) {
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
+
     auto header_layout = new QHBoxLayout();
     auto back_button = new QPushButton(QIcon(":/arrow_back.svg"), "");
     back_button->setToolTip("Go back");
     connect(back_button, &QPushButton::clicked, this, &Sequence_table::pop_table);
     header_layout->addWidget(back_button);
+
     auto add_button = new QPushButton(QIcon(":/add.svg"), "");
     add_button->setToolTip("Add item");
     connect(add_button, &QPushButton::clicked, this, &Sequence_table::add_item);
     header_layout->addWidget(add_button);
+
     auto path_label = new QLabel(m_path);
     header_layout->addWidget(path_label);
     header_layout->addStretch(1);

@@ -1,6 +1,6 @@
 /*
- *  Catch v2.12.4
- *  Generated: 2020-07-05 11:47:18.451282
+ *  Catch v2.13.4
+ *  Generated: 2020-12-29 14:48:00.116107
  *  ----------------------------------------------------------
  *  This file has been merged from multiple headers. Please don't edit it directly
  *  Copyright (c) 2020 Two Blue Cubes Ltd. All rights reserved.
@@ -14,7 +14,7 @@
 
 
 #define CATCH_VERSION_MAJOR 2
-#define CATCH_VERSION_MINOR 12
+#define CATCH_VERSION_MINOR 13
 #define CATCH_VERSION_PATCH 4
 
 #ifdef __clang__
@@ -132,13 +132,9 @@ namespace Catch {
 
 #endif
 
-#if defined(__cpp_lib_uncaught_exceptions)
-#  define CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
-#endif
-
 // We have to avoid both ICC and Clang, because they try to mask themselves
 // as gcc, and we want only GCC in this block
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__ICC)
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__ICC) && !defined(__CUDACC__)
 #    define CATCH_INTERNAL_START_WARNINGS_SUPPRESSION _Pragma( "GCC diagnostic push" )
 #    define CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION  _Pragma( "GCC diagnostic pop" )
 
@@ -162,7 +158,7 @@ namespace Catch {
 // ```
 //
 // Therefore, `CATCH_INTERNAL_IGNORE_BUT_WARN` is not implemented.
-#  if !defined(__ibmxl__)
+#  if !defined(__ibmxl__) && !defined(__CUDACC__)
 #    define CATCH_INTERNAL_IGNORE_BUT_WARN(...) (void)__builtin_constant_p(__VA_ARGS__) /* NOLINT(cppcoreguidelines-pro-type-vararg, hicpp-vararg) */
 #  endif
 
@@ -243,10 +239,6 @@ namespace Catch {
 
 #  define CATCH_INTERNAL_START_WARNINGS_SUPPRESSION __pragma( warning(push) )
 #  define CATCH_INTERNAL_STOP_WARNINGS_SUPPRESSION  __pragma( warning(pop) )
-
-#  if _MSC_VER >= 1900 // Visual Studio 2015 or newer
-#    define CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
-#  endif
 
 // Universal Windows platform does not support SEH
 // Or console colours (or console at all...)
@@ -330,7 +322,10 @@ namespace Catch {
 
   // Check if byte is available and usable
   #  if __has_include(<cstddef>) && defined(CATCH_CPP17_OR_GREATER)
-  #    define CATCH_INTERNAL_CONFIG_CPP17_BYTE
+  #    include <cstddef>
+  #    if __cpp_lib_byte > 0
+  #      define CATCH_INTERNAL_CONFIG_CPP17_BYTE
+  #    endif
   #  endif // __has_include(<cstddef>) && defined(CATCH_CPP17_OR_GREATER)
 
   // Check if variant is available and usable
@@ -371,10 +366,6 @@ namespace Catch {
 
 #if defined(CATCH_INTERNAL_CONFIG_CPP17_OPTIONAL) && !defined(CATCH_CONFIG_NO_CPP17_OPTIONAL) && !defined(CATCH_CONFIG_CPP17_OPTIONAL)
 #  define CATCH_CONFIG_CPP17_OPTIONAL
-#endif
-
-#if defined(CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS) && !defined(CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS) && !defined(CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
-#  define CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
 #endif
 
 #if defined(CATCH_INTERNAL_CONFIG_CPP17_STRING_VIEW) && !defined(CATCH_CONFIG_NO_CPP17_STRING_VIEW) && !defined(CATCH_CONFIG_CPP17_STRING_VIEW)
@@ -1105,7 +1096,7 @@ struct AutoReg : NonCopyable {
                     int index = 0;                                    \
                     constexpr char const* tmpl_types[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, __VA_ARGS__)};\
                     using expander = int[];\
-                    (void)expander{(reg_test(Types{}, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index]), Tags } ), index++, 0)... };/* NOLINT */ \
+                    (void)expander{(reg_test(Types{}, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index]), Tags } ), index++)... };/* NOLINT */ \
                 }\
             };\
             static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){\
@@ -1151,7 +1142,7 @@ struct AutoReg : NonCopyable {
                     constexpr char const* tmpl_types[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, INTERNAL_CATCH_REMOVE_PARENS(TmplTypes))};\
                     constexpr char const* types_list[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, INTERNAL_CATCH_REMOVE_PARENS(TypesList))};\
                     constexpr auto num_types = sizeof(types_list) / sizeof(types_list[0]);\
-                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestFuncName<Types> ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index / num_types]) + "<" + std::string(types_list[index % num_types]) + ">", Tags } ), index++, 0)... };/* NOLINT */\
+                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestFuncName<Types> ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index / num_types]) + "<" + std::string(types_list[index % num_types]) + ">", Tags } ), index++)... };/* NOLINT */\
                 }                                                     \
             };                                                        \
             static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){ \
@@ -1195,7 +1186,7 @@ struct AutoReg : NonCopyable {
             void reg_tests() {                                          \
                 int index = 0;                                    \
                 using expander = int[];                           \
-                (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestFunc<Types> ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ Name " - " + std::string(INTERNAL_CATCH_STRINGIZE(TmplList)) + " - " + std::to_string(index), Tags } ), index++, 0)... };/* NOLINT */\
+                (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestFunc<Types> ), CATCH_INTERNAL_LINEINFO, Catch::StringRef(), Catch::NameAndTags{ Name " - " + std::string(INTERNAL_CATCH_STRINGIZE(TmplList)) + " - " + std::to_string(index), Tags } ), index++)... };/* NOLINT */\
             }                                                     \
         };\
         static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){ \
@@ -1229,7 +1220,7 @@ struct AutoReg : NonCopyable {
                     int index = 0;                                    \
                     constexpr char const* tmpl_types[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, __VA_ARGS__)};\
                     using expander = int[];\
-                    (void)expander{(reg_test(Types{}, #ClassName, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index]), Tags } ), index++, 0)... };/* NOLINT */ \
+                    (void)expander{(reg_test(Types{}, #ClassName, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index]), Tags } ), index++)... };/* NOLINT */ \
                 }\
             };\
             static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){\
@@ -1278,7 +1269,7 @@ struct AutoReg : NonCopyable {
                     constexpr char const* tmpl_types[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, INTERNAL_CATCH_REMOVE_PARENS(TmplTypes))};\
                     constexpr char const* types_list[] = {CATCH_REC_LIST(INTERNAL_CATCH_STRINGIZE_WITHOUT_PARENS, INTERNAL_CATCH_REMOVE_PARENS(TypesList))};\
                     constexpr auto num_types = sizeof(types_list) / sizeof(types_list[0]);\
-                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestName<Types>::test ), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index / num_types]) + "<" + std::string(types_list[index % num_types]) + ">", Tags } ), index++, 0)... };/* NOLINT */ \
+                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestName<Types>::test ), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ Name " - " + std::string(tmpl_types[index / num_types]) + "<" + std::string(types_list[index % num_types]) + ">", Tags } ), index++)... };/* NOLINT */ \
                 }\
             };\
             static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){\
@@ -1325,7 +1316,7 @@ struct AutoReg : NonCopyable {
                 void reg_tests(){\
                     int index = 0;\
                     using expander = int[];\
-                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestName<Types>::test ), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ Name " - " + std::string(INTERNAL_CATCH_STRINGIZE(TmplList)) + " - " + std::to_string(index), Tags } ), index++, 0)... };/* NOLINT */ \
+                    (void)expander{(Catch::AutoReg( Catch::makeTestInvoker( &TestName<Types>::test ), CATCH_INTERNAL_LINEINFO, #ClassName, Catch::NameAndTags{ Name " - " + std::string(INTERNAL_CATCH_STRINGIZE(TmplList)) + " - " + std::to_string(index), Tags } ), index++)... };/* NOLINT */ \
                 }\
             };\
             static int INTERNAL_CATCH_UNIQUE_NAME( globalRegistrar ) = [](){\
@@ -1829,8 +1820,8 @@ namespace Catch {
 #endif
 
     namespace Detail {
-        template<typename InputIterator>
-        std::string rangeToString(InputIterator first, InputIterator last) {
+        template<typename InputIterator, typename Sentinel = InputIterator>
+        std::string rangeToString(InputIterator first, Sentinel last) {
             ReusableStringStream rss;
             rss << "{ ";
             if (first != last) {
@@ -4522,6 +4513,7 @@ namespace Catch {
         virtual int abortAfter() const = 0;
         virtual bool showInvisibles() const = 0;
         virtual ShowDurations::OrNot showDurations() const = 0;
+        virtual double minDuration() const = 0;
         virtual TestSpec const& testSpec() const = 0;
         virtual bool hasTestFilters() const = 0;
         virtual std::vector<std::string> const& getTestsOrTags() const = 0;
@@ -5294,6 +5286,7 @@ namespace Catch {
         Verbosity verbosity = Verbosity::Normal;
         WarnAbout::What warnings = WarnAbout::Nothing;
         ShowDurations::OrNot showDurations = ShowDurations::DefaultForReporter;
+        double minDuration = -1;
         RunTests::InWhatOrder runOrder = RunTests::InDeclarationOrder;
         UseColour::YesOrNo useColour = UseColour::Auto;
         WaitForKeypress::When waitForKeypress = WaitForKeypress::Never;
@@ -5344,6 +5337,7 @@ namespace Catch {
         bool warnAboutMissingAssertions() const override;
         bool warnAboutNoTests() const override;
         ShowDurations::OrNot showDurations() const override;
+        double minDuration() const override;
         RunTests::InWhatOrder runOrder() const override;
         unsigned int rngSeed() const override;
         UseColour::YesOrNo useColour() const override;
@@ -5720,6 +5714,9 @@ namespace Catch {
 
     // Returns double formatted as %.3f (format expected on output)
     std::string getFormattedDuration( double duration );
+
+    //! Should the reporter show
+    bool shouldShowDuration( IConfig const& config, double duration );
 
     std::string serializeFilters( std::vector<std::string> const& container );
 
@@ -6113,8 +6110,6 @@ namespace Catch {
         ~CompactReporter() override;
 
         static std::string getDescription();
-
-        ReporterPreferences getPreferences() const override;
 
         void noMatchingTestCases(std::string const& spec) override;
 
@@ -7499,6 +7494,7 @@ namespace TestCaseTracking {
         virtual bool isSuccessfullyCompleted() const = 0;
         virtual bool isOpen() const = 0; // Started but not complete
         virtual bool hasChildren() const = 0;
+        virtual bool hasStarted() const = 0;
 
         virtual ITracker& parent() = 0;
 
@@ -7565,6 +7561,9 @@ namespace TestCaseTracking {
         bool isSuccessfullyCompleted() const override;
         bool isOpen() const override;
         bool hasChildren() const override;
+        bool hasStarted() const override {
+            return m_runState != NotStarted;
+        }
 
         void addChild( ITrackerPtr const& child ) override;
 
@@ -7603,6 +7602,10 @@ namespace TestCaseTracking {
 
         void addInitialFilters( std::vector<std::string> const& filters );
         void addNextFilters( std::vector<std::string> const& filters );
+        //! Returns filters active in this tracker
+        std::vector<std::string> const& getFilters() const;
+        //! Returns whitespace-trimmed name of the tracked section
+        std::string const& trimmedName() const;
     };
 
 } // namespace TestCaseTracking
@@ -9861,6 +9864,9 @@ namespace Catch {
             | Opt( [&]( bool flag ) { config.showDurations = flag ? ShowDurations::Always : ShowDurations::Never; }, "yes|no" )
                 ["-d"]["--durations"]
                 ( "show test durations" )
+            | Opt( config.minDuration, "seconds" )
+                ["-D"]["--min-duration"]
+                ( "show test durations for tests taking at least the given number of seconds" )
             | Opt( loadTestNamesFromFile, "filename" )
                 ["-f"]["--input-file"]
                 ( "load test names to run from a file" )
@@ -10008,6 +10014,7 @@ namespace Catch {
     bool Config::warnAboutMissingAssertions() const    { return !!(m_data.warnings & WarnAbout::NoAssertions); }
     bool Config::warnAboutNoTests() const              { return !!(m_data.warnings & WarnAbout::NoTests); }
     ShowDurations::OrNot Config::showDurations() const { return m_data.showDurations; }
+    double Config::minDuration() const                 { return m_data.minDuration; }
     RunTests::InWhatOrder Config::runOrder() const     { return m_data.runOrder; }
     unsigned int Config::rngSeed() const               { return m_data.rngSeed; }
     UseColour::YesOrNo Config::useColour() const       { return m_data.useColour; }
@@ -12030,7 +12037,7 @@ namespace Catch {
         if (tmpnam_s(m_buffer)) {
             CATCH_RUNTIME_ERROR("Could not get a temp filename");
         }
-        if (fopen_s(&m_file, m_buffer, "w")) {
+        if (fopen_s(&m_file, m_buffer, "w+")) {
             char buffer[100];
             if (strerror_s(buffer, errno)) {
                 CATCH_RUNTIME_ERROR("Could not translate errno to a string");
@@ -12547,7 +12554,7 @@ namespace Catch {
                     currentTracker.addChild( tracker );
                 }
 
-                if( !ctx.completedCycle() && !tracker->isComplete() ) {
+                if( !tracker->isComplete() ) {
                     tracker->open();
                 }
 
@@ -12561,8 +12568,68 @@ namespace Catch {
             }
             void close() override {
                 TrackerBase::close();
-                // Generator interface only finds out if it has another item on atual move
-                if (m_runState == CompletedSuccessfully && m_generator->next()) {
+                // If a generator has a child (it is followed by a section)
+                // and none of its children have started, then we must wait
+                // until later to start consuming its values.
+                // This catches cases where `GENERATE` is placed between two
+                // `SECTION`s.
+                // **The check for m_children.empty cannot be removed**.
+                // doing so would break `GENERATE` _not_ followed by `SECTION`s.
+                const bool should_wait_for_child = [&]() {
+                    // No children -> nobody to wait for
+                    if ( m_children.empty() ) {
+                        return false;
+                    }
+                    // If at least one child started executing, don't wait
+                    if ( std::find_if(
+                             m_children.begin(),
+                             m_children.end(),
+                             []( TestCaseTracking::ITrackerPtr tracker ) {
+                                 return tracker->hasStarted();
+                             } ) != m_children.end() ) {
+                        return false;
+                    }
+
+                    // No children have started. We need to check if they _can_
+                    // start, and thus we should wait for them, or they cannot
+                    // start (due to filters), and we shouldn't wait for them
+                    auto* parent = m_parent;
+                    // This is safe: there is always at least one section
+                    // tracker in a test case tracking tree
+                    while ( !parent->isSectionTracker() ) {
+                        parent = &( parent->parent() );
+                    }
+                    assert( parent &&
+                            "Missing root (test case) level section" );
+
+                    auto const& parentSection =
+                        static_cast<SectionTracker&>( *parent );
+                    auto const& filters = parentSection.getFilters();
+                    // No filters -> no restrictions on running sections
+                    if ( filters.empty() ) {
+                        return true;
+                    }
+
+                    for ( auto const& child : m_children ) {
+                        if ( child->isSectionTracker() &&
+                             std::find( filters.begin(),
+                                        filters.end(),
+                                        static_cast<SectionTracker&>( *child )
+                                            .trimmedName() ) !=
+                                 filters.end() ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }();
+
+                // This check is a bit tricky, because m_generator->next()
+                // has a side-effect, where it consumes generator's current
+                // value, but we do not want to invoke the side-effect if
+                // this generator is still waiting for any child to start.
+                if ( should_wait_for_child ||
+                     ( m_runState == CompletedSuccessfully &&
+                       m_generator->next() ) ) {
                     m_children.clear();
                     m_runState = Executing;
                 }
@@ -12702,7 +12769,6 @@ namespace Catch {
         using namespace Generators;
         GeneratorTracker& tracker = GeneratorTracker::acquire(m_trackerContext,
                                                               TestCaseTracking::NameAndLocation( static_cast<std::string>(generatorName), lineInfo ) );
-        assert( tracker.isOpen() );
         m_lastAssertionInfo.lineInfo = lineInfo;
         return tracker;
     }
@@ -14060,24 +14126,28 @@ namespace Catch {
 
     namespace {
         struct TestHasher {
-            explicit TestHasher(Catch::SimplePcg32& rng) {
-                basis = rng();
-                basis <<= 32;
-                basis |= rng();
-            }
+            using hash_t = uint64_t;
 
-            uint64_t basis;
+            explicit TestHasher( hash_t hashSuffix ):
+                m_hashSuffix{ hashSuffix } {}
 
-            uint64_t operator()(TestCase const& t) const {
-                // Modified FNV-1a hash
-                static constexpr uint64_t prime = 1099511628211;
-                uint64_t hash = basis;
-                for (const char c : t.name) {
+            uint32_t operator()( TestCase const& t ) const {
+                // FNV-1a hash with multiplication fold.
+                const hash_t prime = 1099511628211u;
+                hash_t hash = 14695981039346656037u;
+                for ( const char c : t.name ) {
                     hash ^= c;
                     hash *= prime;
                 }
-                return hash;
+                hash ^= m_hashSuffix;
+                hash *= prime;
+                const uint32_t low{ static_cast<uint32_t>( hash ) };
+                const uint32_t high{ static_cast<uint32_t>( hash >> 32 ) };
+                return low * high;
             }
+
+        private:
+            hash_t m_hashSuffix;
         };
     } // end unnamed namespace
 
@@ -14095,9 +14165,9 @@ namespace Catch {
 
             case RunTests::InRandomOrder: {
                 seedRng( config );
-                TestHasher h( rng() );
+                TestHasher h{ config.rngSeed() };
 
-                using hashedTest = std::pair<uint64_t, TestCase const*>;
+                using hashedTest = std::pair<TestHasher::hash_t, TestCase const*>;
                 std::vector<hashedTest> indexed_tests;
                 indexed_tests.reserve( unsortedTestCases.size() );
 
@@ -14381,7 +14451,8 @@ namespace TestCaseTracking {
     bool SectionTracker::isComplete() const {
         bool complete = true;
 
-        if ((m_filters.empty() || m_filters[0] == "")
+        if (m_filters.empty()
+            || m_filters[0] == ""
             || std::find(m_filters.begin(), m_filters.end(), m_trimmed_name) != m_filters.end()) {
             complete = TrackerBase::isComplete();
         }
@@ -14424,6 +14495,14 @@ namespace TestCaseTracking {
     void SectionTracker::addNextFilters( std::vector<std::string> const& filters ) {
         if( filters.size() > 1 )
             m_filters.insert( m_filters.end(), filters.begin()+1, filters.end() );
+    }
+
+    std::vector<std::string> const& SectionTracker::getFilters() const {
+        return m_filters;
+    }
+
+    std::string const& SectionTracker::trimmedName() const {
+        return m_trimmed_name;
     }
 
 } // namespace TestCaseTracking
@@ -15160,6 +15239,41 @@ namespace Catch {
 // end catch_totals.cpp
 // start catch_uncaught_exceptions.cpp
 
+// start catch_config_uncaught_exceptions.hpp
+
+//              Copyright Catch2 Authors
+// Distributed under the Boost Software License, Version 1.0.
+//   (See accompanying file LICENSE_1_0.txt or copy at
+//        https://www.boost.org/LICENSE_1_0.txt)
+
+// SPDX-License-Identifier: BSL-1.0
+
+#ifndef CATCH_CONFIG_UNCAUGHT_EXCEPTIONS_HPP
+#define CATCH_CONFIG_UNCAUGHT_EXCEPTIONS_HPP
+
+#if defined(_MSC_VER)
+#  if _MSC_VER >= 1900 // Visual Studio 2015 or newer
+#    define CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
+#  endif
+#endif
+
+#include <exception>
+
+#if defined(__cpp_lib_uncaught_exceptions) \
+    && !defined(CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
+
+#  define CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
+#endif // __cpp_lib_uncaught_exceptions
+
+#if defined(CATCH_INTERNAL_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS) \
+    && !defined(CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS) \
+    && !defined(CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
+
+#  define CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS
+#endif
+
+#endif // CATCH_CONFIG_UNCAUGHT_EXCEPTIONS_HPP
+// end catch_config_uncaught_exceptions.hpp
 #include <exception>
 
 namespace Catch {
@@ -15206,7 +15320,7 @@ namespace Catch {
     }
 
     Version const& libraryVersion() {
-        static Version version( 2, 12, 4, "", 0 );
+        static Version version( 2, 13, 4, "", 0 );
         return version;
     }
 
@@ -15608,6 +15722,17 @@ namespace Catch {
         return std::string(buffer);
     }
 
+    bool shouldShowDuration( IConfig const& config, double duration ) {
+        if ( config.showDurations() == ShowDurations::Always ) {
+            return true;
+        }
+        if ( config.showDurations() == ShowDurations::Never ) {
+            return false;
+        }
+        const double min = config.minDuration();
+        return min >= 0 && duration >= min;
+    }
+
     std::string serializeFilters( std::vector<std::string> const& container ) {
         ReusableStringStream oss;
         bool first = true;
@@ -15874,10 +15999,6 @@ private:
             return "Reports test results on a single line, suitable for IDEs";
         }
 
-        ReporterPreferences CompactReporter::getPreferences() const {
-            return m_reporterPrefs;
-        }
-
         void CompactReporter::noMatchingTestCases( std::string const& spec ) {
             stream << "No test cases matched '" << spec << '\'' << std::endl;
         }
@@ -15904,8 +16025,9 @@ private:
         }
 
         void CompactReporter::sectionEnded(SectionStats const& _sectionStats) {
-            if (m_config->showDurations() == ShowDurations::Always) {
-                stream << getFormattedDuration(_sectionStats.durationInSeconds) << " s: " << _sectionStats.sectionInfo.name << std::endl;
+            double dur = _sectionStats.durationInSeconds;
+            if ( shouldShowDuration( *m_config, dur ) ) {
+                stream << getFormattedDuration( dur ) << " s: " << _sectionStats.sectionInfo.name << std::endl;
             }
         }
 
@@ -16325,8 +16447,9 @@ void ConsoleReporter::sectionEnded(SectionStats const& _sectionStats) {
             stream << "\nNo assertions in test case";
         stream << " '" << _sectionStats.sectionInfo.name << "'\n" << std::endl;
     }
-    if (m_config->showDurations() == ShowDurations::Always) {
-        stream << getFormattedDuration(_sectionStats.durationInSeconds) << " s: " << _sectionStats.sectionInfo.name << std::endl;
+    double dur = _sectionStats.durationInSeconds;
+    if (shouldShowDuration(*m_config, dur)) {
+        stream << getFormattedDuration(dur) << " s: " << _sectionStats.sectionInfo.name << std::endl;
     }
     if (m_headerPrinted) {
         m_headerPrinted = false;
@@ -17755,4 +17878,3 @@ using Catch::Detail::Approx;
 // end catch_reenable_warnings.h
 // end catch.hpp
 #endif // TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
-
