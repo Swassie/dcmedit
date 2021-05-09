@@ -53,29 +53,23 @@ void View_manager::replace_view(View& old_view, std::unique_ptr<View> new_view) 
     create_layout();
 }
 
-void View_manager::update_content_in_views() {
-    for(auto& view : m_views) {
-        view->update_content();
-    }
-}
-
 void View_manager::create_layout() {
     delete layout();
     switch(m_views.size()) {
-    case 1:
-        create_1_view_layout();
-        break;
-    case 2:
-        create_2_view_layout();
-        break;
-    case 3:
-        create_3_view_layout();
-        break;
-    case 4:
-        create_4_view_layout();
-        break;
-    default:
-        assert(false);
+        case 1:
+            create_1_view_layout();
+            break;
+        case 2:
+            create_2_view_layout();
+            break;
+        case 3:
+            create_3_view_layout();
+            break;
+        case 4:
+            create_4_view_layout();
+            break;
+        default:
+            assert(false);
     }
 }
 

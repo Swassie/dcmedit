@@ -3,8 +3,10 @@
 #include "catch.hpp"
 
 #include <cstring>
+#include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcdatset.h>
 #include <dcmtk/dcmdata/dcdeftag.h>
+#include <dcmtk/dcmdata/dcsequen.h>
 
 TEST_CASE("Testing Dicom_util::set_element") {
 
@@ -93,4 +95,37 @@ TEST_CASE("Testing Dicom_util::delete_element") {
         Dicom_util::delete_element("PatientName", dataset);
         CHECK_FALSE(dataset.tagExists(DCM_PatientName));
     }
+}
+
+TEST_CASE("Testing Dicom_util::get_index_nr") {
+
+    DcmDataset dataset;
+
+    SECTION("root object has index 0") {
+        CHECK(Dicom_util::get_index_nr(dataset) == 0);
+	}
+    SECTION("element has correct index") {
+        auto status = dataset.putAndInsertString({0x10, 0x10}, "John Doe");
+        REQUIRE(status.good());
+        status = dataset.putAndInsertString({0x10, 0x20}, "117");
+        REQUIRE(status.good());
+
+        auto element = dataset.getElement(0);
+        CHECK(Dicom_util::get_index_nr(*element) == 0);
+
+        element = dataset.getElement(1);
+        CHECK(Dicom_util::get_index_nr(*element) == 1);
+	}
+    SECTION("item has correct index") {
+        DcmSequenceOfItems sq({0x8, 0x6});
+        auto item1 = new DcmItem();
+        auto status = sq.append(item1);
+        REQUIRE(status.good());
+        auto item2 = new DcmItem();
+        status = sq.append(item2);
+        REQUIRE(status.good());
+
+        CHECK(Dicom_util::get_index_nr(*item1) == 0);
+        CHECK(Dicom_util::get_index_nr(*item2) == 1);
+	}
 }

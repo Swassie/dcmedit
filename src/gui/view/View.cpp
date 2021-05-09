@@ -2,10 +2,6 @@
 
 #include <QContextMenuEvent>
 
-void View::update_content() {
-    update();
-}
-
 void View::enterEvent(QEvent*) {
     setFocus(Qt::MouseFocusReason);
 }

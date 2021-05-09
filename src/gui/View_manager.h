@@ -16,19 +16,7 @@ public:
     void show_default_layout();
     void replace_view(View&, std::unique_ptr<View>);
 
-    void update_content_in_views();
-
-    template<class T>
-    std::vector<T*> get_views_with_interface() {
-        std::vector<T*> views;
-        for(auto& view : m_views) {
-            T* casted_view = dynamic_cast<T*>(view.get());
-            if(casted_view) {
-                views.push_back(casted_view);
-            }
-        }
-        return views;
-    }
+    auto& get_views() {return m_views;}
 
 private:
     void create_layout();

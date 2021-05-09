@@ -3,7 +3,9 @@
 #include "logging/Log.h"
 
 #include <dcmtk/dcmdata/dcelem.h>
+#include <dcmtk/dcmdata/dcitem.h>
 #include <dcmtk/dcmdata/dcpath.h>
+#include <dcmtk/dcmdata/dcsequen.h>
 #include <stdexcept>
 
 static DcmObject* get_object(DcmPath* path) {
@@ -96,4 +98,36 @@ void Dicom_util::delete_element(const std::string& tag_path, DcmDataset& dataset
     if(status.bad()) {
         throw std::runtime_error(status.text());
     }
+}
+
+int Dicom_util::get_index_nr(DcmObject& object) {
+    DcmObject* parent = object.getParent();
+
+    if(!parent) {
+        return 0;
+    }
+
+    const DcmEVR vr = parent->ident();
+    if(vr == EVR_item || vr == EVR_dataset) {
+        auto item = static_cast<DcmItem*>(parent);
+        auto elementCount = item->getNumberOfValues();
+
+        for(auto i = 0u; i < elementCount; ++i) {
+            if(item->getElement(i) == &object) {
+                return i;
+            }
+        }
+    }
+    else if(vr == EVR_SQ) {
+        auto sq = static_cast<DcmSequenceOfItems*>(parent);
+        auto itemCount = sq->getNumberOfValues();
+
+        for(auto i = 0u; i < itemCount; ++i) {
+            if(sq->getItem(i) == &object) {
+                return i;
+            }
+        }
+    }
+    Log::error("Could not get index of object. Parent VR: " + std::to_string(vr));
+    return -1;
 }

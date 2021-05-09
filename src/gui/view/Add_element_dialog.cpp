@@ -6,9 +6,9 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-Add_element_dialog::Add_element_dialog(QWidget* parent, DcmItem& dataset)
+Add_element_dialog::Add_element_dialog(QWidget* parent, DcmItem& item)
     : QDialog(parent),
-      m_dataset(dataset),
+      m_item(item),
       m_tag_edit(new QLineEdit()),
       m_value_edit(new QPlainTextEdit()) {
     auto layout = new QVBoxLayout(this);
@@ -42,10 +42,10 @@ void Add_element_dialog::apply() {
             QMessageBox::critical(this, "Invalid value", "Element with VR of SQ can't have a value.");
             return;
         }
-        status = m_dataset.insertEmptyElement(tag, false);
+        status = m_item.insertEmptyElement(tag, false);
     }
     else {
-        status = m_dataset.putAndInsertString(tag, value.c_str(), false);
+        status = m_item.putAndInsertString(tag, value.c_str(), false);
     }
     if(status.bad()) {
         QMessageBox::critical(this, "Failed to create element", "Failed to add data element.\n"

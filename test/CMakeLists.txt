@@ -3,6 +3,7 @@ add_executable(test-runner
   ../src/Dicom_util.cpp
   ../src/gui/Gui_util.cpp
   ../src/gui/tool/Transform_tool.cpp
+  ../src/logging/Console_logger.cpp
   ../src/logging/Log.cpp
   ../third-party/catch.hpp
   # Test files

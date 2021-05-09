@@ -1,4 +1,5 @@
 #pragma once
+#include "gui/Dataset_model.h"
 #include "gui/File_tree.h"
 #include "gui/menu/Tool_bar.h"
 #include "gui/studio/Studio.h"
@@ -23,8 +24,9 @@ public:
 
     void file_was_modified();
     auto& get_files() {return m_files;}
-    auto get_current_file() {return m_current_file;}
+    Dicom_file* get_current_file() {return m_current_file;}
     void set_current_file(Dicom_file*);
+    Dataset_model* get_dataset_model() {return m_dataset_model.get();}
     bool is_ok_to_quit() override;
 
 private:
@@ -38,4 +40,5 @@ private:
     std::vector<std::unique_ptr<Dicom_file>> m_files;
     std::unique_ptr<Tool_bar> m_tool_bar;
     std::unique_ptr<File_tree> m_file_tree;
+    std::unique_ptr<Dataset_model> m_dataset_model;
 };

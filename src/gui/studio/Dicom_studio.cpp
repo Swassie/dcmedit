@@ -21,6 +21,8 @@ Dicom_studio::Dicom_studio(Main_window& main_window, std::vector<std::unique_ptr
       m_files(std::move(files)) {
     assert(!m_files.empty());
     m_current_file = m_files[0].get();
+    m_dataset_model = std::make_unique<Dataset_model>(m_current_file->get_dataset());
+    QObject::connect(m_dataset_model.get(), &Dataset_model::dataset_changed, [this] {file_was_modified();});
 
     m_file_tree.reset(new File_tree(&main_window, *this));
 
@@ -106,14 +108,18 @@ void Dicom_studio::batch_element() {
     Batch_dialog batch_dialog(&m_main_window, files);
     batch_dialog.exec();
     m_main_window.setWindowModified(m_current_file->has_unsaved_changes());
-    m_view_manager->update_content_in_views();
+    for(auto& view : m_view_manager->get_views()) {
+        view->update();
+    }
     m_file_tree->populate_tree();
 }
 
 void Dicom_studio::file_was_modified() {
     m_current_file->set_unsaved_changes(true);
     m_main_window.setWindowModified(true);
-    m_view_manager->update_content_in_views();
+    for(auto& view : m_view_manager->get_views()) {
+        view->update();
+    }
     m_file_tree->populate_tree();
 }
 
@@ -126,7 +132,11 @@ void Dicom_studio::set_current_file(Dicom_file* new_file) {
         return;
     }
     m_current_file = new_file;
-    m_view_manager->update_content_in_views();
+    m_dataset_model = std::make_unique<Dataset_model>(m_current_file->get_dataset());
+    QObject::connect(m_dataset_model.get(), &Dataset_model::dataset_changed, [this] {file_was_modified();});
+    for(auto& view : m_view_manager->get_views()) {
+        view->set_dataset_model(*m_dataset_model);
+    }
     m_main_window.setWindowModified(m_current_file->has_unsaved_changes());
     set_window_title();
 }

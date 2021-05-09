@@ -18,6 +18,8 @@ add_executable(dcmedit
   src/Version.h
   src/gui/About_dialog.cpp
   src/gui/About_dialog.h
+  src/gui/Dataset_model.cpp
+  src/gui/Dataset_model.h
   src/gui/File_tree.cpp
   src/gui/File_tree.h
   src/gui/Gui_util.cpp
@@ -48,16 +50,12 @@ add_executable(dcmedit
   src/gui/tool/Transform_tool.h
   src/gui/view/Add_element_dialog.cpp
   src/gui/view/Add_element_dialog.h
-  src/gui/view/Dataset_table.cpp
-  src/gui/view/Dataset_table.h
   src/gui/view/Dataset_view.cpp
   src/gui/view/Dataset_view.h
   src/gui/view/Edit_element_dialog.cpp
   src/gui/view/Edit_element_dialog.h
   src/gui/view/Image_view.cpp
   src/gui/view/Image_view.h
-  src/gui/view/Sequence_table.cpp
-  src/gui/view/Sequence_table.h
   src/gui/view/View.cpp
   src/gui/view/View.h
   src/logging/Console_logger.cpp

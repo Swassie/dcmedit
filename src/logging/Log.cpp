@@ -8,18 +8,18 @@ static Log* g_log;
 
 static std::string to_string(Log_level log_level) {
     switch(log_level) {
-    case Log_level::debug:
-        return "dbug";
-    case Log_level::info:
-        return "info";
-    case Log_level::warning:
-        return "warn";
-    case Log_level::error:
-        return "fail";
-    case Log_level::critical:
-        return "crit";
-    case Log_level::none:
-        return "";
+        case Log_level::debug:
+            return "dbug";
+        case Log_level::info:
+            return "info";
+        case Log_level::warning:
+            return "warn";
+        case Log_level::error:
+            return "fail";
+        case Log_level::critical:
+            return "crit";
+        case Log_level::none:
+            return "";
     }
     return "";
 }

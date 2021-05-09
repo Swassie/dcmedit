@@ -1,9 +1,9 @@
 #include "gui/view/Image_view.h"
 
 #include "Dicom_file.h"
+#include "gui/Dataset_model.h"
 #include "gui/Gui_util.h"
 #include "gui/menu/Tool_bar.h"
-#include "gui/studio/Dicom_studio.h"
 
 #include <dcmtk/dcmdata/dctk.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
@@ -11,14 +11,19 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-Image_view::Image_view(Dicom_studio& studio,
+Image_view::Image_view(Dataset_model& model,
                        Tool_bar& tool_bar,
                        std::unique_ptr<Transform_tool> transform_tool)
-    : m_studio(studio),
+    : m_dataset_model(&model),
       m_tool_bar(tool_bar),
       m_current_tool(transform_tool.get()),
       m_transform_tool(std::move(transform_tool)) {
     setMouseTracking(true);
+}
+
+void Image_view::set_dataset_model(Dataset_model& model) {
+    m_dataset_model = &model;
+    update();
 }
 
 static QImage::Format get_image_format(const DicomImage& image) {
@@ -33,8 +38,8 @@ static QImage::Format get_image_format(const DicomImage& image) {
 }
 
 void Image_view::paintEvent(QPaintEvent*) {
-    DcmDataset& current_dataset = m_studio.get_current_file()->get_dataset();
-    DicomImage image(&current_dataset, EXS_Unknown);
+    DcmItem& dataset = m_dataset_model->get_root_item();
+    DicomImage image(&dataset, EXS_Unknown);
     const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData());
     QPainter painter(this);
     if(!pixel_data) {
@@ -71,13 +76,13 @@ void Image_view::mousePressEvent(QMouseEvent* event) {
 
 void Image_view::set_tool() {
     switch(m_tool_bar.get_selected_tool()) {
-    case Tool_bar::Tool::pan:
-        m_transform_tool->set_translate_mode();
-        m_current_tool = m_transform_tool.get();
-        break;
-    case Tool_bar::Tool::zoom:
-        m_transform_tool->set_scale_mode();
-        m_current_tool = m_transform_tool.get();
-        break;
+        case Tool_bar::Tool::pan:
+            m_transform_tool->set_translate_mode();
+            m_current_tool = m_transform_tool.get();
+            break;
+        case Tool_bar::Tool::zoom:
+            m_transform_tool->set_scale_mode();
+            m_current_tool = m_transform_tool.get();
+            break;
     }
 }
