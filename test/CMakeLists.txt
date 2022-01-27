@@ -1,15 +1,16 @@
 add_executable(test-runner
   ../src/Dicom_file.cpp
   ../src/Dicom_util.cpp
-  ../src/gui/Gui_util.cpp
-  ../src/gui/tool/Transform_tool.cpp
+  ../src/models/Transform_tool.cpp
   ../src/logging/Console_logger.cpp
   ../src/logging/Log.cpp
-  ../third-party/catch.hpp
+  ../third-party/catch/catch.hpp
+
   # Test files
   main.cpp
   Dicom_util_test.cpp
-  gui/tool/Transform_tool_test.cpp
+  common/Event_test.cpp
+  models/Transform_tool_test.cpp
 )
 
 set_target_properties(test-runner PROPERTIES CXX_STANDARD 17)

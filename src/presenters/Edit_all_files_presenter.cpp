@@ -1,0 +1,62 @@
+#include "presenters/Edit_all_files_presenter.h"
+
+#include "Dicom_util.h"
+#include "models/Dicom_files.h"
+#include "views/IEdit_all_files_view.h"
+
+Edit_all_files_presenter::Edit_all_files_presenter(IEdit_all_files_view& view, Dicom_files& files)
+    : m_view(view),
+      m_files(files) {}
+
+void Edit_all_files_presenter::setup_event_handlers() {
+    m_view.ok_clicked += [this] {apply();};
+    m_view.cancel_clicked += [this] {m_view.close_dialog();};
+    m_view.mode_changed += [this] {on_mode_changed();};
+}
+
+void Edit_all_files_presenter::show_dialog() {
+    m_view.show_dialog();
+}
+
+void Edit_all_files_presenter::apply() {
+    auto tag_path = m_view.tag_path();
+    auto value = m_view.value();
+
+    if(tag_path.empty()) {
+        m_view.show_error("Error", "Tag path must be set.");
+        return;
+    }
+
+    bool error = false;
+
+    for(auto& file : m_files.get_files()) {
+        try {
+            const auto mode = m_view.mode();
+
+            if(mode == IEdit_all_files_view::Mode::add_edit) {
+                Dicom_util::add_or_edit_element(tag_path, value, false, file->get_dataset());
+            }
+            else if(mode == IEdit_all_files_view::Mode::edit) {
+                Dicom_util::add_or_edit_element(tag_path, value, true, file->get_dataset());
+            }
+            else {
+                Dicom_util::delete_element(tag_path, file->get_dataset());
+            }
+        }
+        catch(const std::exception& e) {
+            error = true;
+        }
+        file->set_unsaved_changes(true);
+    }
+    if(error) {
+        m_view.show_error("Error", "At least one operation failed, check log for info");
+    }
+
+    m_files.current_file_set(); // Trigger an update.
+    m_view.close_dialog();
+}
+
+void Edit_all_files_presenter::on_mode_changed() {
+    const auto mode = m_view.mode();
+    m_view.enable_value(mode != IEdit_all_files_view::Mode::remove);
+}
