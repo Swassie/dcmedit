@@ -19,6 +19,7 @@ Dataset_view::Dataset_view(Dataset_model& model)
     m_tree_view->setModel(m_model);
     m_tree_view->setAlternatingRowColors(true);
     m_tree_view->setUniformRowHeights(true);
+    connect(m_tree_view, &QTreeView::activated, [this] (auto& index) {element_activated(index);});
 
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -123,7 +124,6 @@ void Dataset_view::showEvent(QShowEvent*) {
         for(int i = 0; i < column_count; ++i) {
             m_tree_view->resizeColumnToContents(i);
         }
-
         m_resized_to_content = true;
     }
 }

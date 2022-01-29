@@ -4,6 +4,7 @@
 #include "logging/Log.h"
 
 #include <array>
+#include <cstdint>
 #include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcistrmf.h>
 #include <dcmtk/dcmdata/dcitem.h>
@@ -66,19 +67,30 @@ Dataset_model::Dataset_model(Dicom_files& files)
 
 void Dataset_model::setup_event_handlers() {
     m_files.current_file_set += [this] {reset_model();};
+    m_files.all_files_cleared += [this] {reset_model();};
+}
+
+DcmItem* Dataset_model::get_dataset() const {
+    Dicom_file* file = m_files.get_current_file();
+
+    if(file) {
+        return &file->get_dataset();
+    }
+    else {
+        Log::debug("Failed to get dataset");
+        return nullptr;
+    }
 }
 
 DcmObject* Dataset_model::get_object(const QModelIndex& index) const {
     if(!index.isValid()) {
-        return &get_dataset();
+        return get_dataset();
     }
-
     auto object = static_cast<DcmObject*>(index.internalPointer());
 
     if(!object) {
         Log::error("QModelIndex::internalPointer was null.");
     }
-
     return object;
 }
 
@@ -99,7 +111,6 @@ OFCondition Dataset_model::add_element(const QModelIndex& index, const DcmTag& t
     else if(tag.getEVR() == EVR_SQ && !value.empty()) {
         return OFCondition(0, 0, OF_error, "SQ elements can't have a value.");
     }
-
     layoutAboutToBeChanged({QPersistentModelIndex(index)});
 
     DcmElement* element = nullptr;
@@ -108,11 +119,9 @@ OFCondition Dataset_model::add_element(const QModelIndex& index, const DcmTag& t
     if(status.good() && !value.empty()) {
         status = element->putString(value.c_str());
     }
-
     if(status.good()) {
         status = item->insert(element);
     }
-
     layoutChanged({QPersistentModelIndex(index)});
 
     if(status.good()) {
@@ -121,7 +130,6 @@ OFCondition Dataset_model::add_element(const QModelIndex& index, const DcmTag& t
     else {
         delete element;
     }
-
     return status;
 }
 
@@ -131,13 +139,11 @@ OFCondition Dataset_model::add_item(const QModelIndex& index) {
     if(sq == nullptr) {
         return OFCondition(0, 0, OF_error, "Failed to get sequence.");
     }
-
     int item_pos = rowCount(index);
     beginInsertRows(index, item_pos, item_pos);
     auto status = sq->append(new DcmItem());
     endInsertRows();
     mark_as_modified();
-
     return status;
 }
 
@@ -145,13 +151,11 @@ OFCondition Dataset_model::delete_index(const QModelIndex& index) {
     if(!index.isValid()) {
         return OFCondition(0, 0, OF_error, "Invalid index.");
     }
-
     DcmObject* parent = get_object(index.parent());
 
     if(parent == nullptr) {
         return OFCondition(0, 0, OF_error, "Failed to get parent.");
     }
-
     const DcmEVR vr = parent->ident();
     const int row = index.row();
     OFCondition status(EC_Normal);
@@ -170,10 +174,8 @@ OFCondition Dataset_model::delete_index(const QModelIndex& index) {
     else {
         status = OFCondition(0, 0, OF_error, ("Unexpected VR: " + std::to_string(vr)).c_str());
     }
-
     endRemoveRows();
     mark_as_modified();
-
     return status;
 }
 
@@ -183,11 +185,9 @@ OFCondition Dataset_model::set_value(const QModelIndex& index, const std::string
     if(element == nullptr) {
         return OFCondition(0, 0, OF_error, "Failed to get element.");
     }
-
     auto status = element->putString(value.c_str());
     dataChanged(index, index);
     mark_as_modified();
-
     return status;
 }
 
@@ -197,18 +197,15 @@ OFCondition Dataset_model::set_value_from_file(const QModelIndex& index, const s
     if(element == nullptr) {
         return OFCondition(0, 0, OF_error, "Failed to get element.");
     }
-
     DcmInputFileStream file_stream(file_path.c_str());
-    const size_t file_size = OFStandard::getFileSize(file_path.c_str());
+    const auto file_size = static_cast<uint32_t>(OFStandard::getFileSize(file_path.c_str()));
 
     if(file_size % 2) {
         return OFCondition(0, 0, OF_error, "File size must be even.");
     }
-
     auto status = element->createValueFromTempFile(file_stream.newFactory(), file_size, EBO_LittleEndian);
     dataChanged(index, index);
     mark_as_modified();
-
     return status;
 }
 
@@ -216,11 +213,15 @@ QModelIndex Dataset_model::index(int row, int column, const QModelIndex& parent)
     if(!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
-
     DcmObject* child = nullptr;
 
     if(!parent.isValid()) {
-        child = get_dataset().getElement(row);
+        DcmItem* dataset = get_dataset();
+
+        if(dataset == nullptr) {
+            return QModelIndex();
+        }
+        child = dataset->getElement(row);
     }
     else {
         DcmObject* parent_obj = get_object(parent);
@@ -238,7 +239,6 @@ QModelIndex Dataset_model::index(int row, int column, const QModelIndex& parent)
             Log::error("Failed to create index. VR: " + std::to_string(vr));
         }
     }
-
     return child ? createIndex(row, column, child) : QModelIndex();
 }
 
@@ -246,14 +246,12 @@ QModelIndex Dataset_model::parent(const QModelIndex& index) const {
     if(!index.isValid()) {
         return QModelIndex();
     }
-
     DcmObject* object = get_object(index);
     DcmObject* parent = object ? object->getParent() : nullptr;
 
-    if(!parent || parent == &get_dataset()) {
+    if(!parent || parent == get_dataset()) {
         return QModelIndex();
     }
-
     int row = Dicom_util::get_index_nr(*parent);
     return createIndex(row, 0, parent);
 }
@@ -268,7 +266,7 @@ int Dataset_model::rowCount(const QModelIndex& parent) const {
 }
 
 int Dataset_model::columnCount(const QModelIndex&) const {
-    return columns.size();
+    return static_cast<int>(columns.size());
 }
 
 QVariant Dataset_model::data(const QModelIndex& index, int role) const {
@@ -276,7 +274,6 @@ QVariant Dataset_model::data(const QModelIndex& index, int role) const {
     if(!index.isValid() || role != Qt::DisplayRole || !object) {
         return QVariant();
     }
-
     QVariant data;
     const DcmEVR vr = object->ident();
 

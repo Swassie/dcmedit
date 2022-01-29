@@ -18,7 +18,7 @@ public:
 
     void setup_event_handlers();
 
-    DcmItem& get_dataset() const {return m_files.get_current_file()->get_dataset();}
+    DcmItem* get_dataset() const;
     DcmObject* get_object(const QModelIndex&) const;
     DcmEVR get_vr(const QModelIndex&) const;
 

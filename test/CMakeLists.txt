@@ -1,6 +1,8 @@
 add_executable(test-runner
   ../src/Dicom_file.cpp
   ../src/Dicom_util.cpp
+  ../src/Exceptions.cpp
+  ../src/Exceptions.h
   ../src/models/Transform_tool.cpp
   ../src/logging/Console_logger.cpp
   ../src/logging/Log.cpp
@@ -14,7 +16,11 @@ add_executable(test-runner
 )
 
 set_target_properties(test-runner PROPERTIES CXX_STANDARD 17)
-target_compile_options(test-runner PRIVATE -Wall -Wextra -pedantic)
+if(MSVC)
+  target_compile_options(test-runner PRIVATE /W4 /WX)
+else()
+  target_compile_options(test-runner PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
 
 target_include_directories(test-runner PRIVATE
   ../src

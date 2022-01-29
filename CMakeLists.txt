@@ -6,9 +6,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(DCMTK REQUIRED)
+find_package(DCMTK CONFIG REQUIRED)
 
-add_executable(dcmedit
+add_executable(dcmedit WIN32
   assets/assets.qrc
   src/Dicom_file.cpp
   src/Dicom_file.h
@@ -21,6 +21,8 @@ add_executable(dcmedit
   src/common/Scoped_event_handlers.h
   src/dcmedit.cpp
   src/dcmedit.h
+  src/Exceptions.cpp
+  src/Exceptions.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
@@ -102,7 +104,11 @@ add_custom_command(
   VERBATIM)
 
 set_target_properties(dcmedit PROPERTIES CXX_STANDARD 17)
-target_compile_options(dcmedit PRIVATE -Wall -Wextra -pedantic)
+if(MSVC)
+  target_compile_options(dcmedit PRIVATE /W4 /WX)
+else()
+  target_compile_options(dcmedit PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
 
 target_include_directories(dcmedit PRIVATE
   src

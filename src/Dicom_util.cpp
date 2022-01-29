@@ -1,54 +1,35 @@
 #include "Dicom_util.h"
 
+#include "Exceptions.h"
 #include "logging/Log.h"
 
 #include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcitem.h>
 #include <dcmtk/dcmdata/dcpath.h>
 #include <dcmtk/dcmdata/dcsequen.h>
-#include <stdexcept>
 
 static DcmObject* get_object(DcmPath* path) {
-    DcmPathNode* last_element = path->back();
-
-    if(last_element == nullptr) {
-        throw std::runtime_error("Invalid tag path.");
-    }
-    DcmObject* object = last_element->m_obj;
+    DcmPathNode* last_node = path->back();
+    DcmObject* object = last_node ? last_node->m_obj : nullptr;
 
     if(object == nullptr) {
-        throw std::runtime_error("Invalid tag path.");
+        Log::error("Invalid tag path.");
     }
-
     return object;
 }
 
 static void set_element_value(const OFList<DcmPath*>& paths, const std::string& value) {
-    bool error = false;
-
     for(DcmPath* path : paths) {
-        DcmPathNode* last_element = path->back();
-
-        if(last_element == nullptr) {
-            error = true;
-            continue;
-        }
-        auto element = dynamic_cast<DcmElement*>(last_element->m_obj);
+        auto element = dynamic_cast<DcmElement*>(get_object(path));
 
         if(element == nullptr) {
-            error = true;
-            continue;
+            throw DcmeditException("Failed to get element");
         }
         OFCondition status = element->putString(value.c_str());
 
         if(status.bad()) {
-            Log::error(std::string("Failed to set element value. Reason: ") + status.text());
-            error = true;
-            continue;
+            throw DcmeditException(std::string("Failed to set element value. Reason: ") + status.text());
         }
-    }
-    if(error) {
-        throw std::runtime_error("At least one error occurred, check log for details.");
     }
 }
 
@@ -58,22 +39,18 @@ void Dicom_util::add_or_edit_element(const std::string& tag_path, const std::str
     OFCondition status = path_proc.findOrCreatePath(&dataset, tag_path.c_str(), !only_edit);
 
     if(status.bad()) {
-        throw std::runtime_error(status.text());
+        throw TagPathNotFoundException(std::string("Tag path not found. Reason: ") + status.text());
     }
-
     OFList<DcmPath*> foundPaths;
-    auto resultCount = path_proc.getResults(foundPaths);
-
-    if(resultCount == 0) {
-        throw std::runtime_error("Tag path not found.");
-    }
-
+    path_proc.getResults(foundPaths);
     DcmObject* object = get_object(foundPaths.front());
 
-    if(!object->isLeaf() && (only_edit || !value.empty())) {
-        throw std::runtime_error("Can't set value for non-leaf element.");
+    if(object == nullptr) {
+        throw DcmeditException("Failed to get object");
     }
-
+    else if(!object->isLeaf() && (only_edit || !value.empty())) {
+        throw DcmeditException("Can't set value for non-leaf element.");
+    }
     set_element_value(foundPaths, value);
 }
 
@@ -83,7 +60,7 @@ void Dicom_util::delete_element(const std::string& tag_path, DcmDataset& dataset
     OFCondition status = path_proc.findOrDeletePath(&dataset, tag_path.c_str(), resultCount);
 
     if(status.bad()) {
-        throw std::runtime_error(status.text());
+        throw TagPathNotFoundException(std::string("Failed to delete element. Reason: ") + status.text());
     }
 }
 
@@ -93,7 +70,6 @@ int Dicom_util::get_index_nr(DcmObject& object) {
     if(!parent) {
         return 0;
     }
-
     const DcmEVR vr = parent->ident();
     if(vr == EVR_item || vr == EVR_dataset) {
         auto item = static_cast<DcmItem*>(parent);

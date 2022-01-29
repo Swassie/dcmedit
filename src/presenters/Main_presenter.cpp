@@ -104,6 +104,9 @@ void Main_presenter::update_window_title() {
     }
     else {
         Dicom_file* file = m_files.get_current_file();
+        if(!file) {
+            return;
+        }
         m_view.set_window_modified(file->has_unsaved_changes());
 
         QString title = QString::fromStdString(file->get_path() + "[*] - ");

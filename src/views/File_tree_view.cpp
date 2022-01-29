@@ -25,7 +25,6 @@ void File_tree_view::item_activated(const QModelIndex& index) {
     if(!item || item->hasChildren()) {
         return;
     }
-
     auto file = item->data().value<Dicom_file*>();
     file_activated(file);
 }

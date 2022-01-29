@@ -25,7 +25,6 @@ void Edit_value_presenter::set_value() {
         m_view.show_error("Error", "Failed to get element.");
         return;
     }
-
     if(element->isaString() || element->getLength() <= max_binary_value_length) {
         OFString value;
         auto status = element->getOFStringArray(value, false);
@@ -56,7 +55,6 @@ void Edit_value_presenter::apply() {
     if(value.empty() && !m_view.should_save_empty_value()) {
         return;
     }
-
     auto status = m_dataset_model.set_value(m_index, value);
 
     if(status.bad()) {
@@ -64,6 +62,5 @@ void Edit_value_presenter::apply() {
                           "Reason: " + std::string(status.text()));
         return;
     }
-
     m_view.close_dialog();
 }

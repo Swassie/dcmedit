@@ -32,7 +32,6 @@ void Add_element_presenter::apply() {
                           "Reason: " + std::string(status.text()));
         return;
     }
-
     status = m_dataset_model.add_element(m_item_index, tag, m_view.value());
 
     if(status.bad()) {
@@ -40,6 +39,5 @@ void Add_element_presenter::apply() {
                           "Reason: " + std::string(status.text()));
         return;
     }
-
     m_view.close_dialog();
 }

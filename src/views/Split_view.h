@@ -10,8 +10,8 @@ public:
     void add_view(std::unique_ptr<IView>) override;
     void remove_view() override;
     void remove_all_views() override;
-    void replace_view(int index, std::unique_ptr<IView>) override;
-    void show_views() override;
+    void replace_view(size_t index, std::unique_ptr<IView>) override;
+    void set_views() override;
 
 protected:
     std::unique_ptr<QWidget> cast_to_widget(std::unique_ptr<IView>);

@@ -15,6 +15,7 @@ Edit_value_view::Edit_value_view(QWidget* parent)
     connect(button_box, &QDialogButtonBox::accepted, [this] {ok_clicked();});
     connect(button_box, &QDialogButtonBox::rejected, [this] {cancel_clicked();});
     layout->addWidget(button_box);
+    setWindowTitle("Edit value");
 }
 
 void Edit_value_view::show_dialog() {

@@ -10,7 +10,8 @@ public:
     Image_view();
 
     void update() override;
-    void draw(DicomImage&, const QTransform&) override;
+    void draw(const uint8_t* pixel_data, int width, int height, bool monochrome, const QTransform&) override;
+    void show_error(const std::string&) override;
 
 private:
     void paintEvent(QPaintEvent*) override;

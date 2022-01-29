@@ -17,10 +17,10 @@ void Split_view::remove_all_views() {
     m_views.clear();
 }
 
-void Split_view::replace_view(int index, std::unique_ptr<IView> view) {
+void Split_view::replace_view(size_t index, std::unique_ptr<IView> view) {
     m_views[index].release()->deleteLater();
     m_views[index] = cast_to_widget(std::move(view));
-    show_views();
+    set_views();
 }
 
 std::unique_ptr<QWidget> Split_view::cast_to_widget(std::unique_ptr<IView> view) {
@@ -33,11 +33,10 @@ std::unique_ptr<QWidget> Split_view::cast_to_widget(std::unique_ptr<IView> view)
         Log::error("Failed to cast view to QWidget.");
         widget = new QWidget();
     }
-
     return std::unique_ptr<QWidget>(widget);
 }
 
-void Split_view::show_views() {
+void Split_view::set_views() {
     delete layout();
     const auto count = m_views.size();
 

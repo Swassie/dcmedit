@@ -18,6 +18,7 @@ private:
     void add_item(const QModelIndex&);
     void delete_index(const QModelIndex&);
     void edit_value(const QModelIndex&);
+    void edit_value_if_leaf(const QModelIndex&);
     void save_value_to_file(const QModelIndex&);
     void load_value_from_file(const QModelIndex&);
     void show_context_menu(const QPoint&);

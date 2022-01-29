@@ -15,15 +15,16 @@ Dataset_presenter::Dataset_presenter(IDataset_view& view, Dataset_model& dataset
       m_dataset_model(dataset_model) {}
 
 void Dataset_presenter::setup_event_handlers() {
-    m_view.add_element_clicked += [this] (auto index) {add_element(index);};
-    m_view.add_item_clicked += [this] (auto index) {add_item(index);};
-    m_view.delete_item_clicked += [this] (auto index) {delete_index(index);};
-    m_view.delete_sq_clicked += [this] (auto index) {delete_index(index);};
-    m_view.delete_element_clicked += [this] (auto index) {delete_index(index);};
-    m_view.edit_value_clicked += [this] (auto index) {edit_value(index);};
-    m_view.save_value_to_file_clicked += [this] (auto index) {save_value_to_file(index);};
-    m_view.load_value_from_file_clicked += [this] (auto index) {load_value_from_file(index);};
-    m_view.context_menu_requested += [this] (auto pos) {show_context_menu(pos);};
+    m_view.add_element_clicked += [this] (auto& index) {add_element(index);};
+    m_view.add_item_clicked += [this] (auto& index) {add_item(index);};
+    m_view.delete_item_clicked += [this] (auto& index) {delete_index(index);};
+    m_view.delete_sq_clicked += [this] (auto& index) {delete_index(index);};
+    m_view.delete_element_clicked += [this] (auto& index) {delete_index(index);};
+    m_view.edit_value_clicked += [this] (auto& index) {edit_value(index);};
+    m_view.save_value_to_file_clicked += [this] (auto& index) {save_value_to_file(index);};
+    m_view.load_value_from_file_clicked += [this] (auto& index) {load_value_from_file(index);};
+    m_view.context_menu_requested += [this] (auto& pos) {show_context_menu(pos);};
+    m_view.element_activated += [this] (auto& index) {edit_value_if_leaf(index);};
 }
 
 void Dataset_presenter::add_element(const QModelIndex& index) {
@@ -58,6 +59,14 @@ void Dataset_presenter::edit_value(const QModelIndex& index) {
     presenter.show_dialog();
 }
 
+void Dataset_presenter::edit_value_if_leaf(const QModelIndex& index) {
+    const DcmEVR vr = m_dataset_model.get_vr(index);
+
+    if(vr != EVR_item && vr != EVR_SQ) {
+        edit_value(index);
+    }
+}
+
 void Dataset_presenter::save_value_to_file(const QModelIndex& index) {
     auto element = dynamic_cast<DcmElement*>(m_dataset_model.get_object(index));
 
@@ -65,14 +74,12 @@ void Dataset_presenter::save_value_to_file(const QModelIndex& index) {
         m_view.show_error("Error", "Failed to get element");
         return;
     }
-
     const std::string file_path = m_view.show_save_file_dialog();
 
     if(file_path.empty()) {
         return;
     }
-
-    const size_t length = element->getLength();
+    const auto length = element->getLength();
     std::vector<char> buffer(length);
     auto status = element->getPartialValue(buffer.data(), 0, length, nullptr, EBO_LittleEndian);
 
@@ -81,7 +88,6 @@ void Dataset_presenter::save_value_to_file(const QModelIndex& index) {
                           "Reason: " + std::string(status.text()));
         return;
     }
-
     std::ofstream file(file_path, std::ios_base::binary);
     file.write(buffer.data(), length);
 
@@ -96,7 +102,6 @@ void Dataset_presenter::load_value_from_file(const QModelIndex& index) {
     if(file_path.empty()) {
         return;
     }
-
     auto status = m_dataset_model.set_value_from_file(index, file_path);
 
     if(status.bad()) {
@@ -112,7 +117,6 @@ void Dataset_presenter::show_context_menu(const QPoint& pos) {
         m_view.show_context_menu(pos);
         return;
     }
-
     const DcmEVR vr = m_dataset_model.get_vr(index);
 
     if(vr == EVR_item) {

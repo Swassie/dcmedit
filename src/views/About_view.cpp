@@ -20,6 +20,7 @@ About_view::About_view(QWidget* parent)
     scroll_area->setBackgroundRole(QPalette::Light);
     scroll_area->setWidget(text);
     layout->addWidget(scroll_area);
+    setWindowTitle("About");
 }
 
 void About_view::show_about_dialog() {
@@ -31,7 +32,7 @@ static QString get_about_text() {
 <h1>dcmedit</h1>
 Version: $VERSION<br>
 <br>
-Copyright 2020, 2021 Marcus Swanson<br>
+Copyright 2020-2022 Marcus Swanson<br>
 <br>
 This program is free software: you can redistribute it and/or modify<br>
 it under the terms of the GNU General Public License as published by<br>

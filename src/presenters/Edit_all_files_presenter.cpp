@@ -1,6 +1,7 @@
 #include "presenters/Edit_all_files_presenter.h"
 
 #include "Dicom_util.h"
+#include "Exceptions.h"
 #include "models/Dicom_files.h"
 #include "views/IEdit_all_files_view.h"
 
@@ -26,8 +27,7 @@ void Edit_all_files_presenter::apply() {
         m_view.show_error("Error", "Tag path must be set.");
         return;
     }
-
-    bool error = false;
+    std::vector<std::string> file_errors;
 
     for(auto& file : m_files.get_files()) {
         try {
@@ -43,17 +43,23 @@ void Edit_all_files_presenter::apply() {
                 Dicom_util::delete_element(tag_path, file->get_dataset());
             }
         }
+        catch(const TagPathNotFoundException& e) {
+            file_errors.push_back(file->get_path() + ":\n" + e.what());
+            continue;
+        }
         catch(const std::exception& e) {
-            error = true;
+            file_errors.push_back(file->get_path() + ":\n" + e.what());
         }
         file->set_unsaved_changes(true);
     }
-    if(error) {
-        m_view.show_error("Error", "At least one operation failed, check log for info");
-    }
-
     m_files.current_file_set(); // Trigger an update.
-    m_view.close_dialog();
+
+    if(file_errors.empty()) {
+        m_view.close_dialog();
+    }
+    else {
+        m_view.show_error_details(file_errors);
+    }
 }
 
 void Edit_all_files_presenter::on_mode_changed() {

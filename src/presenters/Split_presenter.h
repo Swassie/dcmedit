@@ -14,7 +14,7 @@ public:
     Split_presenter(ISplit_view&, View_factory&);
 
     void set_view_count(size_t);
-    void show_default_layout();
+    void set_default_layout();
 
 protected:
     void setup_event_handlers(IView&, IPresenter&);

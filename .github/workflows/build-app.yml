@@ -1,0 +1,59 @@
+name: Build app
+
+on: [push, workflow_dispatch]
+
+env:
+  CMAKE_BUILD_TYPE: Release
+
+jobs:
+  Build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Cache DCMTK
+        uses: actions/cache@v2
+        with:
+          path: ~\AppData\Local\vcpkg\archives
+          key: ${{ runner.os }}-dcmtk
+
+      - name: Install DCMTK
+        run: vcpkg install dcmtk:x64-windows
+
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-qt
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      - name: Configure
+        run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
+
+      - name: Build
+        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+
+      - name: Test
+        run: .\build-output\test\${{ env.CMAKE_BUILD_TYPE }}\test-runner.exe
+
+      - name: Package application
+        run: |
+          New-Item -Path .\app-package -ItemType Directory
+          Copy-Item .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.exe .\app-package\
+          Copy-Item .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.pdb .\app-package\ -ErrorAction SilentlyContinue
+          Copy-Item .\package-readme.txt .\app-package\README.txt
+          Copy-Item .\LICENSE.html .\app-package\
+          windeployqt --no-quick-import --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-angle --no-opengl-sw .\app-package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-${{ env.CMAKE_BUILD_TYPE }}
+          path: .\app-package

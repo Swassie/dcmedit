@@ -15,6 +15,7 @@ public:
     virtual void show_dialog() = 0;
     virtual void close_dialog() = 0;
     virtual void show_error(std::string title, std::string text) = 0;
+    virtual void show_error_details(const std::vector<std::string>&) = 0;
     virtual void enable_value(bool) = 0;
     virtual std::string tag_path() = 0;
     virtual std::string value() = 0;

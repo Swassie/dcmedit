@@ -6,6 +6,7 @@
 #include "views/IImage_view.h"
 
 #include <dcmtk/dcmdata/dcitem.h>
+#include <dcmtk/dcmimage/diregist.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
 #include <QTransform>
 #include <string>
@@ -30,17 +31,49 @@ void Image_presenter::update() {
     m_view.update();
 }
 
+static const uint8_t* get_pixel_data(DicomImage& image) {
+    int bits_per_sample = image.isMonochrome() ? 16 : 8;
+    return static_cast<const uint8_t*>(image.getOutputData(bits_per_sample));
+}
+
+static bool is_image_supported(const DicomImage& image) {
+    auto photo_interp = image.getPhotometricInterpretation();
+    return photo_interp == EPI_Monochrome1
+        || photo_interp == EPI_Monochrome2
+        || photo_interp == EPI_PaletteColor
+        || photo_interp == EPI_RGB;
+}
+
 void Image_presenter::draw() {
-    DcmItem& dataset = m_dataset_model.get_dataset();
-    DicomImage image(&dataset, EXS_Unknown);
-    m_view.draw(image, m_transform_tool.get_transform());
+    DcmItem* dataset = m_dataset_model.get_dataset();
+
+    if(!dataset) {
+        return;
+    }
+    DicomImage image(dataset, EXS_Unknown);
+
+    if(!is_image_supported(image)) {
+        m_view.show_error("Photometric Interpretation not supported");
+        return;
+    }
+    image.setMinMaxWindow();
+    const uint8_t* pixel_data = get_pixel_data(image);
+
+    if(pixel_data == nullptr) {
+        std::string status = DicomImage::getString(image.getStatus());
+        m_view.show_error(status);
+        return;
+    }
+    auto width = static_cast<int>(image.getWidth());
+    auto height = static_cast<int>(image.getHeight());
+    bool monochrome = image.isMonochrome();
+    m_view.draw(pixel_data, width, height, monochrome, m_transform_tool.get_transform());
 }
 
 void Image_presenter::handle_mouse_move(QMouseEvent* event) {
     if(!Gui_util::is_left_mouse_pressed(*event)) {
         set_tool();
     }
-
     bool has_changed = m_transform_tool.mouse_move(*event);
 
     if(has_changed) {

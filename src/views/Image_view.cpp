@@ -1,21 +1,9 @@
 #include "views/Image_view.h"
 
-#include <dcmtk/dcmimgle/dcmimage.h>
 #include <QAction>
 #include <QImage>
 #include <QMouseEvent>
 #include <QPainter>
-
-static QImage::Format get_image_format(const DicomImage& image) {
-    QImage::Format format = QImage::Format_Invalid;
-    if(image.getDepth() == 8) {
-        format = QImage::Format_Grayscale8;
-    }
-    else if(image.getDepth() == 16) {
-        format = QImage::Format_Grayscale16;
-    }
-    return format;
-}
 
 Image_view::Image_view() {
     setMouseTracking(true);
@@ -32,22 +20,18 @@ void Image_view::update() {
     QWidget::update();
 }
 
-void Image_view::draw(DicomImage& image, const QTransform& transform) {
-    const uchar* pixel_data = static_cast<const uchar*>(image.getOutputData());
+void Image_view::draw(const uint8_t* pixel_data, int width, int height, bool monochrome, const QTransform& transform) {
+    auto format = monochrome ? QImage::Format_Grayscale16 : QImage::Format_RGB888;
+    QImage image(pixel_data, width, height, format);
+    const QRect image_rect = image.rect();
     QPainter painter(this);
-    if(!pixel_data) {
-        QString status = DicomImage::getString(image.getStatus());
-        painter.drawText(rect(), "Could not render image.\nReason: " + status);
-        return;
-    }
-    const size_t width = image.getWidth();
-    const size_t height = image.getHeight();
-    QImage::Format format = get_image_format(image);
-
-    QImage q_image(pixel_data, width, height, format);
-    const QRect image_rect = q_image.rect();
     painter.setTransform(transform);
-    painter.drawPixmap(image_rect, QPixmap::fromImage(q_image), image_rect);
+    painter.drawPixmap(image_rect, QPixmap::fromImage(image), image_rect);
+}
+
+void Image_view::show_error(const std::string& text) {
+    QPainter painter(this);
+    painter.drawText(rect(), "Could not render image.\nReason: " + QString::fromStdString(text));
 }
 
 void Image_view::paintEvent(QPaintEvent*) {

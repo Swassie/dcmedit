@@ -1,3 +1,3 @@
 #pragma once
 
-extern const char * const dcmedit_version;
+extern const char* const dcmedit_version;

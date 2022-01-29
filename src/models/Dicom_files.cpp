@@ -12,8 +12,9 @@ void Dicom_files::add_files(std::vector<std::unique_ptr<Dicom_file>> files) {
         return;
     }
     for(auto& new_file : files) {
-        auto new_file_path = new_file->get_path();
+        std::string new_file_path = new_file->get_path();
         bool duplicate_file = false;
+
         for(auto& file : m_files) {
             if(file->get_path() == new_file_path) {
                 duplicate_file = true;
@@ -24,7 +25,6 @@ void Dicom_files::add_files(std::vector<std::unique_ptr<Dicom_file>> files) {
             m_files.push_back(std::move(new_file));
         }
     }
-
     files_added();
 
     if(m_current_file == nullptr && m_files.size()) {
@@ -60,9 +60,7 @@ bool Dicom_files::save_all_files() {
             ok = false;
         }
     }
-
     files_saved();
-
     return ok;
 }
 

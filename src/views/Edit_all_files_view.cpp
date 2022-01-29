@@ -41,6 +41,7 @@ Edit_all_files_view::Edit_all_files_view(QWidget* parent)
     connect(button_box, &QDialogButtonBox::accepted, [this] {ok_clicked();});
     connect(button_box, &QDialogButtonBox::rejected, [this] {cancel_clicked();});
     layout->addWidget(button_box);
+    setWindowTitle("Edit all files");
 }
 
 void Edit_all_files_view::show_dialog() {
@@ -53,6 +54,18 @@ void Edit_all_files_view::close_dialog() {
 
 void Edit_all_files_view::show_error(std::string title, std::string text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
+}
+
+void Edit_all_files_view::show_error_details(const std::vector<std::string>& error_list) {
+    QMessageBox dialog(QMessageBox::Critical, "Error", "At least one operation failed.",
+                       QMessageBox::Ok, this);
+
+    QString details;
+    for(const auto& error : error_list) {
+        details += QString::fromStdString(error) + "\n\n";
+    }
+    dialog.setDetailedText(details);
+    dialog.exec();
 }
 
 void Edit_all_files_view::enable_value(bool enabled) {

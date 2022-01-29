@@ -12,8 +12,6 @@ class QPoint;
 class IDataset_view : public IView
 {
 public:
-    virtual ~IDataset_view() = default;
-
     Event<const QModelIndex&> add_element_clicked;
     Event<const QModelIndex&> add_item_clicked;
     Event<const QModelIndex&> delete_item_clicked;
@@ -22,6 +20,7 @@ public:
     Event<const QModelIndex&> edit_value_clicked;
     Event<const QModelIndex&> save_value_to_file_clicked;
     Event<const QModelIndex&> load_value_from_file_clicked;
+    Event<const QModelIndex&> element_activated;
     Event<const QPoint&> context_menu_requested;
 
     virtual void show_error(std::string title, std::string text) = 0;

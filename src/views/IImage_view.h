@@ -2,7 +2,9 @@
 #include "common/Event.h"
 #include "views/IView.h"
 
-class DicomImage;
+#include <cstdint>
+#include <string>
+
 class QMouseEvent;
 class QTransform;
 
@@ -14,5 +16,6 @@ public:
     Event<QMouseEvent*> mouse_pressed;
 
     virtual void update() = 0;
-    virtual void draw(DicomImage&, const QTransform&) = 0;
+    virtual void draw(const uint8_t* pixel_data, int width, int height, bool monochrome, const QTransform&) = 0;
+    virtual void show_error(const std::string&) = 0;
 };

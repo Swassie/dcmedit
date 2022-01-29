@@ -36,7 +36,7 @@ int dcmedit::run(int argc, char** argv) {
 
     auto split_view = new Split_view();
     Split_presenter split_presenter(*split_view, view_factory);
-    split_presenter.show_default_layout();
+    split_presenter.set_default_layout();
 
     auto file_tree_view = new File_tree_view(file_tree_model);
 
@@ -58,7 +58,7 @@ int dcmedit::run(int argc, char** argv) {
     main_view.open_files_clicked += [&] {open_files_presenter.open_files();};
     main_view.set_view_count_clicked += [&] (int count) {split_presenter.set_view_count(count);};
     main_view.about_clicked += [&] {about_view.show_about_dialog();};
-    main_view.reset_layout_clicked += [&] {split_presenter.show_default_layout();};
+    main_view.reset_layout_clicked += [&] {split_presenter.set_default_layout();};
     main_view.pan_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::Tool::pan);};
     main_view.zoom_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::Tool::zoom);};
 
