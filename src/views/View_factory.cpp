@@ -30,7 +30,7 @@ VP_pair View_factory::make_default_view() {
 
 std::vector<VP_pair> View_factory::make_default_layout() {
     std::vector<VP_pair> layout;
-    layout.push_back(make_image_view());
     layout.push_back(make_dataset_view());
+    layout.push_back(make_image_view());
     return layout;
 }

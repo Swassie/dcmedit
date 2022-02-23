@@ -21,8 +21,9 @@ void Image_view::update() {
 }
 
 void Image_view::draw(const uint8_t* pixel_data, int width, int height, bool monochrome, const QTransform& transform) {
+    int bytes_per_line = monochrome ? 2 * width : 3 * width;
     auto format = monochrome ? QImage::Format_Grayscale16 : QImage::Format_RGB888;
-    QImage image(pixel_data, width, height, format);
+    QImage image(pixel_data, width, height, bytes_per_line, format);
     const QRect image_rect = image.rect();
     QPainter painter(this);
     painter.setTransform(transform);
