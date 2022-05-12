@@ -1,35 +1,34 @@
 #include "models/Dicom_files.h"
 
 #include "Dicom_file.h"
+#include "Exceptions.h"
 
 #include <algorithm>
 
 Dicom_files::Dicom_files()
     : m_current_file(nullptr) {}
 
-void Dicom_files::add_files(std::vector<std::unique_ptr<Dicom_file>> files) {
-    if(files.empty()) {
-        return;
-    }
-    for(auto& new_file : files) {
-        std::string new_file_path = new_file->get_path();
-        bool duplicate_file = false;
+void Dicom_files::create_new_file(const fs::path& path) {
+    Dicom_file::create_new_file(path);
+    open_file(path);
+}
 
-        for(auto& file : m_files) {
-            if(file->get_path() == new_file_path) {
-                duplicate_file = true;
-                break;
-            }
-        }
-        if(!duplicate_file) {
-            m_files.push_back(std::move(new_file));
-        }
-    }
-    files_added();
+void Dicom_files::open_file(const fs::path& path) {
+    auto replace_file = std::find_if(m_files.begin(), m_files.end(), [&](auto& file) {
+        return file->get_path() == path;
+    });
 
-    if(m_current_file == nullptr && m_files.size()) {
-        set_current_file(m_files[0].get());
+    if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
+        throw DcmeditException("Failed to open file: " + path.string() +
+                               "\nReason: it has unsaved changes.");
     }
+    auto file = std::make_unique<Dicom_file>(path);
+
+    if(replace_file != m_files.end()) {
+        m_files.erase(replace_file);
+    }
+    m_files.push_back(std::move(file));
+    set_current_file(m_files.back().get());
 }
 
 bool Dicom_files::has_unsaved_changes() const {
@@ -44,9 +43,22 @@ void Dicom_files::clear_all_files() {
     all_files_cleared();
 }
 
-void Dicom_files::save_current_file_as(const std::string& path) {
-    m_current_file->save_file_as(path);
-    files_saved();
+void Dicom_files::save_current_file_as(const fs::path& new_path) {
+    bool same_path = m_current_file->get_path() == new_path;
+    auto replace_file = std::find_if(m_files.begin(), m_files.end(), [&](auto& file) {
+        return !same_path && file->get_path() == new_path;
+    });
+
+    if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
+        throw DcmeditException("Failed to save file: " + new_path.string() +
+                               "\nReason: it has unsaved changes.");
+    }
+    m_current_file->save_file_as(new_path);
+
+    if(replace_file != m_files.end()) {
+        m_files.erase(replace_file);
+    }
+    file_saved();
 }
 
 bool Dicom_files::save_all_files() {
@@ -60,7 +72,7 @@ bool Dicom_files::save_all_files() {
             ok = false;
         }
     }
-    files_saved();
+    file_saved();
     return ok;
 }
 

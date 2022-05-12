@@ -13,11 +13,16 @@ public:
     using Handler_remover = std::function<void()>;
 
     Event()
-        : m_enabled(true),
+        : m_defer_event(false),
+          m_deferred(false),
           m_next_handler_id(0) {}
 
-    void set_enabled(bool enabled) {
-        m_enabled = enabled;
+    void defer_event(bool defer_event) {
+        m_defer_event = defer_event;
+    }
+
+    bool deferred() const {
+        return m_deferred;
     }
 
     Handler_remover operator+=(const Handler& handler) {
@@ -38,9 +43,11 @@ public:
     }
 
     void operator()(Parameters... parameters) {
-        if(!m_enabled) {
+        if(m_defer_event) {
+            m_deferred = true;
             return;
         }
+        m_deferred = false;
 
         /* Since each handler can add/remove handlers, we must iterate
          * from the start of the vector after calling each handler. */
@@ -62,7 +69,8 @@ public:
 protected:
     struct Handler_pair {Id id; Handler handler;};
 
-    bool m_enabled;
+    bool m_defer_event;
+    bool m_deferred;
     Id m_next_handler_id;
     std::vector<Handler_pair> m_handlers;
 };

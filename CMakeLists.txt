@@ -17,6 +17,8 @@ add_executable(dcmedit WIN32
   src/Version.cpp
   src/Version.h
   src/common/Event.h
+  src/common/Defer_event.cpp
+  src/common/Defer_event.h
   src/common/Scoped_event_handlers.cpp
   src/common/Scoped_event_handlers.h
   src/dcmedit.cpp
@@ -54,6 +56,8 @@ add_executable(dcmedit WIN32
   src/presenters/Image_presenter.h
   src/presenters/Main_presenter.cpp
   src/presenters/Main_presenter.h
+  src/presenters/New_file_presenter.cpp
+  src/presenters/New_file_presenter.h
   src/presenters/Open_files_presenter.cpp
   src/presenters/Open_files_presenter.h
   src/presenters/Split_presenter.cpp
@@ -81,12 +85,15 @@ add_executable(dcmedit WIN32
   src/views/IFile_tree_view.h
   src/views/IImage_view.h
   src/views/IMain_view.h
+  src/views/INew_file_view.h
   src/views/IOpen_files_view.h
   src/views/ISplit_view.h
   src/views/Image_view.cpp
   src/views/Image_view.h
   src/views/Main_view.cpp
   src/views/Main_view.h
+  src/views/New_file_view.cpp
+  src/views/New_file_view.h
   src/views/Open_files_view.cpp
   src/views/Open_files_view.h
   src/views/Split_view.cpp

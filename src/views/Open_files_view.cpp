@@ -6,11 +6,11 @@
 Open_files_view::Open_files_view(QWidget* parent)
     : m_parent(parent) {}
 
-std::vector<std::string> Open_files_view::show_file_dialog() {
+std::vector<fs::path> Open_files_view::show_file_dialog() {
     const QStringList file_list = QFileDialog::getOpenFileNames(m_parent, "Open files");
-    std::vector<std::string> file_paths;
+    std::vector<fs::path> file_paths;
 
-    for(const auto& path : file_list) {
+    for(const QString& path : file_list) {
         file_paths.push_back(path.toStdString());
     }
     return file_paths;

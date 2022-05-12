@@ -43,8 +43,8 @@ int dcmedit::run(int argc, char** argv) {
     Main_view main_view{std::unique_ptr<Dashboard_view>(dashboard_view),
         std::unique_ptr<Split_view>(split_view),
         std::unique_ptr<File_tree_view>(file_tree_view)};
-    Main_presenter main_presenter(main_view, dicom_files, dataset_model);
-    main_presenter.setup_event_handlers();
+    Main_presenter main_presenter(main_view, dicom_files);
+    main_presenter.setup_event_handlers(dataset_model);
     main_presenter.show_dashboard_view();
 
     Open_files_view open_files_view(&main_view);

@@ -6,8 +6,8 @@
 
 #include <memory>
 #include <QMainWindow>
-
-class QStackedWidget;
+#include <QStackedWidget>
+#include <string>
 
 class Main_view : public QMainWindow, public IMain_view
 {
@@ -19,11 +19,12 @@ public:
     void show_editor_view() override;
 
     void set_window_modified(bool) override;
-    void set_window_title(const QString&) override;
+    void set_window_title(const std::string&) override;
 
-    void show_error(std::string title, std::string text) override;
-    std::string show_save_file_dialog() override;
+    void show_error(const std::string& title, const std::string& text) override;
+    fs::path show_save_file_dialog() override;
     bool show_discard_dialog() override;
+    std::unique_ptr<INew_file_view> create_new_file_view() override;
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
 
 protected:

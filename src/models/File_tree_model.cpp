@@ -48,9 +48,8 @@ File_tree_model::File_tree_model(Dicom_files& files)
     : m_files(files) {}
 
 void File_tree_model::setup_event_handlers(Dataset_model& dataset_model) {
-    m_files.files_added += [this] {update_model();};
     m_files.all_files_cleared += [this] {clear();};
-    m_files.files_saved += [this] {update_model();};
+    m_files.file_saved += [this] {update_model();};
     dataset_model.dataset_changed += [this] {update_model();};
 }
 
@@ -68,18 +67,18 @@ void File_tree_model::add_items() {
         DcmDataset& dataset = file->get_dataset();
         text = get_patient_text(dataset);
         dataset.findAndGetString(DCM_PatientID, id);
-        auto patient_item = find_or_create_item<QString>(invisibleRootItem(), {text}, {id});
+        QStandardItem* patient_item = find_or_create_item<QString>(invisibleRootItem(), {text}, {id});
 
         text = get_study_text(dataset);
         dataset.findAndGetString(DCM_StudyInstanceUID, id);
-        auto study_item = find_or_create_item<QString>(patient_item, {text}, {id});
+        QStandardItem* study_item = find_or_create_item<QString>(patient_item, {text}, {id});
 
         text = get_series_text(dataset);
         dataset.findAndGetString(DCM_SeriesInstanceUID, id);
-        auto series_item = find_or_create_item<QString>(study_item, {text}, {id});
+        QStandardItem* series_item = find_or_create_item<QString>(study_item, {text}, {id});
 
-        auto file_path = file->get_path();
-        auto file_item = find_or_create_item<Dicom_file*>(series_item, QString::fromStdString(file_path), file.get());
+        std::string file_path = file->get_path().string();
+        QStandardItem* file_item = find_or_create_item<Dicom_file*>(series_item, QString::fromStdString(file_path), file.get());
         decorate_file_item(*file_item);
     }
 }
@@ -148,7 +147,7 @@ bool File_tree_model::is_file_item_invalid(const QStandardItem& item) {
 
 void File_tree_model::decorate_file_item(QStandardItem& file_item) {
     auto file = file_item.data().value<Dicom_file*>();
-    auto file_path = file->get_path();
+    std::string file_path = file->get_path().string();
 
     if(file->has_unsaved_changes()) {
         file_path += "*";

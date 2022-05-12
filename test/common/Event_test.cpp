@@ -3,7 +3,6 @@
 #include "catch/catch.hpp"
 
 TEST_CASE("Adding event handler.") {
-
     Event<> event;
 
     SECTION("adding a handler works.") {
@@ -32,7 +31,6 @@ TEST_CASE("Adding event handler.") {
 }
 
 TEST_CASE("Removing event handler.") {
-
     Event<> event;
 
     SECTION("removing a handler works.") {
@@ -109,7 +107,6 @@ TEST_CASE("Removing event handler.") {
 }
 
 TEST_CASE("Event with parameters.") {
-
     Event<int, double> event;
 
     SECTION("the event arguments are passed to the handlers.") {
@@ -120,4 +117,25 @@ TEST_CASE("Event with parameters.") {
 
         event(10, 1.5);
 	}
+}
+
+TEST_CASE("Defer event") {
+    Event<> event;
+    int counter = 0;
+    event += [&] {
+        counter++;
+    };
+    CHECK(!event.deferred());
+    event.defer_event(true);
+    event();
+    event();
+
+    CHECK(event.deferred());
+    CHECK(counter == 0);
+
+    event.defer_event(false);
+    event();
+
+    CHECK(!event.deferred());
+    CHECK(counter == 1);
 }

@@ -6,5 +6,6 @@ class IDashboard_view
 public:
     virtual ~IDashboard_view() = default;
 
+    Event<> new_file_clicked;
     Event<> open_files_clicked;
 };

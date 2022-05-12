@@ -1,6 +1,8 @@
 #include "views/Main_view.h"
 
 #include "views/Edit_all_files_view.h"
+#include "views/INew_file_view.h"
+#include "views/New_file_view.h"
 
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -25,6 +27,8 @@ Main_view::Main_view(std::unique_ptr<Dashboard_view> dashboard_view,
 
     m_stacked_widget->addWidget(m_dashboard_view.get());
     m_stacked_widget->addWidget(m_split_view.get());
+
+    m_dashboard_view->new_file_clicked += [this] {new_file_clicked();};
 }
 
 void Main_view::show_dashboard_view() {
@@ -51,15 +55,15 @@ void Main_view::set_window_modified(bool modified) {
     setWindowModified(modified);
 }
 
-void Main_view::set_window_title(const QString& title) {
-    setWindowTitle(title);
+void Main_view::set_window_title(const std::string& title) {
+    setWindowTitle(QString::fromStdString(title));
 }
 
-void Main_view::show_error(std::string title, std::string text) {
+void Main_view::show_error(const std::string& title, const std::string& text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 
-std::string Main_view::show_save_file_dialog() {
+fs::path Main_view::show_save_file_dialog() {
     auto file_path = QFileDialog::getSaveFileName(this, "Save file as");
     return file_path.toStdString();
 }
@@ -70,6 +74,10 @@ bool Main_view::show_discard_dialog() {
     return answer == QMessageBox::Yes;
 }
 
+std::unique_ptr<INew_file_view> Main_view::create_new_file_view() {
+    return std::make_unique<New_file_view>(this);
+}
+
 std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {
     return std::make_unique<Edit_all_files_view>(this);
 }
@@ -78,6 +86,7 @@ QMenuBar* Main_view::create_dashboard_menu_bar() {
     auto menu_bar = new QMenuBar(this);
 
     auto file_menu = new QMenu("&File", menu_bar);
+    file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
     menu_bar->addMenu(file_menu);
@@ -93,6 +102,7 @@ QMenuBar* Main_view::create_editor_menu_bar() {
     auto menu_bar = new QMenuBar(this);
 
     auto file_menu = new QMenu("&File", menu_bar);
+    file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
     file_menu->addAction("Save file", [this] {save_file_clicked();}, QKeySequence::Save);
     file_menu->addAction("Save file as", [this] {save_file_as_clicked();}, QKeySequence::SaveAs);

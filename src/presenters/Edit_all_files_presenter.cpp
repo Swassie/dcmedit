@@ -44,11 +44,11 @@ void Edit_all_files_presenter::apply() {
             }
         }
         catch(const TagPathNotFoundException& e) {
-            file_errors.push_back(file->get_path() + ":\n" + e.what());
+            file_errors.push_back(file->get_path().string() + ":\n" + e.what());
             continue;
         }
         catch(const std::exception& e) {
-            file_errors.push_back(file->get_path() + ":\n" + e.what());
+            file_errors.push_back(file->get_path().string() + ":\n" + e.what());
         }
         file->set_unsaved_changes(true);
     }
