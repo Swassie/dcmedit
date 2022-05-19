@@ -1,7 +1,6 @@
 #include "models/File_tree_model.h"
 
 #include "logging/Log.h"
-#include "models/Dataset_model.h"
 
 #include <algorithm>
 #include <dcmtk/dcmdata/dcdeftag.h>
@@ -47,10 +46,9 @@ static const char* get_series_text(DcmDataset& dataset) {
 File_tree_model::File_tree_model(Dicom_files& files)
     : m_files(files) {}
 
-void File_tree_model::setup_event_handlers(Dataset_model& dataset_model) {
+void File_tree_model::setup_event_handlers() {
     m_files.all_files_cleared += [this] {clear();};
     m_files.file_saved += [this] {update_model();};
-    dataset_model.dataset_changed += [this] {update_model();};
 }
 
 void File_tree_model::update_model() {

@@ -7,7 +7,7 @@ class Open_files_presenter
 public:
     Open_files_presenter(IOpen_files_view&, Dicom_files&);
 
-    void open_files();
+    void show_dialog();
 
 protected:
     IOpen_files_view& m_view;

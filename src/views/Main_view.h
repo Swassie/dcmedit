@@ -24,7 +24,9 @@ public:
     void show_error(const std::string& title, const std::string& text) override;
     fs::path show_save_file_dialog() override;
     bool show_discard_dialog() override;
+    void show_about_dialog() override;
     std::unique_ptr<INew_file_view> create_new_file_view() override;
+    std::unique_ptr<IOpen_files_view> create_open_files_view() override;
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
 
 protected:

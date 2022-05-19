@@ -3,7 +3,7 @@
 class Tool_bar
 {
 public:
-    enum class Tool {
+    enum Tool {
         pan,
         zoom
     };

@@ -2,6 +2,7 @@
 #include "common/Event.h"
 #include "views/IEdit_all_files_view.h"
 #include "views/INew_file_view.h"
+#include "views/IOpen_files_view.h"
 
 #include <filesystem>
 #include <string>
@@ -37,6 +38,8 @@ public:
     virtual void show_error(const std::string& title, const std::string& text) = 0;
     virtual fs::path show_save_file_dialog() = 0;
     virtual bool show_discard_dialog() = 0;
+    virtual void show_about_dialog() = 0;
     virtual std::unique_ptr<INew_file_view> create_new_file_view() = 0;
+    virtual std::unique_ptr<IOpen_files_view> create_open_files_view() = 0;
     virtual std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() = 0;
 };

@@ -91,10 +91,10 @@ void Image_presenter::handle_mouse_press(QMouseEvent* event) {
 
 void Image_presenter::set_tool() {
     switch(m_tool_bar.get_selected_tool()) {
-        case Tool_bar::Tool::pan:
+        case Tool_bar::pan:
             m_transform_tool.set_translate_mode();
             break;
-        case Tool_bar::Tool::zoom:
+        case Tool_bar::zoom:
             m_transform_tool.set_scale_mode();
             break;
     }

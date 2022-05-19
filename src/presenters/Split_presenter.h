@@ -1,12 +1,10 @@
 #pragma once
 #include "presenters/IPresenter.h"
+#include "views/ISplit_view.h"
 #include "views/View_factory.h"
 
 #include <memory>
 #include <vector>
-
-class ISplit_view;
-class IView;
 
 class Split_presenter
 {

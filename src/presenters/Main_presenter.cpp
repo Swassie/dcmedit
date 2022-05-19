@@ -1,13 +1,16 @@
 #include "presenters/Main_presenter.h"
 
-#include "models/Dataset_model.h"
 #include "models/Dicom_files.h"
 #include "presenters/Edit_all_files_presenter.h"
 #include "presenters/New_file_presenter.h"
+#include "presenters/Open_files_presenter.h"
 #include "views/IEdit_all_files_view.h"
 #include "views/IMain_view.h"
+#include "views/INew_file_view.h"
+#include "views/IOpen_files_view.h"
 
 #include <QCoreApplication>
+#include <memory>
 
 Main_presenter::Main_presenter(IMain_view& view,
                                Dicom_files& files)
@@ -15,7 +18,7 @@ Main_presenter::Main_presenter(IMain_view& view,
       m_view(view),
       m_files(files) {}
 
-void Main_presenter::setup_event_handlers(Dataset_model& dataset_model) {
+void Main_presenter::setup_event_handlers() {
     m_files.current_file_set += [this] {
         if(m_state == Presenter_state::dashboard) {
             show_editor_view();
@@ -23,6 +26,7 @@ void Main_presenter::setup_event_handlers(Dataset_model& dataset_model) {
     };
     m_files.all_files_cleared += [this] {show_dashboard_view();};
     m_files.file_saved += [this] {update_window_title();};
+    m_view.open_files_clicked += [this] {open_file();};
     m_view.new_file_clicked += [this] {new_file();};
     m_view.save_file_clicked += [this] {save_file();};
     m_view.save_file_as_clicked += [this] {save_file_as();};
@@ -30,7 +34,7 @@ void Main_presenter::setup_event_handlers(Dataset_model& dataset_model) {
     m_view.clear_all_files_clicked += [this] {clear_all_files();};
     m_view.quit_clicked += [this] {quit();};
     m_view.edit_all_files_clicked += [this] {edit_all_files();};
-    dataset_model.dataset_changed += [this] {update_window_title();};
+    m_view.about_clicked += [this] {about();};
 }
 
 void Main_presenter::show_dashboard_view() {
@@ -45,8 +49,14 @@ void Main_presenter::show_editor_view() {
     m_view.show_editor_view();
 }
 
+void Main_presenter::open_file() {
+    std::unique_ptr<IOpen_files_view> view = m_view.create_open_files_view();
+    Open_files_presenter presenter(*view, m_files);
+    presenter.show_dialog();
+}
+
 void Main_presenter::new_file() {
-    auto view = m_view.create_new_file_view();
+    std::unique_ptr<INew_file_view> view = m_view.create_new_file_view();
     New_file_presenter presenter(*view, m_files);
     presenter.show_dialog();
 }
@@ -100,6 +110,10 @@ void Main_presenter::edit_all_files() {
     Edit_all_files_presenter presenter(*view, m_files);
     presenter.setup_event_handlers();
     presenter.show_dialog();
+}
+
+void Main_presenter::about() {
+    m_view.show_about_dialog();
 }
 
 void Main_presenter::update_window_title() {

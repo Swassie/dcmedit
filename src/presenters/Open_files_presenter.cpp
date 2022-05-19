@@ -15,7 +15,7 @@ Open_files_presenter::Open_files_presenter(IOpen_files_view& view, Dicom_files& 
     : m_view(view),
       m_dicom_files(dicom_files) {}
 
-void Open_files_presenter::open_files() {
+void Open_files_presenter::show_dialog() {
     std::vector<fs::path> file_paths = m_view.show_file_dialog();
 
     if (file_paths.empty()) {

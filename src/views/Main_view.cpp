@@ -1,8 +1,11 @@
 #include "views/Main_view.h"
 
+#include "views/About_view.h"
 #include "views/Edit_all_files_view.h"
 #include "views/INew_file_view.h"
+#include "views/IOpen_files_view.h"
 #include "views/New_file_view.h"
+#include "views/Open_files_view.h"
 
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -29,6 +32,7 @@ Main_view::Main_view(std::unique_ptr<Dashboard_view> dashboard_view,
     m_stacked_widget->addWidget(m_split_view.get());
 
     m_dashboard_view->new_file_clicked += [this] {new_file_clicked();};
+    m_dashboard_view->open_files_clicked += [this] {open_files_clicked();};
 }
 
 void Main_view::show_dashboard_view() {
@@ -74,8 +78,17 @@ bool Main_view::show_discard_dialog() {
     return answer == QMessageBox::Yes;
 }
 
+void Main_view::show_about_dialog() {
+    About_view view(this);
+    view.show_about_dialog();
+}
+
 std::unique_ptr<INew_file_view> Main_view::create_new_file_view() {
     return std::make_unique<New_file_view>(this);
+}
+
+std::unique_ptr<IOpen_files_view> Main_view::create_open_files_view() {
+    return std::make_unique<Open_files_view>(this);
 }
 
 std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {

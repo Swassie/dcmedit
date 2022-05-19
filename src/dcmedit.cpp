@@ -6,13 +6,10 @@
 #include "models/File_tree_model.h"
 #include "models/Tool_bar.h"
 #include "presenters/Main_presenter.h"
-#include "presenters/Open_files_presenter.h"
 #include "presenters/Split_presenter.h"
-#include "views/About_view.h"
 #include "views/Dashboard_view.h"
 #include "views/File_tree_view.h"
 #include "views/Main_view.h"
-#include "views/Open_files_view.h"
 #include "views/Split_view.h"
 #include "views/View_factory.h"
 
@@ -27,7 +24,7 @@ int dcmedit::run(int argc, char** argv) {
     Dataset_model dataset_model(dicom_files);
     dataset_model.setup_event_handlers();
     File_tree_model file_tree_model(dicom_files);
-    file_tree_model.setup_event_handlers(dataset_model);
+    file_tree_model.setup_event_handlers();
 
     // Setup GUI.
     auto dashboard_view = new Dashboard_view();
@@ -44,23 +41,17 @@ int dcmedit::run(int argc, char** argv) {
         std::unique_ptr<Split_view>(split_view),
         std::unique_ptr<File_tree_view>(file_tree_view)};
     Main_presenter main_presenter(main_view, dicom_files);
-    main_presenter.setup_event_handlers(dataset_model);
+    main_presenter.setup_event_handlers();
     main_presenter.show_dashboard_view();
 
-    Open_files_view open_files_view(&main_view);
-    Open_files_presenter open_files_presenter(open_files_view, dicom_files);
-
-    About_view about_view(&main_view);
-
     // Add event handlers.
-    dashboard_view->open_files_clicked += [&] {open_files_presenter.open_files();};
     file_tree_view->file_activated += [&] (Dicom_file* file) {dicom_files.set_current_file(file);};
-    main_view.open_files_clicked += [&] {open_files_presenter.open_files();};
+    dataset_model.dataset_changed += [&] {file_tree_model.update_model();};
+    dataset_model.dataset_changed += [&] {main_presenter.update_window_title();};
     main_view.set_view_count_clicked += [&] (int count) {split_presenter.set_view_count(count);};
-    main_view.about_clicked += [&] {about_view.show_about_dialog();};
     main_view.reset_layout_clicked += [&] {split_presenter.set_default_layout();};
-    main_view.pan_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::Tool::pan);};
-    main_view.zoom_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::Tool::zoom);};
+    main_view.pan_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::pan);};
+    main_view.zoom_tool_selected += [&] {tool_bar.set_selected_tool(Tool_bar::zoom);};
 
     main_view.show();
 
