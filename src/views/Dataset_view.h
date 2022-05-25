@@ -1,10 +1,10 @@
 #pragma once
+#include "models/Dataset_model.h"
 #include "views/IDataset_view.h"
 
+#include <QSortFilterProxyModel>
+#include <QTreeView>
 #include <QWidget>
-
-class Dataset_model;
-class QTreeView;
 
 class Dataset_view : public QWidget, public IDataset_view
 {
@@ -28,7 +28,7 @@ private:
     void enterEvent(QEvent*) override;
     void contextMenuEvent(QContextMenuEvent*) override;
 
-    Dataset_model* m_model;
+    QSortFilterProxyModel* m_proxy_model;
     QTreeView* m_tree_view;
     bool m_resized_to_content;
 };

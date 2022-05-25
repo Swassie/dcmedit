@@ -6,20 +6,27 @@
 
 #include <QContextMenuEvent>
 #include <QFileDialog>
+#include <QLineEdit>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QTreeView>
+#include <QRegularExpression>
 #include <QVBoxLayout>
 
 Dataset_view::Dataset_view(Dataset_model& model)
-    : m_model(&model),
+    : m_proxy_model(new QSortFilterProxyModel(this)),
       m_tree_view(new QTreeView()),
       m_resized_to_content(false) {
-    m_tree_view->setModel(m_model);
+    m_proxy_model->setSourceModel(&model);
+    m_proxy_model->setFilterKeyColumn(-1);
+    m_proxy_model->setRecursiveFilteringEnabled(true);
+    m_tree_view->setModel(m_proxy_model);
     m_tree_view->setAlternatingRowColors(true);
     m_tree_view->setUniformRowHeights(true);
-    connect(m_tree_view, &QTreeView::activated, [this] (auto& index) {element_activated(index);});
+    connect(m_tree_view, &QTreeView::activated, [this] (auto& proxy_index) {
+        QModelIndex index = m_proxy_model->mapToSource(proxy_index);
+        element_activated(index);
+    });
 
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -29,6 +36,13 @@ Dataset_view::Dataset_view(Dataset_model& model)
     add_button->setToolTip("Add element");
     connect(add_button, &QPushButton::clicked, [this] {add_element_clicked(QModelIndex());});
     header_layout->addWidget(add_button);
+    auto filter_edit = new QLineEdit();
+    filter_edit->setPlaceholderText("Filter");
+    connect(filter_edit, &QLineEdit::textChanged, [this] (const QString& text) {
+        QRegularExpression regex(text, QRegularExpression::CaseInsensitiveOption);
+        m_proxy_model->setFilterRegularExpression(regex);
+    });
+    header_layout->addWidget(filter_edit);
     header_layout->addStretch(1);
 
     layout->addLayout(header_layout);
@@ -64,8 +78,9 @@ std::unique_ptr<IEdit_value_view> Dataset_view::create_edit_value_view() {
 }
 
 QModelIndex Dataset_view::get_model_index(const QPoint& pos) {
-    auto tree_pos = m_tree_view->viewport()->mapFrom(this, pos);
-    return m_tree_view->indexAt(tree_pos);
+    QPoint tree_pos = m_tree_view->viewport()->mapFrom(this, pos);
+    QModelIndex proxy_index = m_tree_view->indexAt(tree_pos);
+    return m_proxy_model->mapToSource(proxy_index);
 }
 
 void Dataset_view::show_context_menu(const QPoint& pos) {
@@ -119,7 +134,7 @@ void Dataset_view::show_element_context_menu(const QPoint& pos, const QModelInde
 
 void Dataset_view::showEvent(QShowEvent*) {
     if(!m_resized_to_content) {
-        const int column_count = m_model->columnCount();
+        const int column_count = m_proxy_model->columnCount();
 
         for(int i = 0; i < column_count; ++i) {
             m_tree_view->resizeColumnToContents(i);
