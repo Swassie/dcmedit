@@ -13,10 +13,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Cache DCMTK
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~\AppData\Local\vcpkg\archives
-          key: ${{ runner.os }}-dcmtk
+          key: ${{ runner.os }}-dcmtk-temp
 
       - name: Install DCMTK
         run: vcpkg install dcmtk:x64-windows
