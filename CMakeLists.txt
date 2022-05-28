@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK CONFIG REQUIRED)
 
-add_executable(dcmedit WIN32
+add_executable(dcmedit WIN32 MACOSX_BUNDLE
   assets/assets.qrc
   src/Dicom_file.cpp
   src/Dicom_file.h
@@ -108,9 +108,14 @@ add_custom_command(
   OUTPUT "${CMAKE_SOURCE_DIR}/src/Version.cpp" phony_output
   COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/version.cmake"
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-  VERBATIM)
+  VERBATIM
+)
 
-set_target_properties(dcmedit PROPERTIES CXX_STANDARD 17)
+set_target_properties(dcmedit PROPERTIES
+  CXX_STANDARD 17
+  MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/macOS.plist"
+)
+
 if(MSVC)
   target_compile_options(dcmedit PRIVATE /W4 /WX)
 else()

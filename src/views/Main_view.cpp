@@ -36,22 +36,16 @@ Main_view::Main_view(std::unique_ptr<Dashboard_view> dashboard_view,
 }
 
 void Main_view::show_dashboard_view() {
-    auto menu_bar = create_dashboard_menu_bar();
-    setMenuBar(menu_bar);
-
+    show_dashboard_menu_bar();
     m_file_tree_view->hide();
     m_tool_bar->hide();
-
     m_stacked_widget->setCurrentWidget(m_dashboard_view.get());
 }
 
 void Main_view::show_editor_view() {
-    auto menu_bar = create_editor_menu_bar();
-    setMenuBar(menu_bar);
-
+    show_editor_menu_bar();
     m_file_tree_view->show();
     m_tool_bar->show();
-
     m_stacked_widget->setCurrentWidget(m_split_view.get());
 }
 
@@ -95,26 +89,24 @@ std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {
     return std::make_unique<Edit_all_files_view>(this);
 }
 
-QMenuBar* Main_view::create_dashboard_menu_bar() {
-    auto menu_bar = new QMenuBar(this);
+void Main_view::show_dashboard_menu_bar() {
+    QMenuBar* menu_bar = menuBar();
+    menu_bar->clear();
 
-    auto file_menu = new QMenu("&File", menu_bar);
+    QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
-    menu_bar->addMenu(file_menu);
 
-    auto help_menu = new QMenu("&Help", menu_bar);
+    QMenu* help_menu = menu_bar->addMenu("&Help");
     help_menu->addAction("About", [this] {about_clicked();});
-    menu_bar->addMenu(help_menu);
-
-    return menu_bar;
 }
 
-QMenuBar* Main_view::create_editor_menu_bar() {
-    auto menu_bar = new QMenuBar(this);
+void Main_view::show_editor_menu_bar() {
+    QMenuBar* menu_bar = menuBar();
+    menu_bar->clear();
 
-    auto file_menu = new QMenu("&File", menu_bar);
+    QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
     file_menu->addAction("Save file", [this] {save_file_clicked();}, QKeySequence::Save);
@@ -122,24 +114,18 @@ QMenuBar* Main_view::create_editor_menu_bar() {
     file_menu->addAction("Save all files", [this] {save_all_files_clicked();});
     file_menu->addAction("Clear all files", [this] {clear_all_files_clicked();});
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
-    menu_bar->addMenu(file_menu);
 
-    auto view_menu = new QMenu("&View", menu_bar);
+    QMenu* view_menu = menu_bar->addMenu("&View");
     view_menu->addAction("1 view", [this] {set_view_count_clicked(1);}, QKeySequence("Ctrl+1"));
     view_menu->addAction("2 views", [this] {set_view_count_clicked(2);}, QKeySequence("Ctrl+2"));
     view_menu->addAction("3 views", [this] {set_view_count_clicked(3);}, QKeySequence("Ctrl+3"));
     view_menu->addAction("4 views", [this] {set_view_count_clicked(4);}, QKeySequence("Ctrl+4"));
-    menu_bar->addMenu(view_menu);
 
-    auto edit_menu = new QMenu("&Edit", menu_bar);
+    QMenu* edit_menu = menu_bar->addMenu("&Edit");
     edit_menu->addAction("Edit all files", [this] {edit_all_files_clicked();});
-    menu_bar->addMenu(edit_menu);
 
-    auto help_menu = new QMenu("&Help", menu_bar);
+    QMenu* help_menu = menu_bar->addMenu("&Help");
     help_menu->addAction("About", [this] {about_clicked();});
-    menu_bar->addMenu(help_menu);
-
-    return menu_bar;
 }
 
 QToolBar* Main_view::create_editor_tool_bar() {

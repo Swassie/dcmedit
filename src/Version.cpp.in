@@ -1,0 +1,3 @@
+#include "Version.h"
+
+const char* const dcmedit_version = "${long_version}";

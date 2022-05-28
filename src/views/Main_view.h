@@ -30,8 +30,8 @@ public:
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
 
 protected:
-    QMenuBar* create_dashboard_menu_bar();
-    QMenuBar* create_editor_menu_bar();
+    void show_dashboard_menu_bar();
+    void show_editor_menu_bar();
     QToolBar* create_editor_tool_bar();
 
     void closeEvent(QCloseEvent*) override;

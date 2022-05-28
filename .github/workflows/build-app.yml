@@ -7,16 +7,16 @@ env:
 
 jobs:
   Build-windows:
-    runs-on: windows-2022
+    runs-on: windows-2019
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache DCMTK
         uses: actions/cache@v3
         with:
           path: ~\AppData\Local\vcpkg\archives
-          key: ${{ runner.os }}-dcmtk-temp
+          key: ${{ runner.os }}-dcmtk
 
       - name: Install DCMTK
         run: vcpkg install dcmtk:x64-windows
@@ -53,7 +53,112 @@ jobs:
           windeployqt --no-quick-import --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-angle --no-opengl-sw .\app-package
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows-${{ env.CMAKE_BUILD_TYPE }}
           path: .\app-package
+
+  Build-macos:
+    runs-on: macos-10.15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache DCMTK
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: ${{ runner.os }}-dcmtk
+
+      - name: Install DCMTK
+        run: vcpkg install dcmtk:x64-osx
+
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-qt
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      - name: Configure
+        run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .
+
+      - name: Build
+        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+
+      - name: Test
+        run: ./build-output/test/test-runner
+
+      - name: Package application
+        run: |
+          macdeployqt ./build-output/dcmedit.app -dmg
+          mkdir app-package
+          cp ./build-output/dcmedit.dmg ./app-package/
+          cp ./package-readme.txt ./app-package/README.txt
+          cp ./LICENSE.html ./app-package/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-${{ env.CMAKE_BUILD_TYPE }}
+          path: ./app-package
+
+  Build-linux:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache DCMTK
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: ${{ runner.os }}-dcmtk
+
+      - name: Install DCMTK
+        run: vcpkg install dcmtk:x64-linux
+
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-qt
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      - name: Configure
+        run: CXX=g++-10 cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .
+
+      - name: Build
+        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+
+      - name: Test
+        run: ./build-output/test/test-runner
+
+      - name: Package application
+        run: |
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O ~/linuxdeployqt
+          chmod a+x ~/linuxdeployqt
+          PATH=$PATH:~
+          ./scripts/package-linux.sh ./build-output/dcmedit
+          mkdir app-package
+          cp -r ./dcmedit-*-x86_64.AppImage ./app-package/
+          cp ./package-readme.txt ./app-package/README.txt
+          cp ./LICENSE.html ./app-package/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-${{ env.CMAKE_BUILD_TYPE }}
+          path: ./app-package
