@@ -46,13 +46,7 @@ jobs:
         run: .\build-output\test\${{ env.CMAKE_BUILD_TYPE }}\test-runner.exe
 
       - name: Package application
-        run: |
-          New-Item -Path .\app-package -ItemType Directory
-          Copy-Item .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.exe .\app-package\
-          Copy-Item .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.pdb .\app-package\ -ErrorAction SilentlyContinue
-          Copy-Item .\package-readme.txt .\app-package\README.txt
-          Copy-Item .\LICENSE.html .\app-package\
-          windeployqt --no-quick-import --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-angle --no-opengl-sw .\app-package
+        run: python3 .\scripts\package_windows.py .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.exe .\app-package\
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -100,12 +94,7 @@ jobs:
         run: ./build-output/test/test-runner
 
       - name: Package application
-        run: |
-          macdeployqt ./build-output/dcmedit.app -dmg
-          mkdir app-package
-          cp ./build-output/dcmedit.dmg ./app-package/
-          cp ./package-readme.txt ./app-package/README.txt
-          cp ./LICENSE.html ./app-package/
+        run: python3 ./scripts/package_macos.py ./build-output/dcmedit.app ./app-package/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -157,11 +146,7 @@ jobs:
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -O ~/linuxdeployqt
           chmod a+x ~/linuxdeployqt
           PATH=$PATH:~
-          ./scripts/package-linux.sh ./build-output/dcmedit
-          mkdir app-package
-          cp -r ./dcmedit-*-x86_64.AppImage ./app-package/
-          cp ./package-readme.txt ./app-package/README.txt
-          cp ./LICENSE.html ./app-package/
+          python3 ./scripts/package_linux.py ./build-output/dcmedit ./app-package/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
