@@ -30,6 +30,8 @@ void About_view::show_about_dialog() {
 static QString get_about_text() {
     QString text = R"END(
 <h1>dcmedit</h1>
+dcmedit is a DICOM editor for Windows, Linux and macOS.<br>
+<br>
 Version: $VERSION<br>
 <br>
 Copyright 2020-2022 Marcus Swanson<br>
