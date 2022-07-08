@@ -14,17 +14,17 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/Dicom_file.h
   src/Dicom_util.cpp
   src/Dicom_util.h
+  src/Exceptions.cpp
+  src/Exceptions.h
   src/Version.cpp
   src/Version.h
-  src/common/Event.h
   src/common/Defer_event.cpp
   src/common/Defer_event.h
+  src/common/Event.h
   src/common/Scoped_event_handlers.cpp
   src/common/Scoped_event_handlers.h
   src/dcmedit.cpp
   src/dcmedit.h
-  src/Exceptions.cpp
-  src/Exceptions.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
@@ -42,64 +42,65 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/models/Tool_bar.h
   src/models/Transform_tool.cpp
   src/models/Transform_tool.h
-  src/presenters/Add_element_presenter.cpp
-  src/presenters/Add_element_presenter.h
-  src/presenters/Dataset_presenter.cpp
-  src/presenters/Dataset_presenter.h
-  src/presenters/Edit_all_files_presenter.cpp
-  src/presenters/Edit_all_files_presenter.h
-  src/presenters/Edit_value_presenter.cpp
-  src/presenters/Edit_value_presenter.h
-  src/presenters/Gui_util.h
-  src/presenters/IPresenter.h
-  src/presenters/Image_presenter.cpp
-  src/presenters/Image_presenter.h
-  src/presenters/Main_presenter.cpp
-  src/presenters/Main_presenter.h
-  src/presenters/New_file_presenter.cpp
-  src/presenters/New_file_presenter.h
-  src/presenters/Open_files_presenter.cpp
-  src/presenters/Open_files_presenter.h
-  src/presenters/Split_presenter.cpp
-  src/presenters/Split_presenter.h
-  src/views/About_view.cpp
-  src/views/About_view.h
-  src/views/Add_element_view.cpp
-  src/views/Add_element_view.h
-  src/views/Dashboard_view.cpp
-  src/views/Dashboard_view.h
-  src/views/Dataset_view.cpp
-  src/views/Dataset_view.h
-  src/views/Edit_all_files_view.cpp
-  src/views/Edit_all_files_view.h
-  src/views/Edit_value_view.cpp
-  src/views/Edit_value_view.h
-  src/views/File_tree_view.cpp
-  src/views/File_tree_view.h
-  src/views/IAbout_view.h
-  src/views/IAdd_element_view.h
-  src/views/IDashboard_view.h
-  src/views/IDataset_view.h
-  src/views/IEdit_all_files_view.h
-  src/views/IEdit_value_view.h
-  src/views/IFile_tree_view.h
-  src/views/IImage_view.h
-  src/views/IMain_view.h
-  src/views/INew_file_view.h
-  src/views/IOpen_files_view.h
-  src/views/ISplit_view.h
-  src/views/Image_view.cpp
-  src/views/Image_view.h
-  src/views/Main_view.cpp
-  src/views/Main_view.h
-  src/views/New_file_view.cpp
-  src/views/New_file_view.h
-  src/views/Open_files_view.cpp
-  src/views/Open_files_view.h
-  src/views/Split_view.cpp
-  src/views/Split_view.h
-  src/views/View_factory.cpp
-  src/views/View_factory.h
+  src/ui/Gui_util.h
+  src/ui/IPresenter.h
+  src/ui/IView.h
+  src/ui/View_factory.cpp
+  src/ui/View_factory.h
+  src/ui/about_dialog/About_view.cpp
+  src/ui/about_dialog/About_view.h
+  src/ui/about_dialog/IAbout_view.h
+  src/ui/add_element_dialog/Add_element_presenter.cpp
+  src/ui/add_element_dialog/Add_element_presenter.h
+  src/ui/add_element_dialog/Add_element_view.cpp
+  src/ui/add_element_dialog/Add_element_view.h
+  src/ui/add_element_dialog/IAdd_element_view.h
+  src/ui/dashboard_view/Dashboard_view.cpp
+  src/ui/dashboard_view/Dashboard_view.h
+  src/ui/dashboard_view/IDashboard_view.h
+  src/ui/dataset_view/Dataset_presenter.cpp
+  src/ui/dataset_view/Dataset_presenter.h
+  src/ui/dataset_view/Dataset_view.cpp
+  src/ui/dataset_view/Dataset_view.h
+  src/ui/dataset_view/IDataset_view.h
+  src/ui/edit_all_files_dialog/Edit_all_files_presenter.cpp
+  src/ui/edit_all_files_dialog/Edit_all_files_presenter.h
+  src/ui/edit_all_files_dialog/Edit_all_files_view.cpp
+  src/ui/edit_all_files_dialog/Edit_all_files_view.h
+  src/ui/edit_all_files_dialog/IEdit_all_files_view.h
+  src/ui/edit_value_dialog/Edit_value_presenter.cpp
+  src/ui/edit_value_dialog/Edit_value_presenter.h
+  src/ui/edit_value_dialog/Edit_value_view.cpp
+  src/ui/edit_value_dialog/Edit_value_view.h
+  src/ui/edit_value_dialog/IEdit_value_view.h
+  src/ui/file_tree_view/File_tree_view.cpp
+  src/ui/file_tree_view/File_tree_view.h
+  src/ui/file_tree_view/IFile_tree_view.h
+  src/ui/image_view/IImage_view.h
+  src/ui/image_view/Image_presenter.cpp
+  src/ui/image_view/Image_presenter.h
+  src/ui/image_view/Image_view.cpp
+  src/ui/image_view/Image_view.h
+  src/ui/main_view/IMain_view.h
+  src/ui/main_view/Main_presenter.cpp
+  src/ui/main_view/Main_presenter.h
+  src/ui/main_view/Main_view.cpp
+  src/ui/main_view/Main_view.h
+  src/ui/new_file_dialog/INew_file_view.h
+  src/ui/new_file_dialog/New_file_presenter.cpp
+  src/ui/new_file_dialog/New_file_presenter.h
+  src/ui/new_file_dialog/New_file_view.cpp
+  src/ui/new_file_dialog/New_file_view.h
+  src/ui/open_files_dialog/IOpen_files_view.h
+  src/ui/open_files_dialog/Open_files_presenter.cpp
+  src/ui/open_files_dialog/Open_files_presenter.h
+  src/ui/open_files_dialog/Open_files_view.cpp
+  src/ui/open_files_dialog/Open_files_view.h
+  src/ui/split_view/ISplit_view.h
+  src/ui/split_view/Split_presenter.cpp
+  src/ui/split_view/Split_presenter.h
+  src/ui/split_view/Split_view.cpp
+  src/ui/split_view/Split_view.h
 )
 
 set_property(SOURCE src/Version.cpp PROPERTY SKIP_AUTOGEN ON)

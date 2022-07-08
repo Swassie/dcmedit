@@ -5,13 +5,13 @@
 #include "models/Dicom_files.h"
 #include "models/File_tree_model.h"
 #include "models/Tool_bar.h"
-#include "presenters/Main_presenter.h"
-#include "presenters/Split_presenter.h"
-#include "views/Dashboard_view.h"
-#include "views/File_tree_view.h"
-#include "views/Main_view.h"
-#include "views/Split_view.h"
-#include "views/View_factory.h"
+#include "ui/View_factory.h"
+#include "ui/dashboard_view/Dashboard_view.h"
+#include "ui/file_tree_view/File_tree_view.h"
+#include "ui/main_view/Main_presenter.h"
+#include "ui/main_view/Main_view.h"
+#include "ui/split_view/Split_presenter.h"
+#include "ui/split_view/Split_view.h"
 
 #include <QApplication>
 
