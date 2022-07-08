@@ -2,14 +2,14 @@
 #include <stdexcept>
 #include <string>
 
-class DcmeditException : public std::runtime_error
+class Dcmedit_exception : public std::runtime_error
 {
 public:
-    DcmeditException(const std::string&);
+    Dcmedit_exception(const std::string&);
 };
 
-class TagPathNotFoundException : public DcmeditException
+class Tag_path_not_found_exception : public Dcmedit_exception
 {
 public:
-    TagPathNotFoundException(const std::string&);
+    Tag_path_not_found_exception(const std::string&);
 };

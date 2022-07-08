@@ -13,11 +13,11 @@ Dicom_file::Dicom_file(const fs::path& path)
         status = m_file.loadFile(m_path.c_str());
     }
     else {
-        throw DcmeditException("File not found: " + m_path.string());
+        throw Dcmedit_exception("File not found: " + m_path.string());
     }
     if(status.bad()) {
-        throw DcmeditException("Failed to load file: " + m_path.string() +
-                               "\nReason: " + status.text());
+        throw Dcmedit_exception("Failed to load file: " + m_path.string() +
+            "\nReason: " + status.text());
     }
     Log::debug("Loaded file: " + m_path.string());
 }
@@ -35,8 +35,8 @@ void Dicom_file::save_file_as(const fs::path& path) {
         status = m_file.saveFile(path.c_str(), new_transfer);
     }
     if(status.bad()) {
-        throw DcmeditException("Failed to save file: " + path.string() +
-                               "\nReason: " + status.text());
+        throw Dcmedit_exception("Failed to save file: " + path.string() +
+            "\nReason: " + status.text());
     }
     m_path = path;
     m_unsaved_changes = false;
@@ -48,7 +48,7 @@ void Dicom_file::create_new_file(const fs::path& path) {
     OFCondition status = file.saveFile(path.c_str(), EXS_LittleEndianExplicit);
 
     if(status.bad()) {
-        throw DcmeditException("Failed to create file: " + path.string() +
-                               "\nReason: " + status.text());
+        throw Dcmedit_exception("Failed to create file: " + path.string() +
+            "\nReason: " + status.text());
     }
 }

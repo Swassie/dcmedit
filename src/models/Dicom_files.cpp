@@ -19,8 +19,8 @@ void Dicom_files::open_file(const fs::path& path) {
     });
 
     if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
-        throw DcmeditException("Failed to open file: " + path.string() +
-                               "\nReason: it has unsaved changes.");
+        throw Dcmedit_exception("Failed to open file: " + path.string() +
+            "\nReason: it has unsaved changes.");
     }
     auto file = std::make_unique<Dicom_file>(path);
 
@@ -50,8 +50,8 @@ void Dicom_files::save_current_file_as(const fs::path& new_path) {
     });
 
     if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
-        throw DcmeditException("Failed to save file: " + new_path.string() +
-                               "\nReason: it has unsaved changes.");
+        throw Dcmedit_exception("Failed to save file: " + new_path.string() +
+            "\nReason: it has unsaved changes.");
     }
     m_current_file->save_file_as(new_path);
 

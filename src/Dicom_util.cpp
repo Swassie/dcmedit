@@ -23,12 +23,12 @@ static void set_element_value(const OFList<DcmPath*>& paths, const std::string& 
         auto element = dynamic_cast<DcmElement*>(get_object(path));
 
         if(element == nullptr) {
-            throw DcmeditException("Failed to get element");
+            throw Dcmedit_exception("Failed to get element");
         }
         OFCondition status = element->putString(value.c_str());
 
         if(status.bad()) {
-            throw DcmeditException(std::string("Failed to set element value. Reason: ") + status.text());
+            throw Dcmedit_exception(std::string("Failed to set element value. Reason: ") + status.text());
         }
     }
 }
@@ -39,17 +39,17 @@ void Dicom_util::add_or_edit_element(const std::string& tag_path, const std::str
     OFCondition status = path_proc.findOrCreatePath(&dataset, tag_path.c_str(), !only_edit);
 
     if(status.bad()) {
-        throw TagPathNotFoundException(std::string("Tag path not found. Reason: ") + status.text());
+        throw Tag_path_not_found_exception(std::string("Tag path not found. Reason: ") + status.text());
     }
     OFList<DcmPath*> foundPaths;
     path_proc.getResults(foundPaths);
     DcmObject* object = get_object(foundPaths.front());
 
     if(object == nullptr) {
-        throw DcmeditException("Failed to get object");
+        throw Dcmedit_exception("Failed to get object");
     }
     else if(!object->isLeaf() && (only_edit || !value.empty())) {
-        throw DcmeditException("Can't set value for non-leaf element.");
+        throw Dcmedit_exception("Can't set value for non-leaf element.");
     }
     set_element_value(foundPaths, value);
 }
@@ -60,7 +60,7 @@ void Dicom_util::delete_element(const std::string& tag_path, DcmDataset& dataset
     OFCondition status = path_proc.findOrDeletePath(&dataset, tag_path.c_str(), resultCount);
 
     if(status.bad()) {
-        throw TagPathNotFoundException(std::string("Failed to delete element. Reason: ") + status.text());
+        throw Tag_path_not_found_exception(std::string("Failed to delete element. Reason: ") + status.text());
     }
 }
 

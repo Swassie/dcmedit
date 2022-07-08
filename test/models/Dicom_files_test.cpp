@@ -32,7 +32,7 @@ TEST_CASE("Open a file") {
         files.open_file(data_path / "new-file.dcm");
         files.get_current_file()->set_unsaved_changes(true);
 
-        CHECK_THROWS_AS(files.open_file(data_path / "new-file.dcm"), DcmeditException);
+        CHECK_THROWS_AS(files.open_file(data_path / "new-file.dcm"), Dcmedit_exception);
         CHECK(files.get_files().size() == 1);
         CHECK(files.get_current_file()->has_unsaved_changes());
 	}
@@ -128,7 +128,7 @@ TEST_CASE("Save current file as") {
             SECTION("An exception is thrown if the file has unsaved changes") {
                 files.get_current_file()->set_unsaved_changes(true);
                 files.set_current_file(file);
-                CHECK_THROWS_AS(files.save_current_file_as(new_path), DcmeditException);
+                CHECK_THROWS_AS(files.save_current_file_as(new_path), Dcmedit_exception);
             }
         }
 	}

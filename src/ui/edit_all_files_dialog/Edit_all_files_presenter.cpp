@@ -43,7 +43,7 @@ void Edit_all_files_presenter::apply() {
                 Dicom_util::delete_element(tag_path, file->get_dataset());
             }
         }
-        catch(const TagPathNotFoundException& e) {
+        catch(const Tag_path_not_found_exception& e) {
             file_errors.push_back(file->get_path().string() + ":\n" + e.what());
             continue;
         }
