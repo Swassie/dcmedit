@@ -7,8 +7,8 @@
 const int max_binary_value_length = 100;
 
 Edit_value_presenter::Edit_value_presenter(IEdit_value_view& view,
-                                           Dataset_model& dataset_model,
-                                           const QModelIndex& index)
+    Dataset_model& dataset_model,
+    const QModelIndex& index)
     : m_view(view),
       m_dataset_model(dataset_model),
       m_index(index) {}
@@ -34,13 +34,13 @@ void Edit_value_presenter::set_value() {
         }
         else if(status.bad() && element->getLength() > 0) {
             m_view.show_error("Error", "Could not get value.\n"
-                              "Reason: " + std::string(status.text()));
+                "Reason: " + std::string(status.text()));
         }
     }
     else {
         m_view.show_error("Large value", "Value contains large binary data. To view/edit it, save it to file and "
-                          "use an external program that can handle binary files. If you modify the "
-                          "value you can then load it from file. You can also enter a new value here.");
+            "use an external program that can handle binary files. If you modify the "
+            "value you can then load it from file. You can also enter a new value here.");
     }
 }
 
@@ -59,7 +59,7 @@ void Edit_value_presenter::apply() {
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to edit the data element value.\n"
-                          "Reason: " + std::string(status.text()));
+            "Reason: " + std::string(status.text()));
         return;
     }
     m_view.close_dialog();

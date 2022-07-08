@@ -39,7 +39,7 @@ void Dataset_presenter::add_item(const QModelIndex& index) {
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to add item.\n"
-                          "Reason: " + std::string(status.text()));
+            "Reason: " + std::string(status.text()));
     }
 }
 
@@ -48,7 +48,7 @@ void Dataset_presenter::delete_index(const QModelIndex& index) {
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to delete object.\n"
-                          "Reason: " + std::string(status.text()));
+            "Reason: " + std::string(status.text()));
     }
 }
 
@@ -85,7 +85,7 @@ void Dataset_presenter::save_value_to_file(const QModelIndex& index) {
 
     if(status.bad()) {
         m_view.show_error("Save failed", "Failed to get the data element value.\n"
-                          "Reason: " + std::string(status.text()));
+            "Reason: " + std::string(status.text()));
         return;
     }
     std::ofstream file(file_path, std::ios_base::binary);
@@ -106,7 +106,7 @@ void Dataset_presenter::load_value_from_file(const QModelIndex& index) {
 
     if(status.bad()) {
         m_view.show_error("Load failed", "Failed to load the data element value.\n"
-                          "Reason: " + std::string(status.text()));
+            "Reason: " + std::string(status.text()));
     }
 }
 

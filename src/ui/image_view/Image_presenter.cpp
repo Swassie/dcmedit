@@ -12,8 +12,8 @@
 #include <string>
 
 Image_presenter::Image_presenter(IImage_view& view,
-                                 Dataset_model& dataset_model,
-                                 Tool_bar& tool_bar)
+    Dataset_model& dataset_model,
+    Tool_bar& tool_bar)
     : m_view(view),
       m_dataset_model(dataset_model),
       m_tool_bar(tool_bar) {}

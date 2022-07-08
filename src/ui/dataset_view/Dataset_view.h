@@ -12,7 +12,7 @@ class Dataset_view : public QWidget, public IDataset_view
 public:
     Dataset_view(Dataset_model& model);
 
-    void show_error(std::string title, std::string text) override;
+    void show_error(const std::string& title, const std::string& text) override;
     std::string show_save_file_dialog() override;
     std::string show_load_file_dialog() override;
     std::unique_ptr<IAdd_element_view> create_add_element_view() override;

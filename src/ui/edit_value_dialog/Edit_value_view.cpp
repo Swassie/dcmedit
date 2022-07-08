@@ -26,13 +26,13 @@ void Edit_value_view::close_dialog() {
     accept();
 }
 
-void Edit_value_view::show_error(std::string title, std::string text) {
+void Edit_value_view::show_error(const std::string& title, const std::string& text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 
 bool Edit_value_view::should_save_empty_value() {
     auto answer = QMessageBox::question(this, "Save empty value?",
-                                        "Do you really want to save an empty value?");
+        "Do you really want to save an empty value?");
     return answer == QMessageBox::Yes;
 }
 

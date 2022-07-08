@@ -13,7 +13,7 @@ Add_element_view::Add_element_view(QWidget* parent)
     auto layout = new QVBoxLayout(this);
 
     QString tag_text("Enter tag. Either by keyword (e.g. \"PatientName\") or "
-                     "by group and element number (e.g. \"0010,0010\").");
+        "by group and element number (e.g. \"0010,0010\").");
     m_tag_edit->setPlaceholderText(tag_text);
     layout->addWidget(m_tag_edit);
 
@@ -35,7 +35,7 @@ void Add_element_view::close_dialog() {
     accept();
 }
 
-void Add_element_view::show_error(std::string title, std::string text) {
+void Add_element_view::show_error(const std::string& title, const std::string& text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 

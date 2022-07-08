@@ -23,7 +23,7 @@ public:
     Event<const QModelIndex&> element_activated;
     Event<const QPoint&> context_menu_requested;
 
-    virtual void show_error(std::string title, std::string text) = 0;
+    virtual void show_error(const std::string& title, const std::string& text) = 0;
     virtual std::string show_save_file_dialog() = 0;
     virtual std::string show_load_file_dialog() = 0;
     virtual std::unique_ptr<IAdd_element_view> create_add_element_view() = 0;

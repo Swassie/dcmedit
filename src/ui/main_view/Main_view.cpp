@@ -14,8 +14,8 @@
 #include <QToolBar>
 
 Main_view::Main_view(std::unique_ptr<Dashboard_view> dashboard_view,
-                     std::unique_ptr<Split_view> split_view,
-                     std::unique_ptr<File_tree_view> file_tree_view)
+    std::unique_ptr<Split_view> split_view,
+    std::unique_ptr<File_tree_view> file_tree_view)
     : m_dashboard_view(std::move(dashboard_view)),
       m_split_view(std::move(split_view)),
       m_file_tree_view(std::move(file_tree_view)),
@@ -66,7 +66,7 @@ fs::path Main_view::show_save_file_dialog() {
 
 bool Main_view::show_discard_dialog() {
     auto answer = QMessageBox::question(this, "Discard unsaved changes?",
-                                        "Do you really want to discard unsaved changes?");
+        "Do you really want to discard unsaved changes?");
     return answer == QMessageBox::Yes;
 }
 

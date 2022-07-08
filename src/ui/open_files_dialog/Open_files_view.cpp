@@ -18,7 +18,7 @@ std::vector<fs::path> Open_files_view::show_file_dialog() {
 
 void Open_files_view::show_error(const std::vector<std::string>& file_errors) {
     QMessageBox dialog(QMessageBox::Critical, "Failed to load files",
-                       "At least one file failed to load.", QMessageBox::Ok, m_parent);
+        "At least one file failed to load.", QMessageBox::Ok, m_parent);
 
     QString details;
     for(const auto& error : file_errors) {

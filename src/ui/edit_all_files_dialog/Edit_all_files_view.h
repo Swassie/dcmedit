@@ -15,7 +15,7 @@ public:
 
     void show_dialog() override;
     void close_dialog() override;
-    void show_error(std::string title, std::string text) override;
+    void show_error(const std::string& title, const std::string& text) override;
     void show_error_details(const std::vector<std::string>&) override;
     void enable_value(bool) override;
     std::string tag_path() override;

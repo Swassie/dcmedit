@@ -52,13 +52,13 @@ void Edit_all_files_view::close_dialog() {
     accept();
 }
 
-void Edit_all_files_view::show_error(std::string title, std::string text) {
+void Edit_all_files_view::show_error(const std::string& title, const std::string& text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 
 void Edit_all_files_view::show_error_details(const std::vector<std::string>& error_list) {
     QMessageBox dialog(QMessageBox::Critical, "Error", "At least one operation failed.",
-                       QMessageBox::Ok, this);
+        QMessageBox::Ok, this);
 
     QString details;
     for(const auto& error : error_list) {
@@ -94,10 +94,10 @@ Edit_all_files_view::Mode Edit_all_files_view::mode() {
 
 void Edit_all_files_view::show_tag_path_help() {
     QString text("Enter tag path. The syntax is '{sequence[item-nr].}*element', "
-                 "e.g. '(0010,0010)' or '(0008,1111)[0].PatientName'. "
-                 "The item number starts from zero and can be replaced by a wildcard '*', "
-                 "which selects all items in a sequence. More info can be found "
-                 "on https://support.dcmtk.org/docs/dcmodify.html");
+        "e.g. '(0010,0010)' or '(0008,1111)[0].PatientName'. "
+        "The item number starts from zero and can be replaced by a wildcard '*', "
+        "which selects all items in a sequence. More info can be found "
+        "on https://support.dcmtk.org/docs/dcmodify.html");
 
     QMessageBox::information(this, "Tag path", text);
 }

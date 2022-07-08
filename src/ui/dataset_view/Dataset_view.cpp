@@ -55,7 +55,7 @@ Dataset_view::Dataset_view(Dataset_model& model)
     addAction(image_action);
 }
 
-void Dataset_view::show_error(std::string title, std::string text) {
+void Dataset_view::show_error(const std::string& title, const std::string& text) {
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 
