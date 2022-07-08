@@ -1,9 +1,8 @@
 #pragma once
+#include "models/File_tree_model.h"
 #include "ui/file_tree_view/IFile_tree_view.h"
 
 #include <QDockWidget>
-
-class File_tree_model;
 
 class File_tree_view : public QDockWidget, public IFile_tree_view
 {

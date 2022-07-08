@@ -1,8 +1,6 @@
 #pragma once
-
-class Dataset_model;
-class IAdd_element_view;
-class QModelIndex;
+#include "models/Dataset_model.h"
+#include "ui/add_element_dialog/IAdd_element_view.h"
 
 class Add_element_presenter
 {

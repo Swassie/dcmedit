@@ -2,8 +2,7 @@
 #include "ui/edit_value_dialog/IEdit_value_view.h"
 
 #include <QDialog>
-
-class QPlainTextEdit;
+#include <QPlainTextEdit>
 
 class Edit_value_view : public QDialog, public IEdit_value_view
 {

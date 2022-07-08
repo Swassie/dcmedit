@@ -1,6 +1,5 @@
 #pragma once
-
-class QMouseEvent;
+#include <QMouseEvent>
 
 class Tool
 {

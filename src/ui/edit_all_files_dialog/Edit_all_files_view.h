@@ -2,10 +2,9 @@
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
 
 #include <QDialog>
-
-class QLineEdit;
-class QPlainTextEdit;
-class QRadioButton;
+#include <QLineEdit>
+#include <QPlainTextEdit>
+#include <QRadioButton>
 
 class Edit_all_files_view : public QDialog, public IEdit_all_files_view
 {

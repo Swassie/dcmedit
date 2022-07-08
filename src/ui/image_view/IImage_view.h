@@ -2,11 +2,10 @@
 #include "common/Event.h"
 #include "ui/IView.h"
 
+#include <QMouseEvent>
+#include <QTransform>
 #include <cstdint>
 #include <string>
-
-class QMouseEvent;
-class QTransform;
 
 class IImage_view : public IView
 {

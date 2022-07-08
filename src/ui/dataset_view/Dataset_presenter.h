@@ -1,10 +1,10 @@
 #pragma once
+#include "models/Dataset_model.h"
 #include "ui/IPresenter.h"
+#include "ui/dataset_view/IDataset_view.h"
 
-class Dataset_model;
-class IDataset_view;
-class QModelIndex;
-class QPoint;
+#include <QModelIndex>
+#include <QPoint>
 
 class Dataset_presenter : public IPresenter
 {

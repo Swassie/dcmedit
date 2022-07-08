@@ -1,12 +1,12 @@
 #pragma once
 #include "common/Scoped_event_handlers.h"
+#include "models/Dataset_model.h"
+#include "models/Tool_bar.h"
 #include "models/Transform_tool.h"
 #include "ui/IPresenter.h"
+#include "ui/image_view/IImage_view.h"
 
-class Dataset_model;
-class IImage_view;
-class QMouseEvent;
-class Tool_bar;
+#include <QMouseEvent>
 
 class Image_presenter : public IPresenter
 {

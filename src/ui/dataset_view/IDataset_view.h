@@ -1,13 +1,12 @@
 #pragma once
 #include "common/Event.h"
 #include "ui/IView.h"
+#include "ui/add_element_dialog/IAdd_element_view.h"
+#include "ui/edit_value_dialog/IEdit_value_view.h"
 
 #include <memory>
-
-class IAdd_element_view;
-class IEdit_value_view;
-class QModelIndex;
-class QPoint;
+#include <QModelIndex>
+#include <QPoint>
 
 class IDataset_view : public IView
 {

@@ -1,9 +1,9 @@
 #pragma once
+#include "logging/Logger.h"
+
 #include <memory>
 #include <string>
 #include <vector>
-
-class Logger;
 
 enum class Log_level {
     debug = 0,

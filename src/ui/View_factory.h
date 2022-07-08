@@ -1,13 +1,12 @@
 #pragma once
+#include "models/Dataset_model.h"
+#include "models/Tool_bar.h"
 #include "ui/IPresenter.h"
 #include "ui/IView.h"
 
 #include <memory>
 #include <utility>
 #include <vector>
-
-class Dataset_model;
-class Tool_bar;
 
 using VP_pair = std::pair<std::unique_ptr<IView>, std::unique_ptr<IPresenter>>;
 

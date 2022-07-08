@@ -1,7 +1,6 @@
 #pragma once
+#include "Dicom_file.h"
 #include "common/Event.h"
-
-class Dicom_file;
 
 class IFile_tree_view
 {

@@ -1,6 +1,6 @@
 #pragma once
-class Dicom_files;
-class IEdit_all_files_view;
+#include "models/Dicom_files.h"
+#include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
 
 class Edit_all_files_presenter
 {

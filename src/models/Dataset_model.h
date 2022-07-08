@@ -4,10 +4,6 @@
 #include <dcmtk/dcmdata/dcvr.h>
 #include <QAbstractItemModel>
 
-class DcmItem;
-class DcmObject;
-class Dicom_files;
-
 class Dataset_model : public QAbstractItemModel
 {
     Q_OBJECT

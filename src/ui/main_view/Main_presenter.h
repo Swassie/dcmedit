@@ -1,8 +1,7 @@
 #pragma once
+#include "models/Dicom_files.h"
+#include "ui/main_view/IMain_view.h"
 #include <filesystem>
-
-class Dicom_files;
-class IMain_view;
 
 namespace fs = std::filesystem;
 

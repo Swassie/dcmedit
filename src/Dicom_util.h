@@ -1,8 +1,6 @@
 #pragma once
+#include <dcmtk/dcmdata/dcdatset.h>
 #include <string>
-
-class DcmDataset;
-class DcmObject;
 
 namespace Dicom_util
 {

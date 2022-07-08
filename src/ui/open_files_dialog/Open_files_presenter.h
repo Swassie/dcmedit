@@ -1,6 +1,6 @@
 #pragma once
-class Dicom_files;
-class IOpen_files_view;
+#include "models/Dicom_files.h"
+#include "ui/open_files_dialog/IOpen_files_view.h"
 
 class Open_files_presenter
 {

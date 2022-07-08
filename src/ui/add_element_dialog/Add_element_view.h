@@ -2,9 +2,8 @@
 #include "ui/add_element_dialog/IAdd_element_view.h"
 
 #include <QDialog>
-
-class QLineEdit;
-class QPlainTextEdit;
+#include <QLineEdit>
+#include <QPlainTextEdit>
 
 class Add_element_view : public QDialog, public IAdd_element_view
 {

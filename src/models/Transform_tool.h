@@ -2,8 +2,7 @@
 #include "models/Tool.h"
 
 #include <QPointF>
-
-class QTransform;
+#include <QTransform>
 
 class Transform_tool : public Tool
 {

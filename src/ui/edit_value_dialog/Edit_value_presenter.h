@@ -1,8 +1,8 @@
 #pragma once
+#include "models/Dataset_model.h"
+#include "ui/edit_value_dialog/IEdit_value_view.h"
 
-class Dataset_model;
-class IEdit_value_view;
-class QModelIndex;
+#include <QModelIndex>
 
 class Edit_value_presenter
 {
