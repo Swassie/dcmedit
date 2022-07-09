@@ -5,7 +5,7 @@
 #include <QGridLayout>
 
 void Split_view::add_view(std::unique_ptr<IView> view) {
-    auto widget = cast_to_widget(std::move(view));
+    std::unique_ptr<QWidget> widget = cast_to_widget(std::move(view));
     m_views.push_back(std::move(widget));
 }
 

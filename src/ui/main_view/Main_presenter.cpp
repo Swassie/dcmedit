@@ -106,7 +106,7 @@ void Main_presenter::quit() {
 }
 
 void Main_presenter::edit_all_files() {
-    auto view = m_view.create_edit_all_files_view();
+    std::unique_ptr<IEdit_all_files_view> view = m_view.create_edit_all_files_view();
     Edit_all_files_presenter presenter(*view, m_files);
     presenter.setup_event_handlers();
     presenter.show_dialog();

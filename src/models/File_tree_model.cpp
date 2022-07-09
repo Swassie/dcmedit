@@ -82,19 +82,19 @@ void File_tree_model::add_items() {
 }
 
 void File_tree_model::prune_items() {
-    auto root_item = invisibleRootItem();
+    QStandardItem* root_item = invisibleRootItem();
 
     for(int i = root_item->rowCount() - 1; i >= 0; --i) {
-        auto patient_item = root_item->child(i);
+        QStandardItem* patient_item = root_item->child(i);
 
         for(int j = patient_item->rowCount() - 1; j >= 0; --j) {
-            auto study_item = patient_item->child(j);
+            QStandardItem* study_item = patient_item->child(j);
 
             for(int k = study_item->rowCount() - 1; k >= 0; --k) {
-                auto series_item = study_item->child(k);
+                QStandardItem* series_item = study_item->child(k);
 
                 for(int l = series_item->rowCount() - 1; l >= 0; --l) {
-                    auto file_item = series_item->child(l);
+                    QStandardItem* file_item = series_item->child(l);
 
                     if(is_file_item_invalid(*file_item)) {
                         series_item->removeRow(l);
@@ -125,8 +125,8 @@ bool File_tree_model::is_file_item_invalid(const QStandardItem& item) {
         return true;
     }
     const char* id = nullptr;
-    auto& dataset = file->get_dataset();
-    auto parent = item.parent();
+    DcmDataset& dataset = file->get_dataset();
+    QStandardItem* parent = item.parent();
     dataset.findAndGetString(DCM_SeriesInstanceUID, id);
 
     if(parent->data() != id) {
@@ -152,7 +152,7 @@ void File_tree_model::decorate_file_item(QStandardItem& file_item) {
     }
     file_item.setText(QString::fromStdString(file_path));
 
-    auto font = file_item.font();
+    QFont font = file_item.font();
     font.setBold(file == m_files.get_current_file());
     file_item.setFont(font);
 }

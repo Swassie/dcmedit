@@ -27,7 +27,7 @@ void Edit_value_presenter::set_value() {
     }
     if(element->isaString() || element->getLength() <= max_binary_value_length) {
         OFString value;
-        auto status = element->getOFStringArray(value, false);
+        OFCondition status = element->getOFStringArray(value, false);
 
         if(status.good()) {
             m_view.set_value(value.c_str());
@@ -55,7 +55,7 @@ void Edit_value_presenter::apply() {
     if(value.empty() && !m_view.should_save_empty_value()) {
         return;
     }
-    auto status = m_dataset_model.set_value(m_index, value);
+    OFCondition status = m_dataset_model.set_value(m_index, value);
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to edit the data element value.\n"

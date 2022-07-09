@@ -7,7 +7,7 @@ New_file_view::New_file_view(QWidget* parent)
     : m_parent(parent) {}
 
 fs::path New_file_view::show_file_dialog() {
-    auto file_path = QFileDialog::getSaveFileName(m_parent, "Create new file");
+    QString file_path = QFileDialog::getSaveFileName(m_parent, "Create new file");
     return file_path.toStdString();
 }
 

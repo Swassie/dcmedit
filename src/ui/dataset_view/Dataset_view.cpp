@@ -60,12 +60,12 @@ void Dataset_view::show_error(const std::string& title, const std::string& text)
 }
 
 std::string Dataset_view::show_save_file_dialog() {
-    auto file_path = QFileDialog::getSaveFileName(this, "Save value to file");
+    QString file_path = QFileDialog::getSaveFileName(this, "Save value to file");
     return file_path.toStdString();
 }
 
 std::string Dataset_view::show_load_file_dialog() {
-    auto file_path = QFileDialog::getOpenFileName(this, "Load value from file");
+    QString file_path = QFileDialog::getOpenFileName(this, "Load value from file");
     return file_path.toStdString();
 }
 

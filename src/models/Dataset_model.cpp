@@ -114,7 +114,7 @@ OFCondition Dataset_model::add_element(const QModelIndex& index, const DcmTag& t
     layoutAboutToBeChanged({QPersistentModelIndex(index)});
 
     DcmElement* element = nullptr;
-    auto status = DcmItem::newDicomElement(element, tag);
+    OFCondition status = DcmItem::newDicomElement(element, tag);
 
     if(status.good() && !value.empty()) {
         status = element->putString(value.c_str());
@@ -141,7 +141,7 @@ OFCondition Dataset_model::add_item(const QModelIndex& index) {
     }
     int item_pos = rowCount(index);
     beginInsertRows(index, item_pos, item_pos);
-    auto status = sq->append(new DcmItem());
+    OFCondition status = sq->append(new DcmItem());
     endInsertRows();
     mark_as_modified();
     return status;
@@ -185,7 +185,7 @@ OFCondition Dataset_model::set_value(const QModelIndex& index, const std::string
     if(element == nullptr) {
         return OFCondition(0, 0, OF_error, "Failed to get element.");
     }
-    auto status = element->putString(value.c_str());
+    OFCondition status = element->putString(value.c_str());
     dataChanged(index, index);
     mark_as_modified();
     return status;
@@ -203,7 +203,7 @@ OFCondition Dataset_model::set_value_from_file(const QModelIndex& index, const s
     if(file_size % 2) {
         return OFCondition(0, 0, OF_error, "File size must be even.");
     }
-    auto status = element->createValueFromTempFile(file_stream.newFactory(), file_size, EBO_LittleEndian);
+    OFCondition status = element->createValueFromTempFile(file_stream.newFactory(), file_size, EBO_LittleEndian);
     dataChanged(index, index);
     mark_as_modified();
     return status;

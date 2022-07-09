@@ -61,7 +61,7 @@ void Edit_all_files_view::show_error_details(const std::vector<std::string>& err
         QMessageBox::Ok, this);
 
     QString details;
-    for(const auto& error : error_list) {
+    for(const std::string& error : error_list) {
         details += QString::fromStdString(error) + "\n\n";
     }
     dialog.setDetailedText(details);

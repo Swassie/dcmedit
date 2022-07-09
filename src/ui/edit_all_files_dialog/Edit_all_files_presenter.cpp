@@ -20,8 +20,8 @@ void Edit_all_files_presenter::show_dialog() {
 }
 
 void Edit_all_files_presenter::apply() {
-    auto tag_path = m_view.tag_path();
-    auto value = m_view.value();
+    std::string tag_path = m_view.tag_path();
+    std::string value = m_view.value();
 
     if(tag_path.empty()) {
         m_view.show_error("Error", "Tag path must be set.");

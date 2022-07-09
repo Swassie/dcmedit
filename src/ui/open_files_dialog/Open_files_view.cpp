@@ -21,7 +21,7 @@ void Open_files_view::show_error(const std::vector<std::string>& file_errors) {
         "At least one file failed to load.", QMessageBox::Ok, m_parent);
 
     QString details;
-    for(const auto& error : file_errors) {
+    for(const std::string& error : file_errors) {
         details += QString::fromStdString(error) + "\n\n";
     }
     dialog.setDetailedText(details);

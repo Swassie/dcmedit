@@ -20,7 +20,7 @@ File_tree_view::File_tree_view(File_tree_model& model)
 }
 
 void File_tree_view::item_activated(const QModelIndex& index) {
-    auto item = m_model.itemFromIndex(index);
+    QStandardItem* item = m_model.itemFromIndex(index);
 
     if(!item || item->hasChildren()) {
         return;

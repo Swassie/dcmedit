@@ -41,9 +41,9 @@ void Dicom_util::add_or_edit_element(const std::string& tag_path, const std::str
     if(status.bad()) {
         throw Tag_path_not_found_exception(std::string("Tag path not found. Reason: ") + status.text());
     }
-    OFList<DcmPath*> foundPaths;
-    path_proc.getResults(foundPaths);
-    DcmObject* object = get_object(foundPaths.front());
+    OFList<DcmPath*> found_paths;
+    path_proc.getResults(found_paths);
+    DcmObject* object = get_object(found_paths.front());
 
     if(object == nullptr) {
         throw Dcmedit_exception("Failed to get object");
@@ -51,13 +51,13 @@ void Dicom_util::add_or_edit_element(const std::string& tag_path, const std::str
     else if(!object->isLeaf() && (only_edit || !value.empty())) {
         throw Dcmedit_exception("Can't set value for non-leaf element.");
     }
-    set_element_value(foundPaths, value);
+    set_element_value(found_paths, value);
 }
 
 void Dicom_util::delete_element(const std::string& tag_path, DcmDataset& dataset) {
     DcmPathProcessor path_proc;
-    unsigned int resultCount = 0;
-    OFCondition status = path_proc.findOrDeletePath(&dataset, tag_path.c_str(), resultCount);
+    unsigned int result_count = 0;
+    OFCondition status = path_proc.findOrDeletePath(&dataset, tag_path.c_str(), result_count);
 
     if(status.bad()) {
         throw Tag_path_not_found_exception(std::string("Failed to delete element. Reason: ") + status.text());
@@ -71,11 +71,12 @@ int Dicom_util::get_index_nr(DcmObject& object) {
         return 0;
     }
     const DcmEVR vr = parent->ident();
+
     if(vr == EVR_item || vr == EVR_dataset) {
         auto item = static_cast<DcmItem*>(parent);
-        auto elementCount = item->getNumberOfValues();
+        auto element_count = item->getNumberOfValues();
 
-        for(auto i = 0u; i < elementCount; ++i) {
+        for(auto i = 0u; i < element_count; ++i) {
             if(item->getElement(i) == &object) {
                 return i;
             }
@@ -83,9 +84,9 @@ int Dicom_util::get_index_nr(DcmObject& object) {
     }
     else if(vr == EVR_SQ) {
         auto sq = static_cast<DcmSequenceOfItems*>(parent);
-        auto itemCount = sq->getNumberOfValues();
+        auto item_count = sq->getNumberOfValues();
 
-        for(auto i = 0u; i < itemCount; ++i) {
+        for(auto i = 0u; i < item_count; ++i) {
             if(sq->getItem(i) == &object) {
                 return i;
             }

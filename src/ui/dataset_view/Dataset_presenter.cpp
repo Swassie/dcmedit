@@ -28,14 +28,14 @@ void Dataset_presenter::setup_event_handlers() {
 }
 
 void Dataset_presenter::add_element(const QModelIndex& index) {
-    auto view = m_view.create_add_element_view();
+    std::unique_ptr<IAdd_element_view> view = m_view.create_add_element_view();
     Add_element_presenter presenter(*view, m_dataset_model, index);
     presenter.setup_event_handlers();
     presenter.show_dialog();
 }
 
 void Dataset_presenter::add_item(const QModelIndex& index) {
-    auto status = m_dataset_model.add_item(index);
+    OFCondition status = m_dataset_model.add_item(index);
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to add item.\n"
@@ -44,7 +44,7 @@ void Dataset_presenter::add_item(const QModelIndex& index) {
 }
 
 void Dataset_presenter::delete_index(const QModelIndex& index) {
-    auto status = m_dataset_model.delete_index(index);
+    OFCondition status = m_dataset_model.delete_index(index);
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to delete object.\n"
@@ -53,7 +53,7 @@ void Dataset_presenter::delete_index(const QModelIndex& index) {
 }
 
 void Dataset_presenter::edit_value(const QModelIndex& index) {
-    auto view = m_view.create_edit_value_view();
+    std::unique_ptr<IEdit_value_view> view = m_view.create_edit_value_view();
     Edit_value_presenter presenter(*view, m_dataset_model, index);
     presenter.setup_event_handlers();
     presenter.show_dialog();
@@ -81,7 +81,7 @@ void Dataset_presenter::save_value_to_file(const QModelIndex& index) {
     }
     const auto length = element->getLength();
     std::vector<char> buffer(length);
-    auto status = element->getPartialValue(buffer.data(), 0, length, nullptr, EBO_LittleEndian);
+    OFCondition status = element->getPartialValue(buffer.data(), 0, length, nullptr, EBO_LittleEndian);
 
     if(status.bad()) {
         m_view.show_error("Save failed", "Failed to get the data element value.\n"
@@ -102,7 +102,7 @@ void Dataset_presenter::load_value_from_file(const QModelIndex& index) {
     if(file_path.empty()) {
         return;
     }
-    auto status = m_dataset_model.set_value_from_file(index, file_path);
+    OFCondition status = m_dataset_model.set_value_from_file(index, file_path);
 
     if(status.bad()) {
         m_view.show_error("Load failed", "Failed to load the data element value.\n"

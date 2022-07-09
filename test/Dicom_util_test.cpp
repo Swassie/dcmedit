@@ -24,12 +24,12 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=false") {
     SECTION("adding a new element works") {
         Dicom_util::add_or_edit_element("(10,10)", "Marcus", false, dataset);
         const char* name = nullptr;
-        auto status = dataset.findAndGetString(DCM_PatientName, name);
+        OFCondition status = dataset.findAndGetString(DCM_PatientName, name);
         REQUIRE(status.good());
         CHECK(std::strcmp(name, "Marcus") == 0);
     }
     SECTION("changing an element works") {
-        auto status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
+        OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
         REQUIRE(status.good());
         Dicom_util::add_or_edit_element("PatientName", "Marcus", false, dataset);
         const char* name = nullptr;
@@ -66,7 +66,7 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=true") {
         CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,8)", "value", true, dataset), std::runtime_error);
     }
     SECTION("editing an element works") {
-        auto status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
+        OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
         REQUIRE(status.good());
         Dicom_util::add_or_edit_element("PatientName", "Marcus", true, dataset);
         const char* name = nullptr;
@@ -90,7 +90,7 @@ TEST_CASE("Testing Dicom_util::delete_element") {
         CHECK_THROWS_AS(Dicom_util::delete_element("PatientName", dataset), std::runtime_error);
 	}
     SECTION("deleting an element works") {
-        auto status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
+        OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
         REQUIRE(status.good());
         Dicom_util::delete_element("PatientName", dataset);
         CHECK_FALSE(dataset.tagExists(DCM_PatientName));
@@ -105,12 +105,12 @@ TEST_CASE("Testing Dicom_util::get_index_nr") {
         CHECK(Dicom_util::get_index_nr(dataset) == 0);
 	}
     SECTION("element has correct index") {
-        auto status = dataset.putAndInsertString({0x10, 0x10}, "John Doe");
+        OFCondition status = dataset.putAndInsertString({0x10, 0x10}, "John Doe");
         REQUIRE(status.good());
         status = dataset.putAndInsertString({0x10, 0x20}, "117");
         REQUIRE(status.good());
 
-        auto element = dataset.getElement(0);
+        DcmElement* element = dataset.getElement(0);
         CHECK(Dicom_util::get_index_nr(*element) == 0);
 
         element = dataset.getElement(1);
@@ -119,7 +119,7 @@ TEST_CASE("Testing Dicom_util::get_index_nr") {
     SECTION("item has correct index") {
         DcmSequenceOfItems sq({0x8, 0x6});
         auto item1 = new DcmItem();
-        auto status = sq.append(item1);
+        OFCondition status = sq.append(item1);
         REQUIRE(status.good());
         auto item2 = new DcmItem();
         status = sq.append(item2);
