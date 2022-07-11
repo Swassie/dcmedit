@@ -75,19 +75,20 @@ void Main_presenter::save_file_as() {
 }
 
 void Main_presenter::save_file_as(const fs::path& path) {
-    try {
-        m_files.save_current_file_as(path);
-    }
-    catch(const std::exception& e) {
-        m_view.show_error("Error", e.what());
+    Status status = m_files.save_current_file_as(path);
+
+    if(status.bad()) {
+        m_view.show_error("Error", "Failed to save file: " + path.string() +
+            "\nReason: " + status.text());
     }
 }
 
 void Main_presenter::save_all_files() {
-    bool ok = m_files.save_all_files();
+    Status status = m_files.save_all_files();
 
-    if(!ok) {
-        m_view.show_error("Error", "Failed to save some files.");
+    if(status.bad()) {
+        m_view.show_error("Error", "At least one file failed to save.\n"
+            "Reason: " + status.text());
     }
 }
 

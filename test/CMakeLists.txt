@@ -1,8 +1,8 @@
 add_executable(test-runner
   ../src/Dicom_file.cpp
   ../src/Dicom_util.cpp
-  ../src/Exceptions.cpp
-  ../src/Exceptions.h
+  ../src/common/Status.cpp
+  ../src/common/Status.h
   ../src/models/Dicom_files.cpp
   ../src/models/Transform_tool.cpp
   ../src/logging/Console_logger.cpp

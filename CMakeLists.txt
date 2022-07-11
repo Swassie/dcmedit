@@ -14,8 +14,6 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/Dicom_file.h
   src/Dicom_util.cpp
   src/Dicom_util.h
-  src/Exceptions.cpp
-  src/Exceptions.h
   src/Version.cpp
   src/Version.h
   src/common/Defer_event.cpp
@@ -23,6 +21,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/common/Event.h
   src/common/Scoped_event_handlers.cpp
   src/common/Scoped_event_handlers.h
+  src/common/Status.cpp
+  src/common/Status.h
   src/dcmedit.cpp
   src/dcmedit.h
   src/logging/Console_logger.cpp

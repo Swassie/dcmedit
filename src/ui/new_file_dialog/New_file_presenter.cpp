@@ -16,10 +16,10 @@ void New_file_presenter::show_dialog() {
     if(file_path.empty()) {
         return;
     }
-    try {
-        m_dicom_files.create_new_file(file_path);
-    }
-    catch(const std::exception& e) {
-        m_view.show_error(e.what());
+    Status status = m_dicom_files.create_new_file(file_path);
+
+    if(status.bad()) {
+        m_view.show_error("Failed to create file: " + file_path.string() +
+            "\nReason: " + status.text());
     }
 }

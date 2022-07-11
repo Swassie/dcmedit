@@ -12,14 +12,17 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=false") {
 
     DcmDataset dataset;
 
-    SECTION("an empty tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("", "value", false, dataset), std::runtime_error);
+    SECTION("an empty tag path causes an error") {
+        Status status = Dicom_util::add_or_edit_element("", "value", false, dataset);
+        CHECK(status.bad());
 	}
-    SECTION("an invalid tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("foo", "value", false, dataset), std::runtime_error);
+    SECTION("an invalid tag path causes an error") {
+        Status status = Dicom_util::add_or_edit_element("foo", "value", false, dataset);
+        CHECK(status.code() == Status_code::tag_path_not_found);
 	}
-    SECTION("setting a value for a non-leaf element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,6)", "value", false, dataset), std::runtime_error);
+    SECTION("setting a value for a non-leaf element causes an error") {
+        Status status = Dicom_util::add_or_edit_element("(8,6)", "value", false, dataset);
+        CHECK(status.bad());
     }
     SECTION("adding a new element works") {
         Dicom_util::add_or_edit_element("(10,10)", "Marcus", false, dataset);
@@ -53,17 +56,21 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=true") {
 
     DcmDataset dataset;
 
-    SECTION("an empty tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("", "value", true, dataset), std::runtime_error);
+    SECTION("an empty tag path causes an error") {
+        Status status = Dicom_util::add_or_edit_element("", "value", true, dataset);
+        CHECK(status.bad());
 	}
-    SECTION("an invalid tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("foo", "value", true, dataset), std::runtime_error);
+    SECTION("an invalid tag path causes an error") {
+        Status status = Dicom_util::add_or_edit_element("foo", "value", true, dataset);
+        CHECK(status.code() == Status_code::tag_path_not_found);
 	}
-    SECTION("editing a non-leaf element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,6)", "", true, dataset), std::runtime_error);
+    SECTION("editing a non-leaf element causes an error") {
+        Status status = Dicom_util::add_or_edit_element("(8,6)", "", true, dataset);
+        CHECK(status.bad());
     }
-    SECTION("editing a non-existent element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,8)", "value", true, dataset), std::runtime_error);
+    SECTION("editing a non-existent element causes an error") {
+        Status status = Dicom_util::add_or_edit_element("(8,8)", "value", true, dataset);
+        CHECK(status.code() == Status_code::tag_path_not_found);
     }
     SECTION("editing an element works") {
         OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
@@ -80,14 +87,17 @@ TEST_CASE("Testing Dicom_util::delete_element") {
 
     DcmDataset dataset;
 
-    SECTION("an empty tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::delete_element("", dataset), std::runtime_error);
+    SECTION("an empty tag path causes an error") {
+        Status status = Dicom_util::delete_element("", dataset);
+        CHECK(status.bad());
 	}
-    SECTION("an invalid tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::delete_element("foo", dataset), std::runtime_error);
+    SECTION("an invalid tag path causes an error") {
+        Status status = Dicom_util::delete_element("foo", dataset);
+        CHECK(status.code() == Status_code::tag_path_not_found);
 	}
-    SECTION("deleting a non-existent element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::delete_element("PatientName", dataset), std::runtime_error);
+    SECTION("deleting a non-existent element causes an error") {
+        Status status = Dicom_util::delete_element("PatientName", dataset);
+        CHECK(status.code() == Status_code::tag_path_not_found);
 	}
     SECTION("deleting an element works") {
         OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");

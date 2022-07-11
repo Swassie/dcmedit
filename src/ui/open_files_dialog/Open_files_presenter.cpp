@@ -25,11 +25,11 @@ void Open_files_presenter::show_dialog() {
     Defer_event defer(m_dicom_files.current_file_set);
 
     for(const fs::path& file_path : file_paths) {
-        try {
-            m_dicom_files.open_file(file_path);
-        }
-        catch(const std::exception& e) {
-            file_errors.push_back(e.what());
+        Status status = m_dicom_files.open_file(file_path);
+
+        if(status.bad()) {
+            file_errors.push_back("Failed to open file: " + file_path.string() +
+                "\nReason: " + status.text());
         }
     }
     if(!file_errors.empty()) {

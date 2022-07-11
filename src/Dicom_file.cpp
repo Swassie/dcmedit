@@ -1,32 +1,33 @@
 #include "Dicom_file.h"
 
-#include "Exceptions.h"
+#include "common/Status.h"
 #include "logging/Log.h"
 #include <dcmtk/dcmdata/dcxfer.h>
 
-Dicom_file::Dicom_file(const fs::path& path)
-    : m_path(path),
-      m_unsaved_changes(false) {
-    OFCondition status;
+Dicom_file::Dicom_file()
+    : m_unsaved_changes(false) {}
 
-    if(OFStandard::fileExists(m_path.c_str())) {
-        status = m_file.loadFile(m_path.c_str());
+Status Dicom_file::load_file(const fs::path& path) {
+    if(!OFStandard::fileExists(path.c_str())) {
+        return Status("file not found");
     }
-    else {
-        throw Dcmedit_exception("File not found: " + m_path.string());
-    }
+    OFCondition status = m_file.loadFile(path.c_str());
+
     if(status.bad()) {
-        throw Dcmedit_exception("Failed to load file: " + m_path.string() +
-            "\nReason: " + status.text());
+        return Status::from(status);
     }
-    Log::debug("Loaded file: " + m_path.string());
+    m_path = path;
+    m_unsaved_changes = false;
+    Log::debug("Loaded file: " + path.string());
+
+    return Status::ok;
 }
 
-void Dicom_file::save_file() {
-    save_file_as(m_path);
+Status Dicom_file::save_file() {
+    return save_file_as(m_path);
 }
 
-void Dicom_file::save_file_as(const fs::path& path) {
+Status Dicom_file::save_file_as(const fs::path& path) {
     OFCondition status = m_file.getDataset()->loadAllDataIntoMemory();
 
     if(status.good()) {
@@ -35,20 +36,18 @@ void Dicom_file::save_file_as(const fs::path& path) {
         status = m_file.saveFile(path.c_str(), new_transfer);
     }
     if(status.bad()) {
-        throw Dcmedit_exception("Failed to save file: " + path.string() +
-            "\nReason: " + status.text());
+        return Status::from(status);
     }
     m_path = path;
     m_unsaved_changes = false;
     Log::debug("Saved file: " + path.string());
+
+    return Status::ok;
 }
 
-void Dicom_file::create_new_file(const fs::path& path) {
+Status Dicom_file::create_new_file(const fs::path& path) {
     DcmFileFormat file;
     OFCondition status = file.saveFile(path.c_str(), EXS_LittleEndianExplicit);
 
-    if(status.bad()) {
-        throw Dcmedit_exception("Failed to create file: " + path.string() +
-            "\nReason: " + status.text());
-    }
+    return Status::from(status);
 }

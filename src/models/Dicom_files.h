@@ -1,6 +1,7 @@
 #pragma once
 #include "common/Event.h"
 #include "Dicom_file.h"
+#include "common/Status.h"
 
 #include <filesystem>
 #include <memory>
@@ -17,14 +18,14 @@ public:
     Event<> all_files_cleared;
     Event<> file_saved;
 
-    void create_new_file(const fs::path&);
-    void open_file(const fs::path&);
+    Status create_new_file(const fs::path&);
+    Status open_file(const fs::path&);
     bool has_unsaved_changes() const;
 
     void clear_all_files();
 
-    void save_current_file_as(const fs::path&);
-    bool save_all_files();
+    Status save_current_file_as(const fs::path&);
+    Status save_all_files();
 
     Dicom_file* get_current_file() {return m_current_file;}
     void set_current_file(Dicom_file*);

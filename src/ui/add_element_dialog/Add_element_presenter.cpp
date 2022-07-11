@@ -25,18 +25,18 @@ void Add_element_presenter::show_dialog() {
 void Add_element_presenter::apply() {
     const std::string tag_string = m_view.tag();
     DcmTag tag;
-    OFCondition status = DcmTag::findTagFromName(tag_string.c_str(), tag);
+    Status status = Status::from(DcmTag::findTagFromName(tag_string.c_str(), tag));
 
     if(status.bad()) {
         m_view.show_error("Error", "Invalid tag.\n"
-            "Reason: " + std::string(status.text()));
+            "Reason: " + status.text());
         return;
     }
     status = m_dataset_model.add_element(m_item_index, tag, m_view.value());
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to add data element.\n"
-            "Reason: " + std::string(status.text()));
+            "Reason: " + status.text());
         return;
     }
     m_view.close_dialog();

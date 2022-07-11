@@ -35,20 +35,20 @@ void Dataset_presenter::add_element(const QModelIndex& index) {
 }
 
 void Dataset_presenter::add_item(const QModelIndex& index) {
-    OFCondition status = m_dataset_model.add_item(index);
+    Status status = m_dataset_model.add_item(index);
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to add item.\n"
-            "Reason: " + std::string(status.text()));
+            "Reason: " + status.text());
     }
 }
 
 void Dataset_presenter::delete_index(const QModelIndex& index) {
-    OFCondition status = m_dataset_model.delete_index(index);
+    Status status = m_dataset_model.delete_index(index);
 
     if(status.bad()) {
         m_view.show_error("Error", "Failed to delete object.\n"
-            "Reason: " + std::string(status.text()));
+            "Reason: " + status.text());
     }
 }
 
@@ -102,11 +102,11 @@ void Dataset_presenter::load_value_from_file(const QModelIndex& index) {
     if(file_path.empty()) {
         return;
     }
-    OFCondition status = m_dataset_model.set_value_from_file(index, file_path);
+    Status status = m_dataset_model.set_value_from_file(index, file_path);
 
     if(status.bad()) {
         m_view.show_error("Load failed", "Failed to load the data element value.\n"
-            "Reason: " + std::string(status.text()));
+            "Reason: " + status.text());
     }
 }
 

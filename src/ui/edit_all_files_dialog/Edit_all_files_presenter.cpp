@@ -1,7 +1,6 @@
 #include "ui/edit_all_files_dialog/Edit_all_files_presenter.h"
 
 #include "Dicom_util.h"
-#include "Exceptions.h"
 #include "models/Dicom_files.h"
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
 
@@ -27,28 +26,28 @@ void Edit_all_files_presenter::apply() {
         m_view.show_error("Error", "Tag path must be set.");
         return;
     }
+    Status status = Status::ok;
     std::vector<std::string> file_errors;
+    const auto mode = m_view.mode();
 
     for(auto& file : m_files.get_files()) {
-        try {
-            const auto mode = m_view.mode();
+        if(mode == IEdit_all_files_view::Mode::add_edit) {
+            status = Dicom_util::add_or_edit_element(tag_path, value, false, file->get_dataset());
+        }
+        else if(mode == IEdit_all_files_view::Mode::edit) {
+            status = Dicom_util::add_or_edit_element(tag_path, value, true, file->get_dataset());
+        }
+        else {
+            status = Dicom_util::delete_element(tag_path, file->get_dataset());
+        }
 
-            if(mode == IEdit_all_files_view::Mode::add_edit) {
-                Dicom_util::add_or_edit_element(tag_path, value, false, file->get_dataset());
+        if(status.bad()) {
+            file_errors.push_back(file->get_path().string() +
+                "\nReason: " + status.text());
+
+            if(status.code() == Status_code::tag_path_not_found) {
+                continue;
             }
-            else if(mode == IEdit_all_files_view::Mode::edit) {
-                Dicom_util::add_or_edit_element(tag_path, value, true, file->get_dataset());
-            }
-            else {
-                Dicom_util::delete_element(tag_path, file->get_dataset());
-            }
-        }
-        catch(const Tag_path_not_found_exception& e) {
-            file_errors.push_back(file->get_path().string() + ":\n" + e.what());
-            continue;
-        }
-        catch(const std::exception& e) {
-            file_errors.push_back(file->get_path().string() + ":\n" + e.what());
         }
         file->set_unsaved_changes(true);
     }
