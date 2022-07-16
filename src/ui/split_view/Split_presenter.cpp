@@ -4,9 +4,9 @@
 
 #include <cassert>
 
-Split_presenter::Split_presenter(ISplit_view& view, View_factory& view_factory)
+Split_presenter::Split_presenter(ISplit_view& view, Split_factory& split_factory)
     : m_view(view),
-      m_view_factory(view_factory) {}
+      m_split_factory(split_factory) {}
 
 void Split_presenter::set_view_count(const size_t count) {
     assert(count >= 1 && count <= 4);
@@ -16,10 +16,10 @@ void Split_presenter::set_view_count(const size_t count) {
     }
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            VP_pair vp_pair = m_view_factory.make_default_view();
-            setup_event_handlers(*vp_pair.first, *vp_pair.second);
-            m_view.add_view(std::move(vp_pair.first));
-            m_presenters.push_back(std::move(vp_pair.second));
+            View_presenter vp = m_split_factory.make_default_view();
+            setup_event_handlers(*vp.view, *vp.presenter);
+            m_view.add_view(std::move(vp.view));
+            m_presenters.push_back(std::move(vp.presenter));
         }
     }
     else {
@@ -34,12 +34,12 @@ void Split_presenter::set_view_count(const size_t count) {
 void Split_presenter::set_default_layout() {
     m_presenters.clear();
     m_view.remove_all_views();
-    std::vector<VP_pair> vp_pairs = m_view_factory.make_default_layout();
+    std::vector<View_presenter> vp_pairs = m_split_factory.make_default_layout();
 
-    for(VP_pair& vp_pair : vp_pairs) {
-        setup_event_handlers(*vp_pair.first, *vp_pair.second);
-        m_view.add_view(std::move(vp_pair.first));
-        m_presenters.push_back(std::move(vp_pair.second));
+    for(View_presenter& vp : vp_pairs) {
+        setup_event_handlers(*vp.view, *vp.presenter);
+        m_view.add_view(std::move(vp.view));
+        m_presenters.push_back(std::move(vp.presenter));
     }
     m_view.set_views();
 }
@@ -50,21 +50,21 @@ void Split_presenter::setup_event_handlers(IView& view, IPresenter& presenter) {
 }
 
 void Split_presenter::switch_to_dataset_view(IPresenter& target) {
-    VP_pair vp_pair = m_view_factory.make_dataset_view();
-    replace_view(std::move(vp_pair), target);
+    View_presenter vp = m_split_factory.make_dataset_view();
+    replace_view(target, std::move(vp));
 }
 
 void Split_presenter::switch_to_image_view(IPresenter& target) {
-    VP_pair vp_pair = m_view_factory.make_image_view();
-    replace_view(std::move(vp_pair), target);
+    View_presenter vp = m_split_factory.make_image_view();
+    replace_view(target, std::move(vp));
 }
 
-void Split_presenter::replace_view(VP_pair vp_pair, IPresenter& target) {
+void Split_presenter::replace_view(IPresenter& target, View_presenter vp) {
     for(size_t i = 0; i < m_presenters.size(); i++) {
         if(m_presenters[i].get() == &target) {
-            setup_event_handlers(*vp_pair.first, *vp_pair.second);
-            m_view.replace_view(i, std::move(vp_pair.first));
-            m_presenters[i] = std::move(vp_pair.second);
+            setup_event_handlers(*vp.view, *vp.presenter);
+            m_view.replace_view(i, std::move(vp.view));
+            m_presenters[i] = std::move(vp.presenter);
             return;
         }
     }

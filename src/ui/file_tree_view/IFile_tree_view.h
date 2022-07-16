@@ -1,11 +1,14 @@
 #pragma once
 #include "Dicom_file.h"
 #include "common/Event.h"
+#include "models/File_tree_model.h"
 
 class IFile_tree_view
 {
 public:
     virtual ~IFile_tree_view() = default;
 
-    Event<Dicom_file*> file_activated;
+    Event<const QModelIndex&> item_activated;
+
+    virtual void set_model(File_tree_model&) = 0;
 };

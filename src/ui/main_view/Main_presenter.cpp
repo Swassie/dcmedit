@@ -12,8 +12,7 @@
 #include <QCoreApplication>
 #include <memory>
 
-Main_presenter::Main_presenter(IMain_view& view,
-    Dicom_files& files)
+Main_presenter::Main_presenter(IMain_view& view, Dicom_files& files)
     : m_state(Presenter_state::dashboard),
       m_view(view),
       m_files(files) {}

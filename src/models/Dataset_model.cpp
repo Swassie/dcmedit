@@ -71,9 +71,7 @@ void Dataset_model::setup_event_handlers() {
 }
 
 DcmItem* Dataset_model::get_dataset() const {
-    Dicom_file* file = m_files.get_current_file();
-
-    if(file) {
+    if(Dicom_file* file = m_files.get_current_file()) {
         return &file->get_dataset();
     }
     else {

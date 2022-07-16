@@ -13,21 +13,19 @@
 #include <QStackedWidget>
 #include <QToolBar>
 
-Main_view::Main_view(std::unique_ptr<Dashboard_view> dashboard_view,
-    std::unique_ptr<Split_view> split_view,
-    std::unique_ptr<File_tree_view> file_tree_view)
-    : m_dashboard_view(std::move(dashboard_view)),
-      m_split_view(std::move(split_view)),
-      m_file_tree_view(std::move(file_tree_view)),
+Main_view::Main_view()
+    : m_dashboard_view(new Dashboard_view()),
+      m_split_view(new Split_view()),
+      m_file_tree_view(new File_tree_view()),
       m_stacked_widget(new QStackedWidget(this)),
       m_tool_bar(create_editor_tool_bar()) {
     setMinimumSize(800, 600);
     setCentralWidget(m_stacked_widget);
-    addDockWidget(Qt::LeftDockWidgetArea, m_file_tree_view.get());
+    addDockWidget(Qt::LeftDockWidgetArea, m_file_tree_view);
     addToolBar(m_tool_bar);
 
-    m_stacked_widget->addWidget(m_dashboard_view.get());
-    m_stacked_widget->addWidget(m_split_view.get());
+    m_stacked_widget->addWidget(m_dashboard_view);
+    m_stacked_widget->addWidget(m_split_view);
 
     m_dashboard_view->new_file_clicked += [this] {new_file_clicked();};
     m_dashboard_view->open_files_clicked += [this] {open_files_clicked();};
@@ -37,14 +35,14 @@ void Main_view::show_dashboard_view() {
     show_dashboard_menu_bar();
     m_file_tree_view->hide();
     m_tool_bar->hide();
-    m_stacked_widget->setCurrentWidget(m_dashboard_view.get());
+    m_stacked_widget->setCurrentWidget(m_dashboard_view);
 }
 
 void Main_view::show_editor_view() {
     show_editor_menu_bar();
     m_file_tree_view->show();
     m_tool_bar->show();
-    m_stacked_widget->setCurrentWidget(m_split_view.get());
+    m_stacked_widget->setCurrentWidget(m_split_view);
 }
 
 void Main_view::set_window_modified(bool modified) {

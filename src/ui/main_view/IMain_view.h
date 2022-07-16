@@ -1,8 +1,10 @@
 #pragma once
 #include "common/Event.h"
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
+#include "ui/file_tree_view/IFile_tree_view.h"
 #include "ui/new_file_dialog/INew_file_view.h"
 #include "ui/open_files_dialog/IOpen_files_view.h"
+#include "ui/split_view/ISplit_view.h"
 
 #include <filesystem>
 #include <string>
@@ -29,6 +31,7 @@ public:
     Event<> pan_tool_selected;
     Event<> zoom_tool_selected;
 
+    virtual void show() = 0;
     virtual void show_dashboard_view() = 0;
     virtual void show_editor_view() = 0;
 
@@ -42,4 +45,7 @@ public:
     virtual std::unique_ptr<INew_file_view> create_new_file_view() = 0;
     virtual std::unique_ptr<IOpen_files_view> create_open_files_view() = 0;
     virtual std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() = 0;
+
+    virtual ISplit_view& get_split_view() = 0;
+    virtual IFile_tree_view& get_file_tree_view() = 0;
 };

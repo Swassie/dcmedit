@@ -62,7 +62,7 @@ public:
              * might be deleted due to removal or vector reallocation. */
             const Handler handler = m_handlers[i].handler;
             handler(parameters...);
-            i = std::numeric_limits<decltype(i)>::max();
+            i = (std::numeric_limits<decltype(i)>::max)();
         }
     }
 

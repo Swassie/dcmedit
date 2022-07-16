@@ -2,7 +2,6 @@
 
 #include "models/Dataset_model.h"
 #include "models/Tool_bar.h"
-#include "ui/Gui_util.h"
 #include "ui/image_view/IImage_view.h"
 
 #include <dcmtk/dcmdata/dcitem.h>
@@ -71,9 +70,6 @@ void Image_presenter::draw() {
 }
 
 void Image_presenter::handle_mouse_move(QMouseEvent* event) {
-    if(!Gui_util::is_left_mouse_pressed(*event)) {
-        set_tool();
-    }
     bool has_changed = m_transform_tool.mouse_move(*event);
 
     if(has_changed) {
@@ -82,6 +78,7 @@ void Image_presenter::handle_mouse_move(QMouseEvent* event) {
 }
 
 void Image_presenter::handle_mouse_press(QMouseEvent* event) {
+    set_tool();
     bool has_changed = m_transform_tool.mouse_press(*event);
 
     if(has_changed) {

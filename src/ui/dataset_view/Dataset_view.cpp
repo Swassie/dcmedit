@@ -13,11 +13,10 @@
 #include <QRegularExpression>
 #include <QVBoxLayout>
 
-Dataset_view::Dataset_view(Dataset_model& model)
+Dataset_view::Dataset_view()
     : m_proxy_model(new QSortFilterProxyModel(this)),
       m_tree_view(new QTreeView()),
       m_resized_to_content(false) {
-    m_proxy_model->setSourceModel(&model);
     m_proxy_model->setFilterKeyColumn(-1);
     m_proxy_model->setRecursiveFilteringEnabled(true);
     m_tree_view->setModel(m_proxy_model);
@@ -53,6 +52,10 @@ Dataset_view::Dataset_view(Dataset_model& model)
     image_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(image_action, &QAction::triggered, [this] {switch_to_image_view();});
     addAction(image_action);
+}
+
+void Dataset_view::set_model(Dataset_model& model) {
+    m_proxy_model->setSourceModel(&model);
 }
 
 void Dataset_view::show_error(const std::string& title, const std::string& text) {

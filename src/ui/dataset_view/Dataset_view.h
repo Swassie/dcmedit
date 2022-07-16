@@ -10,8 +10,9 @@ class Dataset_view : public QWidget, public IDataset_view
 {
     Q_OBJECT
 public:
-    Dataset_view(Dataset_model& model);
+    Dataset_view();
 
+    void set_model(Dataset_model&) override;
     void show_error(const std::string& title, const std::string& text) override;
     std::string show_save_file_dialog() override;
     std::string show_load_file_dialog() override;

@@ -13,8 +13,9 @@ class Main_view : public QMainWindow, public IMain_view
 {
     Q_OBJECT
 public:
-    Main_view(std::unique_ptr<Dashboard_view>, std::unique_ptr<Split_view>, std::unique_ptr<File_tree_view>);
+    Main_view();
 
+    void show() override {QWidget::show();}
     void show_dashboard_view() override;
     void show_editor_view() override;
 
@@ -29,6 +30,9 @@ public:
     std::unique_ptr<IOpen_files_view> create_open_files_view() override;
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
 
+    ISplit_view& get_split_view() override {return *m_split_view;}
+    IFile_tree_view& get_file_tree_view() override {return *m_file_tree_view;}
+
 protected:
     void show_dashboard_menu_bar();
     void show_editor_menu_bar();
@@ -36,9 +40,9 @@ protected:
 
     void closeEvent(QCloseEvent*) override;
 
-    std::unique_ptr<Dashboard_view> m_dashboard_view;
-    std::unique_ptr<Split_view> m_split_view;
-    std::unique_ptr<File_tree_view> m_file_tree_view;
+    Dashboard_view* m_dashboard_view;
+    Split_view* m_split_view;
+    File_tree_view* m_file_tree_view;
     QStackedWidget* m_stacked_widget;
     QToolBar* m_tool_bar;
 };

@@ -23,8 +23,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/common/Scoped_event_handlers.h
   src/common/Status.cpp
   src/common/Status.h
-  src/dcmedit.cpp
-  src/dcmedit.h
+  src/Dcmedit.cpp
+  src/Dcmedit.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
@@ -45,6 +45,7 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/Gui_util.h
   src/ui/IPresenter.h
   src/ui/IView.h
+  src/ui/IView_factory.h
   src/ui/View_factory.cpp
   src/ui/View_factory.h
   src/ui/about_dialog/About_view.cpp
@@ -73,6 +74,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/edit_value_dialog/Edit_value_view.cpp
   src/ui/edit_value_dialog/Edit_value_view.h
   src/ui/edit_value_dialog/IEdit_value_view.h
+  src/ui/file_tree_view/File_tree_presenter.cpp
+  src/ui/file_tree_view/File_tree_presenter.h
   src/ui/file_tree_view/File_tree_view.cpp
   src/ui/file_tree_view/File_tree_view.h
   src/ui/file_tree_view/IFile_tree_view.h
@@ -97,6 +100,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/open_files_dialog/Open_files_view.cpp
   src/ui/open_files_dialog/Open_files_view.h
   src/ui/split_view/ISplit_view.h
+  src/ui/split_view/Split_factory.cpp
+  src/ui/split_view/Split_factory.h
   src/ui/split_view/Split_presenter.cpp
   src/ui/split_view/Split_presenter.h
   src/ui/split_view/Split_view.cpp

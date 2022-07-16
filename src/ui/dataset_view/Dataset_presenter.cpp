@@ -12,7 +12,9 @@
 
 Dataset_presenter::Dataset_presenter(IDataset_view& view, Dataset_model& dataset_model)
     : m_view(view),
-      m_dataset_model(dataset_model) {}
+      m_dataset_model(dataset_model) {
+    m_view.set_model(m_dataset_model);
+}
 
 void Dataset_presenter::setup_event_handlers() {
     m_view.add_element_clicked += [this] (auto& index) {add_element(index);};

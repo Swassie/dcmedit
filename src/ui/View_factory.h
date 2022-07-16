@@ -1,26 +1,19 @@
 #pragma once
-#include "models/Dataset_model.h"
-#include "models/Tool_bar.h"
-#include "ui/IPresenter.h"
-#include "ui/IView.h"
+#include "ui/IView_factory.h"
+#include "ui/dataset_view/IDataset_view.h"
+#include "ui/image_view/IImage_view.h"
+#include "ui/main_view/Main_view.h"
 
 #include <memory>
-#include <utility>
-#include <vector>
 
-using VP_pair = std::pair<std::unique_ptr<IView>, std::unique_ptr<IPresenter>>;
-
-class View_factory
+class View_factory : public IView_factory
 {
 public:
-    View_factory(Dataset_model&, Tool_bar&);
+    IMain_view& get_main_view() override {return m_main_view;}
 
-    VP_pair make_image_view();
-    VP_pair make_dataset_view();
-    VP_pair make_default_view();
-    std::vector<VP_pair> make_default_layout();
+    std::unique_ptr<IImage_view> make_image_view() override;
+    std::unique_ptr<IDataset_view> make_dataset_view() override;
 
-protected:
-    Dataset_model& m_dataset_model;
-    Tool_bar& m_tool_bar;
+private:
+    Main_view m_main_view;
 };

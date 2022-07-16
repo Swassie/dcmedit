@@ -1,5 +1,6 @@
 #pragma once
 #include "common/Event.h"
+#include "models/Dataset_model.h"
 #include "ui/IView.h"
 #include "ui/add_element_dialog/IAdd_element_view.h"
 #include "ui/edit_value_dialog/IEdit_value_view.h"
@@ -22,6 +23,7 @@ public:
     Event<const QModelIndex&> element_activated;
     Event<const QPoint&> context_menu_requested;
 
+    virtual void set_model(Dataset_model&) = 0;
     virtual void show_error(const std::string& title, const std::string& text) = 0;
     virtual std::string show_save_file_dialog() = 0;
     virtual std::string show_load_file_dialog() = 0;
