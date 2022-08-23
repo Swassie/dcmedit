@@ -1,0 +1,14 @@
+{
+  "name": "dcmedit",
+  "dependencies": [
+    "dcmtk"
+  ],
+  "builtin-baseline": "ee51cc23468d183cc685aae33dc2ad3ce91fec8d",
+  "overrides": [
+    {
+      "name": "dcmtk",
+      "version": "3.6.6",
+      "port-version": 3
+    }
+  ]
+}
