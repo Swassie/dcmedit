@@ -1,5 +1,6 @@
 #include "ui/main_view/Main_presenter.h"
 
+#include "common/App_info.h"
 #include "models/Dicom_files.h"
 #include "ui/edit_all_files_dialog/Edit_all_files_presenter.h"
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
@@ -13,19 +14,14 @@
 #include <memory>
 
 Main_presenter::Main_presenter(IMain_view& view, Dicom_files& files)
-    : m_state(Presenter_state::dashboard),
-      m_view(view),
-      m_files(files) {}
+    : m_view(view),
+      m_files(files) {
+    show_dashboard_view();
+}
 
 void Main_presenter::setup_event_handlers() {
-    m_files.current_file_set += [this] {
-        if(m_state == Presenter_state::dashboard) {
-            show_editor_view();
-        }
-    };
-    m_files.all_files_cleared += [this] {show_dashboard_view();};
     m_files.file_saved += [this] {update_window_title();};
-    m_view.open_files_clicked += [this] {open_file();};
+    m_view.open_files_clicked += [this] {open_files();};
     m_view.new_file_clicked += [this] {new_file();};
     m_view.save_file_clicked += [this] {save_file();};
     m_view.save_file_as_clicked += [this] {save_file_as();};
@@ -34,6 +30,18 @@ void Main_presenter::setup_event_handlers() {
     m_view.quit_clicked += [this] {quit();};
     m_view.edit_all_files_clicked += [this] {edit_all_files();};
     m_view.about_clicked += [this] {about();};
+}
+
+void Main_presenter::on_dataset_changed() {
+    if(m_state == Presenter_state::dashboard) {
+        show_editor_view();
+    }
+    else if(m_files.get_current_file() == nullptr) {
+        show_dashboard_view();
+    }
+    else {
+        update_window_title();
+    }
 }
 
 void Main_presenter::show_dashboard_view() {
@@ -48,7 +56,7 @@ void Main_presenter::show_editor_view() {
     m_view.show_editor_view();
 }
 
-void Main_presenter::open_file() {
+void Main_presenter::open_files() {
     std::unique_ptr<IOpen_files_view> view = m_view.create_open_files_view();
     Open_files_presenter presenter(*view, m_files);
     presenter.show_dialog();
@@ -119,8 +127,7 @@ void Main_presenter::about() {
 void Main_presenter::update_window_title() {
     if(m_state == Presenter_state::dashboard) {
         m_view.set_window_modified(false);
-        std::string title = QCoreApplication::applicationName().toStdString();
-        m_view.set_window_title(title);
+        m_view.set_window_title(App_info::name);
     }
     else {
         Dicom_file* file = m_files.get_current_file();
@@ -129,8 +136,7 @@ void Main_presenter::update_window_title() {
         }
         m_view.set_window_modified(file->has_unsaved_changes());
 
-        std::string title = file->get_path().string() + "[*] - ";
-        title += QCoreApplication::applicationName().toStdString();
+        std::string title = file->get_path().string() + "[*] - " + App_info::name;
         m_view.set_window_title(title);
     }
 }

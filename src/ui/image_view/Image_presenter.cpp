@@ -46,7 +46,7 @@ static bool is_image_supported(const DicomImage& image) {
 void Image_presenter::draw() {
     DcmItem* dataset = m_dataset_model.get_dataset();
 
-    if(!dataset) {
+    if(dataset == nullptr) {
         return;
     }
     DicomImage image(dataset, EXS_Unknown);

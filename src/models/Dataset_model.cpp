@@ -1,6 +1,6 @@
 #include "models/Dataset_model.h"
 
-#include "Dicom_util.h"
+#include "common/Dicom_util.h"
 #include "logging/Log.h"
 
 #include <array>
@@ -67,7 +67,6 @@ Dataset_model::Dataset_model(Dicom_files& files)
 
 void Dataset_model::setup_event_handlers() {
     m_files.current_file_set += [this] {reset_model();};
-    m_files.all_files_cleared += [this] {reset_model();};
 }
 
 DcmItem* Dataset_model::get_dataset() const {

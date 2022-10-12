@@ -1,5 +1,5 @@
-#include "Version.h"
 #include "Dcmedit.h"
+#include "common/App_info.h"
 #include "logging/Console_logger.h"
 #include "logging/Log.h"
 #include "ui/View_factory.h"
@@ -11,10 +11,9 @@ int main(int argc, char** argv) {
     Log log(Log_level::info);
     log.add_logger(std::make_unique<Console_logger>());
 
-    Log::info("dcmedit " + std::string(dcmedit_version));
+    Log::info("dcmedit " + std::string(App_info::version));
 
     QApplication app(argc, argv);
-    app.setApplicationName("dcmedit");
 
     View_factory view_factory;
     Dcmedit dcmedit(view_factory);

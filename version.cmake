@@ -15,4 +15,4 @@ endif()
 string(TIMESTAMP date "%Y-%m-%d")
 set(long_version "${version} ${date}")
 
-configure_file("${CMAKE_SOURCE_DIR}/src/Version.cpp.tmpl" "${CMAKE_SOURCE_DIR}/src/Version.cpp")
+configure_file("${CMAKE_SOURCE_DIR}/src/common/App_info.cpp.tmpl" "${CMAKE_SOURCE_DIR}/src/common/App_info.cpp")

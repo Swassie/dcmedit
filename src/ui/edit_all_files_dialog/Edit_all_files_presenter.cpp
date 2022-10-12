@@ -1,6 +1,6 @@
 #include "ui/edit_all_files_dialog/Edit_all_files_presenter.h"
 
-#include "Dicom_util.h"
+#include "common/Dicom_util.h"
 #include "models/Dicom_files.h"
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
 

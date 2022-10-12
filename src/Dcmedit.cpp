@@ -22,11 +22,10 @@ Dcmedit::Dcmedit(IView_factory& view_factory)
     m_split_presenter.set_default_layout();
     m_file_tree_presenter.setup_event_handlers();
     m_main_presenter.setup_event_handlers();
-    m_main_presenter.show_dashboard_view();
 
     m_file_tree_presenter.file_activated += [&] (Dicom_file* file) {m_dicom_files.set_current_file(file);};
     m_dataset_model.dataset_changed += [&] {m_file_tree_model.update_model();};
-    m_dataset_model.dataset_changed += [&] {m_main_presenter.update_window_title();};
+    m_dataset_model.dataset_changed += [&] {m_main_presenter.on_dataset_changed();};
     m_main_view.set_view_count_clicked += [&] (int count) {m_split_presenter.set_view_count(count);};
     m_main_view.reset_layout_clicked += [&] {m_split_presenter.set_default_layout();};
     m_main_view.pan_tool_selected += [&] {m_tool_bar.set_selected_tool(Tool_bar::pan);};

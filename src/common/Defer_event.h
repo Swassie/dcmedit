@@ -1,6 +1,8 @@
 #pragma once
 #include "common/Event.h"
 
+/* Defers the event. If the event is triggered while deferred, it will be triggered
+ * a single time when this object is destroyed. */
 class Defer_event
 {
 public:

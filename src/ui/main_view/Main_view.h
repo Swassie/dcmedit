@@ -39,6 +39,7 @@ protected:
     QToolBar* create_editor_tool_bar();
 
     void closeEvent(QCloseEvent*) override;
+    QSize sizeHint() const override;
 
     Dashboard_view* m_dashboard_view;
     Split_view* m_split_view;

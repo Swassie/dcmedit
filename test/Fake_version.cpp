@@ -1,0 +1,3 @@
+#include "common/App_info.h"
+
+const char* const App_info::version = "fake version";

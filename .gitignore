@@ -1,4 +1,4 @@
 .cache/*
 .clangd/*
 compile_commands.json
-src/Version.cpp
+src/common/App_info.cpp

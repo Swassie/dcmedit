@@ -1,7 +1,7 @@
 #pragma once
 #include "common/Event.h"
 
-#include "catch/catch.hpp"
+#include <catch2/catch.hpp>
 
 template<class ... Parameters>
 class Check_event

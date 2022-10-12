@@ -11,14 +11,16 @@ public:
     Main_presenter(IMain_view&, Dicom_files&);
 
     void setup_event_handlers();
-    void show_dashboard_view();
-    void show_editor_view();
-    void update_window_title();
+    void on_dataset_changed();
 
 private:
     enum class Presenter_state {dashboard, editor};
 
-    void open_file();
+    void show_dashboard_view();
+    void show_editor_view();
+    void update_window_title();
+
+    void open_files();
     void new_file();
     void save_file();
     void save_file_as();

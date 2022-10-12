@@ -15,7 +15,6 @@ public:
     Dicom_files();
 
     Event<> current_file_set;
-    Event<> all_files_cleared;
     Event<> file_saved;
 
     Status create_new_file(const fs::path&);

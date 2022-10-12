@@ -43,9 +43,8 @@ bool Dicom_files::has_unsaved_changes() const {
 }
 
 void Dicom_files::clear_all_files() {
-    m_current_file = nullptr;
     m_files.clear();
-    all_files_cleared();
+    set_current_file(nullptr);
 }
 
 Status Dicom_files::save_current_file_as(const fs::path& new_path) {

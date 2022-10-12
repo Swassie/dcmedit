@@ -47,7 +47,6 @@ File_tree_model::File_tree_model(Dicom_files& files)
     : m_files(files) {}
 
 void File_tree_model::setup_event_handlers() {
-    m_files.all_files_cleared += [this] {clear();};
     m_files.file_saved += [this] {update_model();};
 }
 

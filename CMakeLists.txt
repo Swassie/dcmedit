@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 project(dcmedit)
 
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -10,21 +11,19 @@ find_package(DCMTK CONFIG REQUIRED)
 
 add_executable(dcmedit WIN32 MACOSX_BUNDLE
   assets/assets.qrc
-  src/Dicom_file.cpp
-  src/Dicom_file.h
-  src/Dicom_util.cpp
-  src/Dicom_util.h
-  src/Version.cpp
-  src/Version.h
+  src/Dcmedit.cpp
+  src/Dcmedit.h
+  src/common/App_info.cpp
+  src/common/App_info.h
   src/common/Defer_event.cpp
   src/common/Defer_event.h
+  src/common/Dicom_util.cpp
+  src/common/Dicom_util.h
   src/common/Event.h
   src/common/Scoped_event_handlers.cpp
   src/common/Scoped_event_handlers.h
   src/common/Status.cpp
   src/common/Status.h
-  src/Dcmedit.cpp
-  src/Dcmedit.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
@@ -33,6 +32,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/main.cpp
   src/models/Dataset_model.cpp
   src/models/Dataset_model.h
+  src/models/Dicom_file.cpp
+  src/models/Dicom_file.h
   src/models/Dicom_files.cpp
   src/models/Dicom_files.h
   src/models/File_tree_model.cpp
@@ -108,17 +109,16 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/split_view/Split_view.h
 )
 
-set_property(SOURCE src/Version.cpp PROPERTY SKIP_AUTOGEN ON)
+set_property(SOURCE src/common/App_info.cpp PROPERTY SKIP_AUTOGEN ON)
 
 add_custom_command(
-  OUTPUT "${CMAKE_SOURCE_DIR}/src/Version.cpp" phony_output
+  OUTPUT "${CMAKE_SOURCE_DIR}/src/common/App_info.cpp" phony_output
   COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/version.cmake"
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   VERBATIM
 )
 
 set_target_properties(dcmedit PROPERTIES
-  CXX_STANDARD 17
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/macOS.plist"
 )
 

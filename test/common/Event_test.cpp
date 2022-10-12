@@ -1,6 +1,6 @@
 #include "common/Event.h"
 
-#include "catch/catch.hpp"
+#include <catch2/catch.hpp>
 
 TEST_CASE("Adding event handler.") {
     Event<> event;

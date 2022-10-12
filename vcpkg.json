@@ -1,14 +1,26 @@
 {
   "name": "dcmedit",
   "dependencies": [
-    "dcmtk"
+    "catch2",
+    "dcmtk",
+    "trompeloeil"
   ],
-  "builtin-baseline": "ee51cc23468d183cc685aae33dc2ad3ce91fec8d",
+  "builtin-baseline": "f4b262b259145adb2ab0116a390b08642489d32b",
   "overrides": [
+    {
+      "name": "catch2",
+      "version": "2.13.9",
+      "port-version": 1
+    },
     {
       "name": "dcmtk",
       "version": "3.6.6",
       "port-version": 3
+    },
+    {
+      "name": "trompeloeil",
+      "version": "41",
+      "port-version": 0
     }
   ]
 }

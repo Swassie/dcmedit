@@ -14,24 +14,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Cache DCMTK
+      - name: Cache vcpkg
         uses: actions/cache@v3
         with:
           path: ~\AppData\Local\vcpkg\archives
-          key: ${{ runner.os }}-dcmtk
-
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-qt
+          key: vcpkg-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: vcpkg-${{ runner.os }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: true
 
       - name: Configure
         run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
@@ -59,24 +53,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Cache DCMTK
+      - name: Cache vcpkg
         uses: actions/cache@v3
         with:
           path: ~/.cache/vcpkg/archives
-          key: ${{ runner.os }}-dcmtk
-
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-qt
+          key: vcpkg-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: vcpkg-${{ runner.os }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: true
 
       - name: Configure
         run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .
@@ -104,24 +92,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Cache DCMTK
+      - name: Cache vcpkg
         uses: actions/cache@v3
         with:
           path: ~/.cache/vcpkg/archives
-          key: ${{ runner.os }}-dcmtk
-
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-qt
+          key: vcpkg-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: vcpkg-${{ runner.os }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: true
 
       - name: Configure
         run: CXX=g++-10 cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .

@@ -3,7 +3,7 @@
 #include "test_utils/Check_event.h"
 #include "test_utils/Temp_dir.h"
 
-#include "catch/catch.hpp"
+#include <catch2/catch.hpp>
 #include <dcmtk/dcmdata/dcdeftag.h>
 
 namespace fs = std::filesystem;
@@ -86,9 +86,9 @@ TEST_CASE("Check if any file has unsaved changes") {
 
 TEST_CASE("Clear all files. All files are cleared.") {
     Dicom_files files;
-    Check_event check_event(files.all_files_cleared);
     Status status = files.open_file(data_path / "new-file.dcm");
     CHECK(status.good());
+    Check_event check_event(files.current_file_set);
     files.clear_all_files();
     CHECK(files.get_current_file() == nullptr);
     CHECK(files.get_files().size() == 0);

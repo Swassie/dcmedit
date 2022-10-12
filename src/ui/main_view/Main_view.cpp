@@ -148,3 +148,7 @@ void Main_view::closeEvent(QCloseEvent* event) {
     event->ignore();
     quit_clicked();
 }
+
+QSize Main_view::sizeHint() const {
+    return {1280, 720};
+}
