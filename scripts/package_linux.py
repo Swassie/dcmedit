@@ -5,6 +5,8 @@ import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from common import package_docs
+
 
 def get_argparser():
     parser = argparse.ArgumentParser(description='Package dcmedit for Linux.')
@@ -70,12 +72,6 @@ Categories=Office;
     icon_file.touch()
 
     return desktop_file
-
-
-def package_docs(config):
-    repo_root = Path(__file__).parent.parent.resolve()
-    shutil.copy(repo_root / 'package-readme.txt', config.output / 'README.txt')
-    shutil.copy(repo_root / 'LICENSE.html', config.output)
 
 
 def main():

@@ -12,6 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Cache vcpkg
@@ -31,10 +32,12 @@ jobs:
         run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
 
       - name: Build
-        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+        run: |
+          cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+          "DCMEDIT_VERSION=$(python3 .\scripts\get_version.py)" >> $env:GITHUB_ENV
 
       - name: Test
-        run: .\build-output\test\${{ env.CMAKE_BUILD_TYPE }}\test-runner.exe
+        run: .\build-output\test\${{ env.CMAKE_BUILD_TYPE }}\unit-test.exe
 
       - name: Package application
         run: python3 .\scripts\package_windows.py .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.exe .\app-package\
@@ -42,7 +45,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: windows-${{ env.CMAKE_BUILD_TYPE }}
+          name: dcmedit-windows-${{ env.CMAKE_BUILD_TYPE }}-${{ env.DCMEDIT_VERSION }}
           path: .\app-package
 
   Build-macos:
@@ -51,6 +54,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Cache vcpkg
@@ -70,10 +74,12 @@ jobs:
         run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .
 
       - name: Build
-        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+        run: |
+          cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+          echo "DCMEDIT_VERSION=$(python3 ./scripts/get_version.py)" >> $GITHUB_ENV
 
       - name: Test
-        run: ./build-output/test/test-runner
+        run: ./build-output/test/unit-test
 
       - name: Package application
         run: python3 ./scripts/package_macos.py ./build-output/dcmedit.app ./app-package/
@@ -81,7 +87,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: macos-${{ env.CMAKE_BUILD_TYPE }}
+          name: dcmedit-macos-${{ env.CMAKE_BUILD_TYPE }}-${{ env.DCMEDIT_VERSION }}
           path: ./app-package
 
   Build-linux:
@@ -90,6 +96,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Cache vcpkg
@@ -109,10 +116,12 @@ jobs:
         run: CXX=g++-10 cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake .
 
       - name: Build
-        run: cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+        run: |
+          cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
+          echo "DCMEDIT_VERSION=$(python3 ./scripts/get_version.py)" >> $GITHUB_ENV
 
       - name: Test
-        run: ./build-output/test/test-runner
+        run: ./build-output/test/unit-test
 
       - name: Package application
         run: |
@@ -124,5 +133,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: linux-${{ env.CMAKE_BUILD_TYPE }}
+          name: dcmedit-linux-${{ env.CMAKE_BUILD_TYPE }}-${{ env.DCMEDIT_VERSION }}
           path: ./app-package

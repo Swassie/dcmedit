@@ -4,6 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from common import package_docs
+
 
 def get_argparser():
     parser = argparse.ArgumentParser(description='Package dcmedit for Windows.')
@@ -40,12 +42,6 @@ def package_binary(config):
     if proc.returncode != 0:
         print('windeployqt failed')
         sys.exit(1)
-
-
-def package_docs(config):
-    repo_root = Path(__file__).parent.parent.resolve()
-    shutil.copy(repo_root / 'package-readme.txt', config.output / 'README.txt')
-    shutil.copy(repo_root / 'LICENSE.html', config.output)
 
 
 def main():

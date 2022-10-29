@@ -1,7 +1,7 @@
 find_package(Catch2 REQUIRED)
 find_package(trompeloeil REQUIRED)
 
-add_executable(test-runner
+add_executable(unit-test
   ../src/Dcmedit.cpp
   ../src/Dcmedit.h
   ../src/common/App_info.h
@@ -85,21 +85,21 @@ add_executable(test-runner
   test_utils/Temp_dir.h
 )
 
-target_compile_definitions(test-runner PRIVATE DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test_data/")
+target_compile_definitions(unit-test PRIVATE DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test_data/")
 
 if(MSVC)
-  target_compile_options(test-runner PRIVATE /W4 /WX)
+  target_compile_options(unit-test PRIVATE /W4 /WX)
 else()
-  target_compile_options(test-runner PRIVATE -Wall -Wextra -pedantic -Werror)
+  target_compile_options(unit-test PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
-target_include_directories(test-runner PRIVATE
+target_include_directories(unit-test PRIVATE
   .
   ../src
   "${DCMTK_INCLUDE_DIRS}"
 )
 
-target_link_libraries(test-runner
+target_link_libraries(unit-test
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
   Catch2::Catch2

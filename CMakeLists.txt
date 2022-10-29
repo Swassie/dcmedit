@@ -112,8 +112,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
 set_property(SOURCE src/common/App_info.cpp PROPERTY SKIP_AUTOGEN ON)
 
 add_custom_command(
-  OUTPUT "${CMAKE_SOURCE_DIR}/src/common/App_info.cpp" phony_output
-  COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_SOURCE_DIR}/version.cmake"
+  OUTPUT "${CMAKE_SOURCE_DIR}/src/common/App_info.cpp" phony_file
+  COMMAND python3 "${CMAKE_SOURCE_DIR}/scripts/generate_app_info.py"
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   VERBATIM
 )

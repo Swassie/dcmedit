@@ -4,6 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from common import package_docs
+
 
 def get_argparser():
     parser = argparse.ArgumentParser(description='Package dcmedit for macOS.')
@@ -40,12 +42,6 @@ def package_binary(config):
         sys.exit(1)
 
     shutil.rmtree(dest)
-
-
-def package_docs(config):
-    repo_root = Path(__file__).parent.parent.resolve()
-    shutil.copy(repo_root / 'package-readme.txt', config.output / 'README.txt')
-    shutil.copy(repo_root / 'LICENSE.html', config.output)
 
 
 def main():
