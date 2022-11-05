@@ -15,7 +15,7 @@ public:
     void set_default_layout();
 
 protected:
-    void setup_event_handlers(IView&, IPresenter&);
+    void setup_event_callbacks(IView&, IPresenter&);
     void switch_to_dataset_view(IPresenter&);
     void switch_to_image_view(IPresenter&);
     void replace_view(IPresenter&, View_presenter);

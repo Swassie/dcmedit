@@ -5,13 +5,20 @@ add_executable(unit-test
   ../src/Dcmedit.cpp
   ../src/Dcmedit.h
   ../src/common/App_info.h
-  ../src/common/Defer_event.cpp
-  ../src/common/Defer_event.h
+  ../src/common/Callback_ref.cpp
+  ../src/common/Callback_ref.h
   ../src/common/Dicom_util.cpp
   ../src/common/Dicom_util.h
   ../src/common/Event.h
-  ../src/common/Scoped_event_handlers.cpp
-  ../src/common/Scoped_event_handlers.h
+  ../src/common/Event_exceptions.cpp
+  ../src/common/Event_exceptions.h
+  ../src/common/IEvent.h
+  ../src/common/Scoped_callbacks.cpp
+  ../src/common/Scoped_callbacks.h
+  ../src/common/Scoped_defer.cpp
+  ../src/common/Scoped_defer.h
+  ../src/common/Scoped_disable.cpp
+  ../src/common/Scoped_disable.h
   ../src/common/Status.cpp
   ../src/common/Status.h
   ../src/logging/Console_logger.cpp
@@ -76,7 +83,11 @@ add_executable(unit-test
   Dcmedit_test.cpp
   Fake_version.cpp
   common/Dicom_util_test.cpp
+  common/Callback_ref_test.cpp
   common/Event_test.cpp
+  common/Scoped_callbacks_test.cpp
+  common/Scoped_defer_test.cpp
+  common/Scoped_disable_test.cpp
   models/Dicom_files_test.cpp
   models/Transform_tool_test.cpp
   test_constants.h

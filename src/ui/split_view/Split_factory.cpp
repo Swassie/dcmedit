@@ -13,14 +13,14 @@ Split_factory::Split_factory(IView_factory& view_factory, Dataset_model& dataset
 View_presenter Split_factory::make_image_view() {
     auto view = m_view_factory.make_image_view();
     auto presenter = std::make_unique<Image_presenter>(*view, m_dataset_model, m_tool_bar);
-    presenter->setup_event_handlers();
+    presenter->setup_event_callbacks();
     return {std::move(view), std::move(presenter)};
 }
 
 View_presenter Split_factory::make_dataset_view() {
     auto view = m_view_factory.make_dataset_view();
     auto presenter = std::make_unique<Dataset_presenter>(*view, m_dataset_model);
-    presenter->setup_event_handlers();
+    presenter->setup_event_callbacks();
     return {std::move(view), std::move(presenter)};
 }
 

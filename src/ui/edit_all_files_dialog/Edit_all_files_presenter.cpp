@@ -8,10 +8,10 @@ Edit_all_files_presenter::Edit_all_files_presenter(IEdit_all_files_view& view, D
     : m_view(view),
       m_files(files) {}
 
-void Edit_all_files_presenter::setup_event_handlers() {
-    m_view.ok_clicked += [this] {apply();};
-    m_view.cancel_clicked += [this] {m_view.close_dialog();};
-    m_view.mode_changed += [this] {on_mode_changed();};
+void Edit_all_files_presenter::setup_event_callbacks() {
+    m_view.ok_clicked.add_callback([this] {apply();});
+    m_view.cancel_clicked.add_callback([this] {m_view.close_dialog();});
+    m_view.mode_changed.add_callback([this] {on_mode_changed();});
 }
 
 void Edit_all_files_presenter::show_dialog() {

@@ -16,23 +16,23 @@ Dataset_presenter::Dataset_presenter(IDataset_view& view, Dataset_model& dataset
     m_view.set_model(m_dataset_model);
 }
 
-void Dataset_presenter::setup_event_handlers() {
-    m_view.add_element_clicked += [this] (auto& index) {add_element(index);};
-    m_view.add_item_clicked += [this] (auto& index) {add_item(index);};
-    m_view.delete_item_clicked += [this] (auto& index) {delete_index(index);};
-    m_view.delete_sq_clicked += [this] (auto& index) {delete_index(index);};
-    m_view.delete_element_clicked += [this] (auto& index) {delete_index(index);};
-    m_view.edit_value_clicked += [this] (auto& index) {edit_value(index);};
-    m_view.save_value_to_file_clicked += [this] (auto& index) {save_value_to_file(index);};
-    m_view.load_value_from_file_clicked += [this] (auto& index) {load_value_from_file(index);};
-    m_view.context_menu_requested += [this] (auto& pos) {show_context_menu(pos);};
-    m_view.element_activated += [this] (auto& index) {edit_value_if_leaf(index);};
+void Dataset_presenter::setup_event_callbacks() {
+    m_view.add_element_clicked.add_callback([this] (auto& index) {add_element(index);});
+    m_view.add_item_clicked.add_callback([this] (auto& index) {add_item(index);});
+    m_view.delete_item_clicked.add_callback([this] (auto& index) {delete_index(index);});
+    m_view.delete_sq_clicked.add_callback([this] (auto& index) {delete_index(index);});
+    m_view.delete_element_clicked.add_callback([this] (auto& index) {delete_index(index);});
+    m_view.edit_value_clicked.add_callback([this] (auto& index) {edit_value(index);});
+    m_view.save_value_to_file_clicked.add_callback([this] (auto& index) {save_value_to_file(index);});
+    m_view.load_value_from_file_clicked.add_callback([this] (auto& index) {load_value_from_file(index);});
+    m_view.context_menu_requested.add_callback([this] (auto& pos) {show_context_menu(pos);});
+    m_view.element_activated.add_callback([this] (auto& index) {edit_value_if_leaf(index);});
 }
 
 void Dataset_presenter::add_element(const QModelIndex& index) {
     std::unique_ptr<IAdd_element_view> view = m_view.create_add_element_view();
     Add_element_presenter presenter(*view, m_dataset_model, index);
-    presenter.setup_event_handlers();
+    presenter.setup_event_callbacks();
     presenter.show_dialog();
 }
 
@@ -57,7 +57,7 @@ void Dataset_presenter::delete_index(const QModelIndex& index) {
 void Dataset_presenter::edit_value(const QModelIndex& index) {
     std::unique_ptr<IEdit_value_view> view = m_view.create_edit_value_view();
     Edit_value_presenter presenter(*view, m_dataset_model, index);
-    presenter.setup_event_handlers();
+    presenter.setup_event_callbacks();
     presenter.show_dialog();
 }
 

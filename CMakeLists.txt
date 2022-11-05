@@ -15,13 +15,20 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/Dcmedit.h
   src/common/App_info.cpp
   src/common/App_info.h
-  src/common/Defer_event.cpp
-  src/common/Defer_event.h
+  src/common/Callback_ref.cpp
+  src/common/Callback_ref.h
   src/common/Dicom_util.cpp
   src/common/Dicom_util.h
   src/common/Event.h
-  src/common/Scoped_event_handlers.cpp
-  src/common/Scoped_event_handlers.h
+  src/common/Event_exceptions.cpp
+  src/common/Event_exceptions.h
+  src/common/IEvent.h
+  src/common/Scoped_callbacks.cpp
+  src/common/Scoped_callbacks.h
+  src/common/Scoped_defer.cpp
+  src/common/Scoped_defer.h
+  src/common/Scoped_disable.cpp
+  src/common/Scoped_disable.h
   src/common/Status.cpp
   src/common/Status.h
   src/logging/Console_logger.cpp

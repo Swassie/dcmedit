@@ -6,8 +6,8 @@ File_tree_presenter::File_tree_presenter(IFile_tree_view& view, File_tree_model&
     m_view.set_model(m_model);
 }
 
-void File_tree_presenter::setup_event_handlers() {
-    m_view.item_activated += [this] (auto& index) {item_activated(index);};
+void File_tree_presenter::setup_event_callbacks() {
+    m_view.item_activated.add_callback([this] (auto& index) {item_activated(index);});
 }
 
 void File_tree_presenter::item_activated(const QModelIndex& index) {

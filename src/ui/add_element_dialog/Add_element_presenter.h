@@ -7,7 +7,7 @@ class Add_element_presenter
 public:
     Add_element_presenter(IAdd_element_view&, Dataset_model&, const QModelIndex&);
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
     void show_dialog();
     void apply();
 

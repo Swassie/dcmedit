@@ -3,12 +3,13 @@
 
 /* Defers the event. If the event is triggered while deferred, it will be triggered
  * a single time when this object is destroyed. */
-class Defer_event
+class Scoped_defer
 {
 public:
-    Defer_event(Event<>&);
-    ~Defer_event();
+    Scoped_defer(Event<>&);
+    ~Scoped_defer();
 
 private:
     Event<>& m_event;
+    bool m_active;
 };

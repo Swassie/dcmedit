@@ -1,6 +1,6 @@
 #include "ui/open_files_dialog/Open_files_presenter.h"
 
-#include "common/Defer_event.h"
+#include "common/Scoped_defer.h"
 #include "models/Dicom_files.h"
 #include "ui/open_files_dialog/IOpen_files_view.h"
 
@@ -22,7 +22,7 @@ void Open_files_presenter::show_dialog() {
         return;
     }
     std::vector<std::string> file_errors;
-    Defer_event defer(m_dicom_files.current_file_set);
+    Scoped_defer defer(m_dicom_files.current_file_set);
 
     for(const fs::path& file_path : file_paths) {
         Status status = m_dicom_files.open_file(file_path);

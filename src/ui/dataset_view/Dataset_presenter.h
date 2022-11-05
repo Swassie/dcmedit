@@ -11,7 +11,7 @@ class Dataset_presenter : public IPresenter
 public:
     Dataset_presenter(IDataset_view&, Dataset_model&);
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
 
 private:
     void add_element(const QModelIndex&);

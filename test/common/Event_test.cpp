@@ -1,27 +1,31 @@
+#include "common/Callback_ref.h"
 #include "common/Event.h"
+#include "common/Scoped_defer.h"
+#include "common/Scoped_disable.h"
 
 #include <catch2/catch.hpp>
+#include <string>
 
-TEST_CASE("Adding event handler.") {
+TEST_CASE("Adding event callback.") {
     Event<> event;
 
-    SECTION("adding a handler works.") {
+    SECTION("adding a callback works.") {
         int counter = 0;
-        event += [&] {
+        event.add_callback([&] {
             counter++;
-        };
+        });
 
         event();
 
         CHECK(counter == 1);
 	}
 
-    SECTION("if an event handler adds another handler, the new handler is also run.") {
+    SECTION("if an event callback adds another callback, the new callback is also run.") {
         int counter[] = {0, 0};
-        event += [&] {
+        event.add_callback([&] {
             counter[0]++;
-            event += [&] {counter[1]++;};
-        };
+            event.add_callback([&] {counter[1]++;});
+        });
 
         event();
 
@@ -30,112 +34,265 @@ TEST_CASE("Adding event handler.") {
 	}
 }
 
-TEST_CASE("Removing event handler.") {
+TEST_CASE("Removing event callback.") {
     Event<> event;
 
-    SECTION("removing a handler works.") {
+    SECTION("removing a callback works.") {
         int counter = 0;
-        event += [&] {
+        Callback_ref callback = event.add_callback([&] {
             counter++;
-        };
+        });
 
         event();
 
         CHECK(counter == 1);
 
-        event.remove_handler(0);
+        callback.remove_callback();
         event();
 
         CHECK(counter == 1);
 	}
 
-    SECTION("if event handler removes itself, the rest of the handlers are unaffected.") {
+    SECTION("if event callback removes itself, the rest of the callbacks are unaffected.") {
         int counter[] = {0, 0};
-        event += [&] {
-            event.remove_handler(0);
+        Callback_ref callback = event.add_callback([&] {
+            callback.remove_callback();
             counter[0]++;
-        };
-        event += [&] {
+        });
+        event.add_callback([&] {
             counter[1]++;
-        };
+        });
 
         event();
-
         CHECK(counter[0] == 1);
         CHECK(counter[1] == 1);
-	}
-
-    SECTION("if event handler removes a previous handler, the rest of the handlers are unaffected.") {
-        int counter[] = {0, 0, 0};
-        event += [&] {
-            counter[0]++;
-        };
-        event += [&] {
-            event.remove_handler(0);
-            counter[1]++;
-        };
-        event += [&] {
-            counter[2]++;
-        };
 
         event();
+        CHECK(counter[0] == 1);
+        CHECK(counter[1] == 2);
+	}
 
+    SECTION("if event callback removes a previous callback, the rest of the callbacks are unaffected.") {
+        int counter[] = {0, 0, 0};
+        Callback_ref callback = event.add_callback([&] {
+            counter[0]++;
+        });
+        event.add_callback([&] {
+            callback.remove_callback();
+            counter[1]++;
+        });
+        event.add_callback([&] {
+            counter[2]++;
+        });
+
+        event();
         CHECK(counter[0] == 1);
         CHECK(counter[1] == 1);
         CHECK(counter[2] == 1);
-	}
-
-    SECTION("if event handler removes the next handler, the next handler is not run.") {
-        int counter[] = {0, 0, 0};
-        event += [&] {
-            event.remove_handler(1);
-            counter[0]++;
-        };
-        event += [&] {
-            counter[1]++;
-        };
-        event += [&] {
-            counter[2]++;
-        };
 
         event();
+        CHECK(counter[0] == 1);
+        CHECK(counter[1] == 2);
+        CHECK(counter[2] == 2);
+	}
 
+    SECTION("if event callback removes the next callback, the next callback is not run.") {
+        int counter[] = {0, 0, 0};
+        Callback_ref callback;
+        event.add_callback([&] {
+            callback.remove_callback();
+            counter[0]++;
+        });
+        callback = event.add_callback([&] {
+            counter[1]++;
+        });
+        event.add_callback([&] {
+            counter[2]++;
+        });
+
+        event();
         CHECK(counter[0] == 1);
         CHECK(counter[1] == 0);
         CHECK(counter[2] == 1);
+
+        event();
+        CHECK(counter[0] == 2);
+        CHECK(counter[1] == 0);
+        CHECK(counter[2] == 2);
 	}
 }
 
 TEST_CASE("Event with parameters.") {
-    Event<int, double> event;
+    Event<int, double&, const std::string&, bool*> event;
+    event.add_callback([] (int i, double& d, const std::string& s, bool* b) {
+        CHECK(i == 10);
+        CHECK(d == 1.5);
+        CHECK(s == "foo");
+        CHECK(*b == true);
 
-    SECTION("the event arguments are passed to the handlers.") {
-        event += [] (int i, double d) {
-            CHECK(i == 10);
-            CHECK(d == 1.5);
-        };
+        d = 5.5;
+        *b = false;
+    });
 
-        event(10, 1.5);
-	}
+    double dd = 1.5;
+    bool bb = true;
+    event(10, dd, "foo", &bb);
+
+    CHECK(dd == 5.5);
+    CHECK(bb == false);
 }
 
-TEST_CASE("Defer event") {
+TEST_CASE("Disable event") {
     Event<> event;
     int counter = 0;
-    event += [&] {
+    event.add_callback([&] {
         counter++;
-    };
+    });
+    CHECK(event.enabled());
     CHECK(!event.deferred());
-    event.defer_event(true);
+
+    event.enable_event(false);
+
+    CHECK(!event.enabled());
+    CHECK(!event.deferred());
+
     event();
     event();
 
     CHECK(event.deferred());
     CHECK(counter == 0);
 
-    event.defer_event(false);
-    event();
+    event.enable_event(true);
+    CHECK(event.enabled());
+    CHECK(!event.deferred());
 
+    event();
     CHECK(!event.deferred());
     CHECK(counter == 1);
+}
+
+TEST_CASE("Adding more than 65536 callbacks causes Event_error to be thrown") {
+    Event<> event;
+
+    for(int i = 0; i < 65536; i++) {
+        event.add_callback([] {});
+    }
+
+    REQUIRE_THROWS_AS(event.add_callback([] {}), Event_error);
+}
+
+TEST_CASE("Adding and removing more than 65536 callbacks works") {
+    Event<> event;
+    Callback_ref callback;
+
+    for(int i = 0; i < 65540; i++) {
+        callback = event.add_callback([] {});
+        callback.remove_callback();
+    }
+}
+
+TEST_CASE("During a single event, an added callback will be called, despite that it gets the same ID as a deleted, already called callback") {
+    Event<> event;
+    Callback_ref callback = event.add_callback([] {});
+
+    for(int i = 0; i < 65534; i++) {
+        event.add_callback([] {});
+    }
+
+    int counter = 0;
+    event.add_callback([&] {
+        callback.remove_callback();
+        event.add_callback([&] {counter++;});
+    });
+
+    // Make sure all ID's are allocated.
+    REQUIRE_THROWS_AS(event.add_callback([] {}), Event_error);
+
+    event();
+    CHECK(counter == 1);
+}
+
+TEST_CASE("Callbacks are called in chronological order, regardless of ID") {
+    Event<> event;
+    Callback_ref callback;
+
+    for(int i = 0; i < 35540; i++) {
+        callback = event.add_callback([] {});
+        callback.remove_callback();
+    }
+    std::string result = "";
+    event.add_callback([&] {result += "foo";});
+
+    for(int i = 0; i < 35540; i++) {
+        callback = event.add_callback([] {});
+        callback.remove_callback();
+    }
+    event.add_callback([&] {result += "bar";});
+
+    event();
+    CHECK(result == "foobar");
+}
+
+TEST_CASE("Event is disabled while triggered, to prevent resursive events") {
+    Event<> event;
+    int counter = 0;
+    event.add_callback([&] {
+        counter++;
+        event();
+    });
+
+    event();
+    CHECK(counter == 1);
+}
+
+TEST_CASE("Only the outer scoped defer has effect for nested scopes") {
+    Event<> event;
+    int counter = 0;
+    event.add_callback([&] {
+        counter++;
+    });
+    {
+        Scoped_defer defer_1(event);
+        {
+            Scoped_defer defer_2(event);
+            {
+                Scoped_disable disable(event);
+                event();
+                CHECK(counter == 0);
+            }
+            event();
+            CHECK(counter == 0);
+        }
+        event();
+        CHECK(counter == 0);
+    }
+    CHECK(event.enabled());
+    CHECK(!event.deferred());
+    CHECK(counter == 1);
+}
+
+TEST_CASE("Only the outer scoped disable has effect for nested scopes") {
+    Event<> event;
+    int counter = 0;
+    event.add_callback([&] {
+        counter++;
+    });
+    {
+        Scoped_disable disable_1(event);
+        {
+            Scoped_disable disable_2(event);
+            {
+                Scoped_defer defer(event);
+                event();
+                CHECK(counter == 0);
+            }
+            event();
+            CHECK(counter == 0);
+        }
+        event();
+        CHECK(counter == 0);
+    }
+    CHECK(event.enabled());
+    CHECK(!event.deferred());
+    CHECK(counter == 0);
 }

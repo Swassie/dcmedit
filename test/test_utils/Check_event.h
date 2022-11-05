@@ -9,7 +9,7 @@ class Check_event
 public:
     Check_event(Event<Parameters...>& event)
         : m_counter(0) {
-        event += [this] {m_counter++;};
+        event.add_callback([this] {m_counter++;});
     }
 
     ~Check_event() {

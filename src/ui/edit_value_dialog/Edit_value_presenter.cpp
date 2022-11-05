@@ -13,9 +13,9 @@ Edit_value_presenter::Edit_value_presenter(IEdit_value_view& view,
       m_dataset_model(dataset_model),
       m_index(index) {}
 
-void Edit_value_presenter::setup_event_handlers() {
-    m_view.ok_clicked += [this] {apply();};
-    m_view.cancel_clicked += [this] {m_view.close_dialog();};
+void Edit_value_presenter::setup_event_callbacks() {
+    m_view.ok_clicked.add_callback([this] {apply();});
+    m_view.cancel_clicked.add_callback([this] {m_view.close_dialog();});
 }
 
 void Edit_value_presenter::set_value() {

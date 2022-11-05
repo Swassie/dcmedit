@@ -19,17 +19,17 @@ Main_presenter::Main_presenter(IMain_view& view, Dicom_files& files)
     show_dashboard_view();
 }
 
-void Main_presenter::setup_event_handlers() {
-    m_files.file_saved += [this] {update_window_title();};
-    m_view.open_files_clicked += [this] {open_files();};
-    m_view.new_file_clicked += [this] {new_file();};
-    m_view.save_file_clicked += [this] {save_file();};
-    m_view.save_file_as_clicked += [this] {save_file_as();};
-    m_view.save_all_files_clicked += [this] {save_all_files();};
-    m_view.clear_all_files_clicked += [this] {clear_all_files();};
-    m_view.quit_clicked += [this] {quit();};
-    m_view.edit_all_files_clicked += [this] {edit_all_files();};
-    m_view.about_clicked += [this] {about();};
+void Main_presenter::setup_event_callbacks() {
+    m_files.file_saved.add_callback([this] {update_window_title();});
+    m_view.open_files_clicked.add_callback([this] {open_files();});
+    m_view.new_file_clicked.add_callback([this] {new_file();});
+    m_view.save_file_clicked.add_callback([this] {save_file();});
+    m_view.save_file_as_clicked.add_callback([this] {save_file_as();});
+    m_view.save_all_files_clicked.add_callback([this] {save_all_files();});
+    m_view.clear_all_files_clicked.add_callback([this] {clear_all_files();});
+    m_view.quit_clicked.add_callback([this] {quit();});
+    m_view.edit_all_files_clicked.add_callback([this] {edit_all_files();});
+    m_view.about_clicked.add_callback([this] {about();});
 }
 
 void Main_presenter::on_dataset_changed() {
@@ -116,7 +116,7 @@ void Main_presenter::quit() {
 void Main_presenter::edit_all_files() {
     std::unique_ptr<IEdit_all_files_view> view = m_view.create_edit_all_files_view();
     Edit_all_files_presenter presenter(*view, m_files);
-    presenter.setup_event_handlers();
+    presenter.setup_event_callbacks();
     presenter.show_dialog();
 }
 

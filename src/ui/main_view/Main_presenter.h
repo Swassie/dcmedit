@@ -10,7 +10,7 @@ class Main_presenter
 public:
     Main_presenter(IMain_view&, Dicom_files&);
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
     void on_dataset_changed();
 
 private:

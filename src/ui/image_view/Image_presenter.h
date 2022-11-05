@@ -1,5 +1,5 @@
 #pragma once
-#include "common/Scoped_event_handlers.h"
+#include "common/Scoped_callbacks.h"
 #include "models/Dataset_model.h"
 #include "models/Tool_bar.h"
 #include "models/Transform_tool.h"
@@ -13,18 +13,18 @@ class Image_presenter : public IPresenter
 public:
     Image_presenter(IImage_view&, Dataset_model&, Tool_bar&);
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
 
 protected:
     void update();
     void draw();
-    void handle_mouse_move(QMouseEvent*);
-    void handle_mouse_press(QMouseEvent*);
+    void on_mouse_move(QMouseEvent*);
+    void on_mouse_press(QMouseEvent*);
     void set_tool();
 
     IImage_view& m_view;
     Dataset_model& m_dataset_model;
     Tool_bar& m_tool_bar;
     Transform_tool m_transform_tool;
-    Scoped_event_handlers m_scoped_handlers;
+    Scoped_callbacks m_scoped_callbacks;
 };

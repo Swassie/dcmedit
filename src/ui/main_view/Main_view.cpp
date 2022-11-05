@@ -27,8 +27,8 @@ Main_view::Main_view()
     m_stacked_widget->addWidget(m_dashboard_view);
     m_stacked_widget->addWidget(m_split_view);
 
-    m_dashboard_view->new_file_clicked += [this] {new_file_clicked();};
-    m_dashboard_view->open_files_clicked += [this] {open_files_clicked();};
+    m_dashboard_view->new_file_clicked.add_callback([this] {new_file_clicked();});
+    m_dashboard_view->open_files_clicked.add_callback([this] {open_files_clicked();});
 }
 
 void Main_view::show_dashboard_view() {

@@ -11,7 +11,7 @@ class File_tree_model : public QStandardItemModel
 public:
     File_tree_model(Dicom_files& files);
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
     void update_model();
 
 private:

@@ -8,6 +8,8 @@
 class IView_factory
 {
 public:
+    virtual ~IView_factory() = default;
+
     virtual IMain_view& get_main_view() = 0;
 
     virtual std::unique_ptr<IImage_view> make_image_view() = 0;

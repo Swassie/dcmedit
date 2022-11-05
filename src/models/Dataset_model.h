@@ -13,7 +13,7 @@ public:
 
     Event<> dataset_changed;
 
-    void setup_event_handlers();
+    void setup_event_callbacks();
 
     DcmItem* get_dataset() const;
     DcmObject* get_object(const QModelIndex&) const;

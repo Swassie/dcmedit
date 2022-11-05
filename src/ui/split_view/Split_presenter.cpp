@@ -17,7 +17,7 @@ void Split_presenter::set_view_count(const size_t count) {
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
             View_presenter vp = m_split_factory.make_default_view();
-            setup_event_handlers(*vp.view, *vp.presenter);
+            setup_event_callbacks(*vp.view, *vp.presenter);
             m_view.add_view(std::move(vp.view));
             m_presenters.push_back(std::move(vp.presenter));
         }
@@ -37,16 +37,16 @@ void Split_presenter::set_default_layout() {
     std::vector<View_presenter> vp_pairs = m_split_factory.make_default_layout();
 
     for(View_presenter& vp : vp_pairs) {
-        setup_event_handlers(*vp.view, *vp.presenter);
+        setup_event_callbacks(*vp.view, *vp.presenter);
         m_view.add_view(std::move(vp.view));
         m_presenters.push_back(std::move(vp.presenter));
     }
     m_view.set_views();
 }
 
-void Split_presenter::setup_event_handlers(IView& view, IPresenter& presenter) {
-    view.switch_to_dataset_view += [&] {switch_to_dataset_view(presenter);};
-    view.switch_to_image_view += [&] {switch_to_image_view(presenter);};
+void Split_presenter::setup_event_callbacks(IView& view, IPresenter& presenter) {
+    view.switch_to_dataset_view.add_callback([&] {switch_to_dataset_view(presenter);});
+    view.switch_to_image_view.add_callback([&] {switch_to_image_view(presenter);});
 }
 
 void Split_presenter::switch_to_dataset_view(IPresenter& target) {
@@ -62,7 +62,7 @@ void Split_presenter::switch_to_image_view(IPresenter& target) {
 void Split_presenter::replace_view(IPresenter& target, View_presenter vp) {
     for(size_t i = 0; i < m_presenters.size(); i++) {
         if(m_presenters[i].get() == &target) {
-            setup_event_handlers(*vp.view, *vp.presenter);
+            setup_event_callbacks(*vp.view, *vp.presenter);
             m_view.replace_view(i, std::move(vp.view));
             m_presenters[i] = std::move(vp.presenter);
             return;

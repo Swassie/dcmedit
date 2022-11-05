@@ -65,8 +65,8 @@ static QVariant get_element_data(DcmElement& element, int column) {
 Dataset_model::Dataset_model(Dicom_files& files)
     : m_files(files) {}
 
-void Dataset_model::setup_event_handlers() {
-    m_files.current_file_set += [this] {reset_model();};
+void Dataset_model::setup_event_callbacks() {
+    m_files.current_file_set.add_callback([this] {reset_model();});
 }
 
 DcmItem* Dataset_model::get_dataset() const {

@@ -13,9 +13,9 @@ Add_element_presenter::Add_element_presenter(IAdd_element_view& view,
       m_dataset_model(dataset_model),
       m_item_index(index) {}
 
-void Add_element_presenter::setup_event_handlers() {
-    m_view.ok_clicked += [this] {apply();};
-    m_view.cancel_clicked += [this] {m_view.close_dialog();};
+void Add_element_presenter::setup_event_callbacks() {
+    m_view.ok_clicked.add_callback([this] {apply();});
+    m_view.cancel_clicked.add_callback([this] {m_view.close_dialog();});
 }
 
 void Add_element_presenter::show_dialog() {
