@@ -7,6 +7,7 @@
 #include "ui/edit_value_dialog/Edit_value_presenter.h"
 #include "ui/edit_value_dialog/IEdit_value_view.h"
 
+#include <exception>
 #include <QModelIndex>
 #include <QPoint>
 
@@ -37,20 +38,22 @@ void Dataset_presenter::add_element(const QModelIndex& index) {
 }
 
 void Dataset_presenter::add_item(const QModelIndex& index) {
-    Status status = m_dataset_model.add_item(index);
-
-    if(status.bad()) {
+    try {
+        m_dataset_model.add_item(index);
+    }
+    catch(const std::exception& e) {
         m_view.show_error("Error", "Failed to add item.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(e.what()));
     }
 }
 
 void Dataset_presenter::delete_index(const QModelIndex& index) {
-    Status status = m_dataset_model.delete_index(index);
-
-    if(status.bad()) {
+    try {
+        m_dataset_model.delete_index(index);
+    }
+    catch(const std::exception& e) {
         m_view.show_error("Error", "Failed to delete object.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(e.what()));
     }
 }
 
@@ -104,11 +107,12 @@ void Dataset_presenter::load_value_from_file(const QModelIndex& index) {
     if(file_path.empty()) {
         return;
     }
-    Status status = m_dataset_model.set_value_from_file(index, file_path);
-
-    if(status.bad()) {
+    try {
+        m_dataset_model.set_value_from_file(index, file_path);
+    }
+    catch(const std::exception& e) {
         m_view.show_error("Load failed", "Failed to load the data element value.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(e.what()));
     }
 }
 

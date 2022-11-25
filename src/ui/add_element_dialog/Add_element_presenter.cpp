@@ -5,6 +5,7 @@
 #include "ui/add_element_dialog/IAdd_element_view.h"
 
 #include <dcmtk/dcmdata/dcitem.h>
+#include <exception>
 
 Add_element_presenter::Add_element_presenter(IAdd_element_view& view,
     Dataset_model& dataset_model,
@@ -25,18 +26,20 @@ void Add_element_presenter::show_dialog() {
 void Add_element_presenter::apply() {
     const std::string tag_string = m_view.tag();
     DcmTag tag;
-    Status status = Status::from(DcmTag::findTagFromName(tag_string.c_str(), tag));
+    OFCondition status = DcmTag::findTagFromName(tag_string.c_str(), tag);
 
     if(status.bad()) {
         m_view.show_error("Error", "Invalid tag.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(status.text()));
         return;
     }
-    status = m_dataset_model.add_element(m_item_index, tag, m_view.value());
 
-    if(status.bad()) {
+    try {
+        m_dataset_model.add_element(m_item_index, tag, m_view.value());
+    }
+    catch(const std::exception& e) {
         m_view.show_error("Error", "Failed to add data element.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(e.what()));
         return;
     }
     m_view.close_dialog();

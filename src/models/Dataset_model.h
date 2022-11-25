@@ -1,5 +1,4 @@
 #pragma once
-#include "common/Status.h"
 #include "models/Dicom_files.h"
 
 #include <dcmtk/dcmdata/dcvr.h>
@@ -19,11 +18,11 @@ public:
     DcmObject* get_object(const QModelIndex&) const;
     DcmEVR get_vr(const QModelIndex&) const;
 
-    Status add_element(const QModelIndex&, const DcmTag&, const std::string&);
-    Status add_item(const QModelIndex&);
-    Status delete_index(const QModelIndex&);
-    Status set_value(const QModelIndex&, const std::string&);
-    Status set_value_from_file(const QModelIndex&, const std::string&);
+    void add_element(const QModelIndex&, const DcmTag&, const std::string&);
+    void add_item(const QModelIndex&);
+    void delete_index(const QModelIndex&);
+    void set_value(const QModelIndex&, const std::string&);
+    void set_value_from_file(const QModelIndex&, const std::string&);
 
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex& index) const override;

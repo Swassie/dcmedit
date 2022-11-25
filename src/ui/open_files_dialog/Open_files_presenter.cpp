@@ -25,11 +25,12 @@ void Open_files_presenter::show_dialog() {
     Scoped_defer defer(m_dicom_files.current_file_set);
 
     for(const fs::path& file_path : file_paths) {
-        Status status = m_dicom_files.open_file(file_path);
-
-        if(status.bad()) {
+        try {
+            m_dicom_files.open_file(file_path);
+        }
+        catch(const std::exception& e) {
             file_errors.push_back("Failed to open file: " + file_path.string() +
-                "\nReason: " + status.text());
+                "\nReason: " + std::string(e.what()));
         }
     }
     if(!file_errors.empty()) {

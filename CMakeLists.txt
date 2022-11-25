@@ -22,6 +22,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/common/Event.h
   src/common/Event_exceptions.cpp
   src/common/Event_exceptions.h
+  src/common/Exceptions.cpp
+  src/common/Exceptions.h
   src/common/IEvent.h
   src/common/Scoped_callbacks.cpp
   src/common/Scoped_callbacks.h
@@ -29,8 +31,6 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/common/Scoped_defer.h
   src/common/Scoped_disable.cpp
   src/common/Scoped_disable.h
-  src/common/Status.cpp
-  src/common/Status.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp

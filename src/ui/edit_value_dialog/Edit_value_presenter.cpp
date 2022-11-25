@@ -55,11 +55,12 @@ void Edit_value_presenter::apply() {
     if(value.empty() && !m_view.should_save_empty_value()) {
         return;
     }
-    Status status = m_dataset_model.set_value(m_index, value);
-
-    if(status.bad()) {
+    try {
+        m_dataset_model.set_value(m_index, value);
+    }
+    catch(const std::exception& e) {
         m_view.show_error("Error", "Failed to edit the data element value.\n"
-            "Reason: " + status.text());
+            "Reason: " + std::string(e.what()));
         return;
     }
     m_view.close_dialog();

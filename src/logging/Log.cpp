@@ -2,6 +2,8 @@
 
 #include "logging/Logger.h"
 
+#include <stdexcept>
+
 static Log* g_log;
 
 static std::string to_string(Log_level log_level) {
@@ -27,6 +29,7 @@ Log::Log(Log_level log_level)
 {
     if(g_log) {
         warning("Log already created.");
+        throw std::logic_error("Log already created.");
     }
     g_log = this;
 }

@@ -3,37 +3,31 @@
 #include "Dicom_file.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 Dicom_files::Dicom_files()
     : m_current_file(nullptr) {}
 
-Status Dicom_files::create_new_file(const fs::path& path) {
-    Status status = Dicom_file::create_new_file(path);
-
-    return status.good() ? open_file(path) : status;
+void Dicom_files::create_new_file(const fs::path& path) {
+    Dicom_file::create_new_file(path);
+    open_file(path);
 }
 
-Status Dicom_files::open_file(const fs::path& path) {
+void Dicom_files::open_file(const fs::path& path) {
     auto replace_file = std::find_if(m_files.begin(), m_files.end(), [&](auto& file) {
         return file->get_path() == path;
     });
 
     if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
-        return Status("file is already open and has unsaved changes");
+        throw std::runtime_error("file is already open and has unsaved changes");
     }
-    auto file = std::make_unique<Dicom_file>();
-    Status status = file->load_file(path);
+    auto file = std::make_unique<Dicom_file>(path);
 
-    if(status.bad()) {
-        return status;
-    }
     if(replace_file != m_files.end()) {
         m_files.erase(replace_file);
     }
     m_files.push_back(std::move(file));
     set_current_file(m_files.back().get());
-
-    return Status::ok;
 }
 
 bool Dicom_files::has_unsaved_changes() const {
@@ -47,40 +41,36 @@ void Dicom_files::clear_all_files() {
     set_current_file(nullptr);
 }
 
-Status Dicom_files::save_current_file_as(const fs::path& new_path) {
+void Dicom_files::save_current_file_as(const fs::path& new_path) {
     bool same_path = m_current_file->get_path() == new_path;
     auto replace_file = std::find_if(m_files.begin(), m_files.end(), [&](auto& file) {
         return !same_path && file->get_path() == new_path;
     });
 
     if(replace_file != m_files.end() && (*replace_file)->has_unsaved_changes()) {
-        return Status("file is already open and has unsaved changes");
+        throw std::runtime_error("file is already open and has unsaved changes");
     }
-    Status status = m_current_file->save_file_as(new_path);
+    m_current_file->save_file_as(new_path);
 
-    if(status.bad()) {
-        return status;
-    }
     if(replace_file != m_files.end()) {
         m_files.erase(replace_file);
     }
     file_saved();
-
-    return Status::ok;
 }
 
-Status Dicom_files::save_all_files() {
-    Status result = Status::ok;
+bool Dicom_files::save_all_files() {
+    bool ok = true;
 
     for(auto& file : m_files) {
-        Status status = file->save_file();
-
-        if(status.bad()) {
-            result = status;
+        try {
+            file->save_file();
+        }
+        catch(const std::exception&) {
+            ok = false;
         }
     }
     file_saved();
-    return result;
+    return ok;
 }
 
 void Dicom_files::set_current_file(Dicom_file* file) {
