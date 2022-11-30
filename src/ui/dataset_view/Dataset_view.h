@@ -2,11 +2,11 @@
 #include "models/Dataset_model.h"
 #include "ui/dataset_view/IDataset_view.h"
 
+#include <QFrame>
 #include <QSortFilterProxyModel>
 #include <QTreeView>
-#include <QWidget>
 
-class Dataset_view : public QWidget, public IDataset_view
+class Dataset_view : public QFrame, public IDataset_view
 {
     Q_OBJECT
 public:

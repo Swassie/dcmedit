@@ -6,6 +6,7 @@
 #include <QPainter>
 
 Image_view::Image_view() {
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setMouseTracking(true);
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -35,8 +36,9 @@ void Image_view::show_error(const std::string& text) {
     painter.drawText(rect(), "Could not render image.\nReason: " + QString::fromStdString(text));
 }
 
-void Image_view::paintEvent(QPaintEvent*) {
+void Image_view::paintEvent(QPaintEvent* e) {
     draw_requested();
+    QFrame::paintEvent(e);
 }
 
 void Image_view::mouseMoveEvent(QMouseEvent* event) {

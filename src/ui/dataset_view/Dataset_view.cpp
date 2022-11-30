@@ -17,6 +17,7 @@ Dataset_view::Dataset_view()
     : m_proxy_model(new QSortFilterProxyModel(this)),
       m_tree_view(new QTreeView()),
       m_resized_to_content(false) {
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     m_proxy_model->setFilterKeyColumn(-1);
     m_proxy_model->setRecursiveFilteringEnabled(true);
     m_tree_view->setModel(m_proxy_model);
@@ -28,7 +29,6 @@ Dataset_view::Dataset_view()
     });
 
     auto layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
 
     auto header_layout = new QHBoxLayout();
     auto add_button = new QPushButton(QIcon(":/add.svg"), "");

@@ -1,9 +1,9 @@
 #pragma once
 #include "ui/image_view/IImage_view.h"
 
-#include <QWidget>
+#include <QFrame>
 
-class Image_view : public QWidget, public IImage_view
+class Image_view : public QFrame, public IImage_view
 {
     Q_OBJECT
 public:
