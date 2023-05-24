@@ -49,7 +49,7 @@ jobs:
           path: .\app-package
 
   Build-macos:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -91,7 +91,7 @@ jobs:
           path: ./app-package
 
   Build-linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
