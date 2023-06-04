@@ -10,6 +10,9 @@ Dashboard_view::Dashboard_view() {
     auto open_files_button = new QPushButton("Open files", this);
     connect(open_files_button, &QPushButton::clicked, [this] {open_files_clicked();});
 
+    auto open_folder_button = new QPushButton("Open folder", this);
+    connect(open_folder_button, &QPushButton::clicked, [this] {open_folder_clicked();});
+
     auto layout = new QGridLayout(this);
     QMargins margins = layout->contentsMargins();
     margins.setTop(30);
@@ -17,6 +20,7 @@ Dashboard_view::Dashboard_view() {
     layout->setContentsMargins(margins);
     layout->addWidget(new_file_button, 0, 0);
     layout->addWidget(open_files_button, 1, 0);
+    layout->addWidget(open_folder_button, 2, 0);
     layout->setColumnStretch(1, 1);
-    layout->setRowStretch(2, 1);
+    layout->setRowStretch(3, 1);
 }

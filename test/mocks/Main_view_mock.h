@@ -18,6 +18,7 @@ public:
     IMPLEMENT_MOCK0(show_about_dialog);
     IMPLEMENT_MOCK0(create_new_file_view);
     IMPLEMENT_MOCK0(create_open_files_view);
+    IMPLEMENT_MOCK1(create_open_folder_dialog);
     IMPLEMENT_MOCK0(create_edit_all_files_view);
     IMPLEMENT_MOCK0(get_split_view);
     IMPLEMENT_MOCK0(get_file_tree_view);

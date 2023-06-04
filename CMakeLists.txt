@@ -107,6 +107,8 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/open_files_dialog/Open_files_presenter.h
   src/ui/open_files_dialog/Open_files_view.cpp
   src/ui/open_files_dialog/Open_files_view.h
+  src/ui/open_folder_dialog/Open_folder_dialog.cpp
+  src/ui/open_folder_dialog/Open_folder_dialog.h
   src/ui/split_view/ISplit_view.h
   src/ui/split_view/Split_factory.cpp
   src/ui/split_view/Split_factory.h

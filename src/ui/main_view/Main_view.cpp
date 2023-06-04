@@ -29,6 +29,7 @@ Main_view::Main_view()
 
     m_dashboard_view->new_file_clicked.add_callback([this] {new_file_clicked();});
     m_dashboard_view->open_files_clicked.add_callback([this] {open_files_clicked();});
+    m_dashboard_view->open_folder_clicked.add_callback([this] {open_folder_clicked();});
 }
 
 void Main_view::show_dashboard_view() {
@@ -85,6 +86,10 @@ std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {
     return std::make_unique<Edit_all_files_view>(this);
 }
 
+std::unique_ptr<Open_folder_dialog> Main_view::create_open_folder_dialog(Dicom_files& dicom_files) {
+    return std::make_unique<Open_folder_dialog>(dicom_files, *this);
+}
+
 void Main_view::show_dashboard_menu_bar() {
     QMenuBar* menu_bar = menuBar();
     menu_bar->clear();
@@ -92,6 +97,7 @@ void Main_view::show_dashboard_menu_bar() {
     QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
+    file_menu->addAction("Open folder", [this] {open_folder_clicked();});
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
 
     QMenu* help_menu = menu_bar->addMenu("&Help");
@@ -105,6 +111,7 @@ void Main_view::show_editor_menu_bar() {
     QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
+    file_menu->addAction("Open folder", [this] {open_folder_clicked();});
     file_menu->addAction("Save file", [this] {save_file_clicked();}, QKeySequence::Save);
     file_menu->addAction("Save file as", [this] {save_file_as_clicked();}, QKeySequence::SaveAs);
     file_menu->addAction("Save all files", [this] {save_all_files_clicked();});

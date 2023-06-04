@@ -4,6 +4,7 @@
 #include "ui/file_tree_view/IFile_tree_view.h"
 #include "ui/new_file_dialog/INew_file_view.h"
 #include "ui/open_files_dialog/IOpen_files_view.h"
+#include "ui/open_folder_dialog/Open_folder_dialog.h"
 #include "ui/split_view/ISplit_view.h"
 
 #include <filesystem>
@@ -18,6 +19,7 @@ public:
 
     Event<> new_file_clicked;
     Event<> open_files_clicked;
+    Event<> open_folder_clicked;
     Event<> save_file_clicked;
     Event<> save_file_as_clicked;
     Event<> save_all_files_clicked;
@@ -44,6 +46,7 @@ public:
     virtual void show_about_dialog() = 0;
     virtual std::unique_ptr<INew_file_view> create_new_file_view() = 0;
     virtual std::unique_ptr<IOpen_files_view> create_open_files_view() = 0;
+    virtual std::unique_ptr<Open_folder_dialog> create_open_folder_dialog(Dicom_files&) = 0;
     virtual std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() = 0;
 
     virtual ISplit_view& get_split_view() = 0;

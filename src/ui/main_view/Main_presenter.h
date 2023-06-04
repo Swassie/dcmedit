@@ -20,8 +20,9 @@ private:
     void show_editor_view();
     void update_window_title();
 
-    void open_files();
     void new_file();
+    void open_files();
+    void open_folder();
     void save_file();
     void save_file_as();
     void save_file_as(const fs::path&);

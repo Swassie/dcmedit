@@ -2,6 +2,7 @@
 #include "ui/dashboard_view/Dashboard_view.h"
 #include "ui/file_tree_view/File_tree_view.h"
 #include "ui/main_view/IMain_view.h"
+#include "ui/open_folder_dialog/Open_folder_dialog.h"
 #include "ui/split_view/Split_view.h"
 
 #include <memory>
@@ -28,6 +29,7 @@ public:
     void show_about_dialog() override;
     std::unique_ptr<INew_file_view> create_new_file_view() override;
     std::unique_ptr<IOpen_files_view> create_open_files_view() override;
+    std::unique_ptr<Open_folder_dialog> create_open_folder_dialog(Dicom_files&) override;
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
 
     ISplit_view& get_split_view() override {return *m_split_view;}
