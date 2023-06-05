@@ -4,6 +4,7 @@ on: [push, workflow_dispatch]
 
 env:
   CMAKE_BUILD_TYPE: Release
+  DCMEDIT_RELEASE: true
 
 jobs:
   Build-windows:
