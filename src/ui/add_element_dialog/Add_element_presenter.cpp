@@ -12,7 +12,9 @@ Add_element_presenter::Add_element_presenter(IAdd_element_view& view,
     const QModelIndex& index)
     : m_view(view),
       m_dataset_model(dataset_model),
-      m_item_index(index) {}
+      m_item_index(index) {
+    setup_event_callbacks();
+}
 
 void Add_element_presenter::setup_event_callbacks() {
     m_view.ok_clicked.add_callback([this] {apply();});

@@ -9,7 +9,7 @@ public:
 
     void show_dialog();
 
-protected:
+private:
     IOpen_files_view& m_view;
     Dicom_files& m_dicom_files;
 };

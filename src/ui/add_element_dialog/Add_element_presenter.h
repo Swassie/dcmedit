@@ -7,11 +7,12 @@ class Add_element_presenter
 public:
     Add_element_presenter(IAdd_element_view&, Dataset_model&, const QModelIndex&);
 
-    void setup_event_callbacks();
     void show_dialog();
     void apply();
 
 private:
+    void setup_event_callbacks();
+
     IAdd_element_view& m_view;
     Dataset_model& m_dataset_model;
     const QModelIndex& m_item_index;

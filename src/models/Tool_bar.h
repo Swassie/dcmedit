@@ -13,6 +13,6 @@ public:
     Tool get_selected_tool() const {return m_selected_tool;}
     void set_selected_tool(Tool tool) {m_selected_tool = tool;}
 
-protected:
+private:
     Tool m_selected_tool;
 };

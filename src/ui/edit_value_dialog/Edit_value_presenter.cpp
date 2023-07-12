@@ -11,7 +11,9 @@ Edit_value_presenter::Edit_value_presenter(IEdit_value_view& view,
     const QModelIndex& index)
     : m_view(view),
       m_dataset_model(dataset_model),
-      m_index(index) {}
+      m_index(index) {
+    setup_event_callbacks();
+}
 
 void Edit_value_presenter::setup_event_callbacks() {
     m_view.ok_clicked.add_callback([this] {apply();});

@@ -4,6 +4,7 @@ File_tree_presenter::File_tree_presenter(IFile_tree_view& view, File_tree_model&
     : m_view(view),
       m_model(model) {
     m_view.set_model(m_model);
+    setup_event_callbacks();
 }
 
 void File_tree_presenter::setup_event_callbacks() {

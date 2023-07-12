@@ -7,12 +7,13 @@ class Edit_all_files_presenter
 public:
     Edit_all_files_presenter(IEdit_all_files_view&, Dicom_files&);
 
-    void setup_event_callbacks();
     void show_dialog();
     void apply();
     void on_mode_changed();
 
 private:
+    void setup_event_callbacks();
+
     IEdit_all_files_view& m_view;
     Dicom_files& m_files;
 };

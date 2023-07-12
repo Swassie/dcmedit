@@ -7,7 +7,9 @@
 
 Edit_all_files_presenter::Edit_all_files_presenter(IEdit_all_files_view& view, Dicom_files& files)
     : m_view(view),
-      m_files(files) {}
+      m_files(files) {
+    setup_event_callbacks();
+}
 
 void Edit_all_files_presenter::setup_event_callbacks() {
     m_view.ok_clicked.add_callback([this] {apply();});
@@ -53,7 +55,7 @@ void Edit_all_files_presenter::apply() {
         }
         file->set_unsaved_changes(true);
     }
-    m_files.current_file_set(); // Trigger an update.
+    m_files.all_files_edited();
 
     if(file_errors.empty()) {
         m_view.close_dialog();

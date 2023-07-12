@@ -6,7 +6,7 @@ class Scoped_disable
 {
 public:
     Scoped_disable(IEvent&);
-    ~Scoped_disable(); // if m_inactive == true, nothing. Else, enable event.
+    ~Scoped_disable();
 
 private:
     IEvent& m_event;

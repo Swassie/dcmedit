@@ -13,9 +13,8 @@ class Image_presenter : public IPresenter
 public:
     Image_presenter(IImage_view&, Dataset_model&, Tool_bar&);
 
+private:
     void setup_event_callbacks();
-
-protected:
     void update();
     void draw();
     void on_mouse_move(QMouseEvent*);

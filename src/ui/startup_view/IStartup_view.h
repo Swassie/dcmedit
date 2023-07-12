@@ -1,10 +1,10 @@
 #pragma once
 #include "common/Event.h"
 
-class IDashboard_view
+class IStartup_view
 {
 public:
-    virtual ~IDashboard_view() = default;
+    virtual ~IStartup_view() = default;
 
     Event<> new_file_clicked;
     Event<> open_files_clicked;

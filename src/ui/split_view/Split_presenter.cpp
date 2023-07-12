@@ -1,12 +1,15 @@
 #include "ui/split_view/Split_presenter.h"
 
+#include "ui/dataset_view/Dataset_presenter.h"
+#include "ui/image_view/Image_presenter.h"
 #include "ui/split_view/ISplit_view.h"
 
 #include <cassert>
 
-Split_presenter::Split_presenter(ISplit_view& view, Split_factory& split_factory)
+Split_presenter::Split_presenter(ISplit_view& view, Dataset_model& dataset_model, Tool_bar& tool_bar)
     : m_view(view),
-      m_split_factory(split_factory) {}
+      m_dataset_model(dataset_model),
+      m_tool_bar(tool_bar) {}
 
 void Split_presenter::set_view_count(const size_t count) {
     assert(count >= 1 && count <= 4);
@@ -16,8 +19,7 @@ void Split_presenter::set_view_count(const size_t count) {
     }
     if(count > current_count) {
         for(size_t i = 0; i < count - current_count; ++i) {
-            View_presenter vp = m_split_factory.make_default_view();
-            setup_event_callbacks(*vp.view, *vp.presenter);
+            Vp_pair vp = make_default_view();
             m_view.add_view(std::move(vp.view));
             m_presenters.push_back(std::move(vp.presenter));
         }
@@ -34,10 +36,8 @@ void Split_presenter::set_view_count(const size_t count) {
 void Split_presenter::set_default_layout() {
     m_presenters.clear();
     m_view.remove_all_views();
-    std::vector<View_presenter> vp_pairs = m_split_factory.make_default_layout();
 
-    for(View_presenter& vp : vp_pairs) {
-        setup_event_callbacks(*vp.view, *vp.presenter);
+    for(Vp_pair& vp : make_default_layout()) {
         m_view.add_view(std::move(vp.view));
         m_presenters.push_back(std::move(vp.presenter));
     }
@@ -50,23 +50,45 @@ void Split_presenter::setup_event_callbacks(IView& view, IPresenter& presenter) 
 }
 
 void Split_presenter::switch_to_dataset_view(IPresenter& target) {
-    View_presenter vp = m_split_factory.make_dataset_view();
-    replace_view(target, std::move(vp));
+    replace_view(target, make_dataset_view());
 }
 
 void Split_presenter::switch_to_image_view(IPresenter& target) {
-    View_presenter vp = m_split_factory.make_image_view();
-    replace_view(target, std::move(vp));
+    replace_view(target, make_image_view());
 }
 
-void Split_presenter::replace_view(IPresenter& target, View_presenter vp) {
+void Split_presenter::replace_view(IPresenter& target, Vp_pair vp) {
     for(size_t i = 0; i < m_presenters.size(); i++) {
         if(m_presenters[i].get() == &target) {
-            setup_event_callbacks(*vp.view, *vp.presenter);
             m_view.replace_view(i, std::move(vp.view));
             m_presenters[i] = std::move(vp.presenter);
             return;
         }
     }
     Log::error("Presenter not found");
+}
+
+Vp_pair Split_presenter::make_image_view() {
+    std::unique_ptr<IImage_view> view = m_view.make_image_view();
+    auto presenter = std::make_unique<Image_presenter>(*view, m_dataset_model, m_tool_bar);
+    setup_event_callbacks(*view, *presenter);
+    return {std::move(view), std::move(presenter)};
+}
+
+Vp_pair Split_presenter::make_dataset_view() {
+    std::unique_ptr<IDataset_view> view = m_view.make_dataset_view();
+    auto presenter = std::make_unique<Dataset_presenter>(*view, m_dataset_model);
+    setup_event_callbacks(*view, *presenter);
+    return {std::move(view), std::move(presenter)};
+}
+
+Vp_pair Split_presenter::make_default_view() {
+    return make_image_view();
+}
+
+std::vector<Vp_pair> Split_presenter::make_default_layout() {
+    std::vector<Vp_pair> layout;
+    layout.push_back(make_dataset_view());
+    layout.push_back(make_image_view());
+    return layout;
 }

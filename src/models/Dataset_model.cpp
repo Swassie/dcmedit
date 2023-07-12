@@ -64,10 +64,13 @@ static QVariant get_element_data(DcmElement& element, int column) {
 }
 
 Dataset_model::Dataset_model(Dicom_files& files)
-    : m_files(files) {}
+    : m_files(files) {
+    setup_event_callbacks();
+}
 
 void Dataset_model::setup_event_callbacks() {
     m_files.current_file_set.add_callback([this] {reset_model();});
+    m_files.all_files_edited.add_callback([this] {reset_model();});
 }
 
 DcmItem* Dataset_model::get_dataset() const {

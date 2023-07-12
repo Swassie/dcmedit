@@ -11,9 +11,8 @@ public:
 
     Event<Dicom_file*> file_activated;
 
-    void setup_event_callbacks();
-
 private:
+    void setup_event_callbacks();
     void item_activated(const QModelIndex&);
 
     IFile_tree_view& m_view;

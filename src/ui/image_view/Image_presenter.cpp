@@ -16,7 +16,9 @@ Image_presenter::Image_presenter(IImage_view& view,
     Tool_bar& tool_bar)
     : m_view(view),
       m_dataset_model(dataset_model),
-      m_tool_bar(tool_bar) {}
+      m_tool_bar(tool_bar) {
+    setup_event_callbacks();
+}
 
 void Image_presenter::setup_event_callbacks() {
     Callback_ref callback = m_dataset_model.dataset_changed.add_callback([this] {update();});

@@ -11,8 +11,6 @@ find_package(DCMTK CONFIG REQUIRED)
 
 add_executable(dcmedit WIN32 MACOSX_BUNDLE
   assets/assets.qrc
-  src/Dcmedit.cpp
-  src/Dcmedit.h
   src/common/App_info.cpp
   src/common/App_info.h
   src/common/Callback_ref.cpp
@@ -53,9 +51,6 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/Gui_util.h
   src/ui/IPresenter.h
   src/ui/IView.h
-  src/ui/IView_factory.h
-  src/ui/View_factory.cpp
-  src/ui/View_factory.h
   src/ui/about_dialog/About_view.cpp
   src/ui/about_dialog/About_view.h
   src/ui/about_dialog/IAbout_view.h
@@ -64,9 +59,9 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/add_element_dialog/Add_element_view.cpp
   src/ui/add_element_dialog/Add_element_view.h
   src/ui/add_element_dialog/IAdd_element_view.h
-  src/ui/dashboard_view/Dashboard_view.cpp
-  src/ui/dashboard_view/Dashboard_view.h
-  src/ui/dashboard_view/IDashboard_view.h
+  src/ui/startup_view/Startup_view.cpp
+  src/ui/startup_view/Startup_view.h
+  src/ui/startup_view/IStartup_view.h
   src/ui/dataset_view/Dataset_presenter.cpp
   src/ui/dataset_view/Dataset_presenter.h
   src/ui/dataset_view/Dataset_view.cpp
@@ -107,11 +102,12 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/open_files_dialog/Open_files_presenter.h
   src/ui/open_files_dialog/Open_files_view.cpp
   src/ui/open_files_dialog/Open_files_view.h
-  src/ui/open_folder_dialog/Open_folder_dialog.cpp
-  src/ui/open_folder_dialog/Open_folder_dialog.h
+  src/ui/open_folder_dialog/IOpen_folder_view.h
+  src/ui/open_folder_dialog/Open_folder_presenter.cpp
+  src/ui/open_folder_dialog/Open_folder_presenter.h
+  src/ui/open_folder_dialog/Open_folder_view.cpp
+  src/ui/open_folder_dialog/Open_folder_view.h
   src/ui/split_view/ISplit_view.h
-  src/ui/split_view/Split_factory.cpp
-  src/ui/split_view/Split_factory.h
   src/ui/split_view/Split_presenter.cpp
   src/ui/split_view/Split_presenter.h
   src/ui/split_view/Split_view.cpp

@@ -12,8 +12,6 @@ public:
 
     Event<> dataset_changed;
 
-    void setup_event_callbacks();
-
     DcmItem* get_dataset() const;
     DcmObject* get_object(const QModelIndex&) const;
     DcmEVR get_vr(const QModelIndex&) const;
@@ -32,6 +30,8 @@ public:
     QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
 
 private:
+    void setup_event_callbacks();
+
     void reset_model();
     void mark_as_modified();
 

@@ -12,6 +12,8 @@ public:
     IMPLEMENT_MOCK0(remove_all_views);
     IMPLEMENT_MOCK2(replace_view);
     IMPLEMENT_MOCK0(set_views);
+    IMPLEMENT_MOCK0(make_image_view);
+    IMPLEMENT_MOCK0(make_dataset_view);
 
     std::vector<std::unique_ptr<IView>> m_views;
 };

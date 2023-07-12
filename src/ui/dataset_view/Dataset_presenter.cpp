@@ -15,6 +15,7 @@ Dataset_presenter::Dataset_presenter(IDataset_view& view, Dataset_model& dataset
     : m_view(view),
       m_dataset_model(dataset_model) {
     m_view.set_model(m_dataset_model);
+    setup_event_callbacks();
 }
 
 void Dataset_presenter::setup_event_callbacks() {
@@ -33,7 +34,6 @@ void Dataset_presenter::setup_event_callbacks() {
 void Dataset_presenter::add_element(const QModelIndex& index) {
     std::unique_ptr<IAdd_element_view> view = m_view.create_add_element_view();
     Add_element_presenter presenter(*view, m_dataset_model, index);
-    presenter.setup_event_callbacks();
     presenter.show_dialog();
 }
 
@@ -60,7 +60,6 @@ void Dataset_presenter::delete_index(const QModelIndex& index) {
 void Dataset_presenter::edit_value(const QModelIndex& index) {
     std::unique_ptr<IEdit_value_view> view = m_view.create_edit_value_view();
     Edit_value_presenter presenter(*view, m_dataset_model, index);
-    presenter.setup_event_callbacks();
     presenter.show_dialog();
 }
 

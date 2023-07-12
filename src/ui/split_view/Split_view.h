@@ -12,9 +12,10 @@ public:
     void remove_all_views() override;
     void replace_view(size_t index, std::unique_ptr<IView>) override;
     void set_views() override;
+    std::unique_ptr<IImage_view> make_image_view() override;
+    std::unique_ptr<IDataset_view> make_dataset_view() override;
 
-protected:
-    std::unique_ptr<QWidget> cast_to_widget(std::unique_ptr<IView>);
+private:
     void show_1_view();
     void show_2_views();
     void show_3_views();

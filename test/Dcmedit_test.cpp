@@ -1,4 +1,4 @@
-#include "Dcmedit.h"
+#include "ui/main_view/Main_presenter.h"
 #include "mocks/Add_element_view_mock.h"
 #include "mocks/Dataset_view_mock.h"
 #include "mocks/File_tree_view_mock.h"
@@ -6,7 +6,6 @@
 #include "mocks/Main_view_mock.h"
 #include "mocks/Open_files_view_mock.h"
 #include "mocks/Split_view_mock.h"
-#include "mocks/View_factory_mock.h"
 #include "test_constants.h"
 
 #include <catch2/catch.hpp>
@@ -32,11 +31,9 @@ public:
         auto create_image_view_mock = [] {
             return std::make_unique<Image_view_mock>();
         };
-        REQUIRE_CALL(m_view_factory_mock, get_main_view())
-            .LR_RETURN(m_main_view_mock);
-        REQUIRE_CALL(m_view_factory_mock, make_dataset_view())
+        REQUIRE_CALL(m_split_view_mock, make_dataset_view())
             .RETURN(create_dataset_view_mock());
-        REQUIRE_CALL(m_view_factory_mock, make_image_view())
+        REQUIRE_CALL(m_split_view_mock, make_image_view())
             .RETURN(create_image_view_mock());
 
         REQUIRE_CALL(m_main_view_mock, get_split_view())
@@ -45,8 +42,7 @@ public:
             .LR_RETURN(m_file_tree_view_mock);
         REQUIRE_CALL(m_main_view_mock, set_window_modified(false));
         REQUIRE_CALL(m_main_view_mock, set_window_title("dcmedit"));
-        REQUIRE_CALL(m_main_view_mock, show_dashboard_view());
-        REQUIRE_CALL(m_main_view_mock, show());
+        REQUIRE_CALL(m_main_view_mock, set_startup_view());
 
         REQUIRE_CALL(m_file_tree_view_mock, set_model(_));
 
@@ -57,7 +53,7 @@ public:
             .TIMES(2);
         REQUIRE_CALL(m_split_view_mock, set_views());
 
-        m_dcmedit = std::make_unique<Dcmedit>(m_view_factory_mock);
+        m_main_presenter = std::make_unique<Main_presenter>(m_main_view_mock);
     }
 
     void open_file(const fs::path& path, bool require_show_editor_view) {
@@ -78,7 +74,7 @@ public:
         }
 
         int show_editor_view_count = 0;
-        ALLOW_CALL(m_main_view_mock, show_editor_view())
+        ALLOW_CALL(m_main_view_mock, set_editor_view())
             .LR_SIDE_EFFECT(show_editor_view_count++);
 
         m_main_view_mock.open_files_clicked();
@@ -96,11 +92,10 @@ public:
         return mocks;
     }
 
-    View_factory_mock m_view_factory_mock;
     Main_view_mock m_main_view_mock;
     Split_view_mock m_split_view_mock;
     File_tree_view_mock m_file_tree_view_mock;
-    std::unique_ptr<Dcmedit> m_dcmedit;
+    std::unique_ptr<Main_presenter> m_main_presenter;
 };
 
 TEST_CASE_METHOD(Dcmedit_test_fixture, "Opening a file shows the editor view") {
@@ -143,11 +138,11 @@ TEST_CASE_METHOD(Dcmedit_test_fixture, "Update() is called on image view when th
     dataset_view_mock->add_element_clicked(QModelIndex());
 }
 
-TEST_CASE_METHOD(Dcmedit_test_fixture, "Clearing all files shows the dashboard view") {
+TEST_CASE_METHOD(Dcmedit_test_fixture, "Clearing all files shows the startup view") {
     open_file(data_path / "one-tag.dcm", true);
     REQUIRE_CALL(m_main_view_mock, set_window_modified(false));
     REQUIRE_CALL(m_main_view_mock, set_window_title("dcmedit"));
-    REQUIRE_CALL(m_main_view_mock, show_dashboard_view());
+    REQUIRE_CALL(m_main_view_mock, set_startup_view());
     Named_expectations expectations;
     for(Image_view_mock* mock : get_image_view_mocks()) {
         expectations.push_back(NAMED_REQUIRE_CALL(*mock, update()));

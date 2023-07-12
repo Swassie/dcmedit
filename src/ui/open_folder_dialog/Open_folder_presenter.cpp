@@ -1,18 +1,22 @@
-#include "ui/open_folder_dialog/Open_folder_dialog.h"
+#include "ui/open_folder_dialog/Open_folder_presenter.h"
 
 #include "common/Scoped_defer.h"
 #include "logging/Log.h"
+#include "models/Dicom_files.h"
+#include "ui/open_folder_dialog/IOpen_folder_view.h"
 
-#include <QFileDialog>
+#include <exception>
 #include <filesystem>
-#include <system_error>
+#include <string>
 
-Open_folder_dialog::Open_folder_dialog(Dicom_files& dicom_files, QWidget& parent)
-    : m_dicom_files(dicom_files),
-      m_parent(parent) {}
+namespace fs = std::filesystem;
 
-void Open_folder_dialog::show() {
-    const fs::path dir = show_dir_dialog();
+Open_folder_presenter::Open_folder_presenter(IOpen_folder_view& view, Dicom_files& dicom_files)
+    : m_view(view),
+      m_dicom_files(dicom_files) {}
+
+void Open_folder_presenter::show_dialog() {
+    const fs::path dir = m_view.show_dir_dialog();
 
     if (dir.empty()) {
         return;
@@ -30,8 +34,4 @@ void Open_folder_dialog::show() {
                 "\nReason: " + std::string(e.what()));
         }
     }
-}
-
-fs::path Open_folder_dialog::show_dir_dialog() {
-    return QFileDialog::getExistingDirectory(&m_parent, "Open folder").toStdString();
 }

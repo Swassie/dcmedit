@@ -4,6 +4,7 @@
 #include "ui/edit_all_files_dialog/Edit_all_files_view.h"
 #include "ui/new_file_dialog/New_file_view.h"
 #include "ui/open_files_dialog/Open_files_view.h"
+#include "ui/open_folder_dialog/Open_folder_view.h"
 
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -14,7 +15,7 @@
 #include <QToolBar>
 
 Main_view::Main_view()
-    : m_dashboard_view(new Dashboard_view()),
+    : m_startup_view(new Startup_view()),
       m_split_view(new Split_view()),
       m_file_tree_view(new File_tree_view()),
       m_stacked_widget(new QStackedWidget(this)),
@@ -24,23 +25,23 @@ Main_view::Main_view()
     addDockWidget(Qt::LeftDockWidgetArea, m_file_tree_view);
     addToolBar(m_tool_bar);
 
-    m_stacked_widget->addWidget(m_dashboard_view);
+    m_stacked_widget->addWidget(m_startup_view);
     m_stacked_widget->addWidget(m_split_view);
 
-    m_dashboard_view->new_file_clicked.add_callback([this] {new_file_clicked();});
-    m_dashboard_view->open_files_clicked.add_callback([this] {open_files_clicked();});
-    m_dashboard_view->open_folder_clicked.add_callback([this] {open_folder_clicked();});
+    m_startup_view->new_file_clicked.add_callback([this] {new_file_clicked();});
+    m_startup_view->open_files_clicked.add_callback([this] {open_files_clicked();});
+    m_startup_view->open_folder_clicked.add_callback([this] {open_folder_clicked();});
 }
 
-void Main_view::show_dashboard_view() {
-    show_dashboard_menu_bar();
+void Main_view::set_startup_view() {
+    set_startup_menu_bar();
     m_file_tree_view->hide();
     m_tool_bar->hide();
-    m_stacked_widget->setCurrentWidget(m_dashboard_view);
+    m_stacked_widget->setCurrentWidget(m_startup_view);
 }
 
-void Main_view::show_editor_view() {
-    show_editor_menu_bar();
+void Main_view::set_editor_view() {
+    set_editor_menu_bar();
     m_file_tree_view->show();
     m_tool_bar->show();
     m_stacked_widget->setCurrentWidget(m_split_view);
@@ -86,11 +87,11 @@ std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {
     return std::make_unique<Edit_all_files_view>(this);
 }
 
-std::unique_ptr<Open_folder_dialog> Main_view::create_open_folder_dialog(Dicom_files& dicom_files) {
-    return std::make_unique<Open_folder_dialog>(dicom_files, *this);
+std::unique_ptr<IOpen_folder_view> Main_view::create_open_folder_view() {
+    return std::make_unique<Open_folder_view>(this);
 }
 
-void Main_view::show_dashboard_menu_bar() {
+void Main_view::set_startup_menu_bar() {
     QMenuBar* menu_bar = menuBar();
     menu_bar->clear();
 
@@ -104,7 +105,7 @@ void Main_view::show_dashboard_menu_bar() {
     help_menu->addAction("About", [this] {about_clicked();});
 }
 
-void Main_view::show_editor_menu_bar() {
+void Main_view::set_editor_menu_bar() {
     QMenuBar* menu_bar = menuBar();
     menu_bar->clear();
 

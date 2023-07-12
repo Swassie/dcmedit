@@ -1,9 +1,9 @@
-#include "ui/dashboard_view/Dashboard_view.h"
+#include "ui/startup_view/Startup_view.h"
 
 #include <QGridLayout>
 #include <QPushButton>
 
-Dashboard_view::Dashboard_view() {
+Startup_view::Startup_view() {
     auto new_file_button = new QPushButton("New file", this);
     connect(new_file_button, &QPushButton::clicked, [this] {new_file_clicked();});
 
