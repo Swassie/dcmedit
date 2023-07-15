@@ -35,7 +35,7 @@ dcmedit is a DICOM editor for Windows, Linux and macOS.<br>
 <br>
 Version: $VERSION<br>
 <br>
-Copyright 2020-2022 Marcus Swanson<br>
+Copyright 2020-2023 Marcus Swanson<br>
 <br>
 This program is free software: you can redistribute it and/or modify<br>
 it under the terms of the GNU General Public License as published by<br>
