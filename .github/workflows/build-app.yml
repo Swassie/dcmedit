@@ -6,6 +6,10 @@ env:
   CMAKE_BUILD_TYPE: Release
   DCMEDIT_RELEASE: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   Build-windows:
     runs-on: windows-2019
@@ -30,18 +34,18 @@ jobs:
           cache: true
 
       - name: Configure
-        run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
+        run: cmake -B build-output -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake .
 
       - name: Build
         run: |
           cmake --build build-output --config ${{ env.CMAKE_BUILD_TYPE }}
-          "DCMEDIT_VERSION=$(python3 .\scripts\get_version.py)" >> $env:GITHUB_ENV
+          echo "DCMEDIT_VERSION=$(python3 ./scripts/get_version.py)" >> $GITHUB_ENV
 
       - name: Test
-        run: .\build-output\test\${{ env.CMAKE_BUILD_TYPE }}\unit-test.exe
+        run: ./build-output/test/${{ env.CMAKE_BUILD_TYPE }}/unit-test.exe
 
       - name: Package application
-        run: python3 .\scripts\package_windows.py .\build-output\${{ env.CMAKE_BUILD_TYPE }}\dcmedit.exe .\app-package\
+        run: python3 ./scripts/package_windows.py ./build-output/${{ env.CMAKE_BUILD_TYPE }}/dcmedit.exe ./app-package/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
