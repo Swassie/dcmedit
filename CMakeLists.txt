@@ -107,6 +107,11 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/ui/open_folder_dialog/Open_folder_presenter.h
   src/ui/open_folder_dialog/Open_folder_view.cpp
   src/ui/open_folder_dialog/Open_folder_view.h
+  src/ui/progressbar/IProgress_view.h
+  src/ui/progressbar/Progress_presenter.cpp
+  src/ui/progressbar/Progress_presenter.h
+  src/ui/progressbar/Progress_view.cpp
+  src/ui/progressbar/Progress_view.h
   src/ui/split_view/ISplit_view.h
   src/ui/split_view/Split_presenter.cpp
   src/ui/split_view/Split_presenter.h

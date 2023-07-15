@@ -5,6 +5,7 @@
 #include "ui/new_file_dialog/New_file_view.h"
 #include "ui/open_files_dialog/Open_files_view.h"
 #include "ui/open_folder_dialog/Open_folder_view.h"
+#include "ui/progressbar/Progress_view.h"
 
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -48,15 +49,19 @@ void Main_view::set_editor_view() {
 }
 
 void Main_view::set_window_modified(bool modified) {
-    setWindowModified(modified);
+    QMetaObject::invokeMethod(this, [this, modified] {setWindowModified(modified);});
 }
 
 void Main_view::set_window_title(const std::string& title) {
-    setWindowTitle(QString::fromStdString(title));
+    QMetaObject::invokeMethod(this, [this, title] {
+        setWindowTitle(QString::fromStdString(title));
+    });
 }
 
 void Main_view::show_error(const std::string& title, const std::string& text) {
-    QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
+    QMetaObject::invokeMethod(this, [this, title, text] {
+        QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
+    });
 }
 
 fs::path Main_view::show_save_file_dialog() {
@@ -89,6 +94,10 @@ std::unique_ptr<IEdit_all_files_view> Main_view::create_edit_all_files_view() {
 
 std::unique_ptr<IOpen_folder_view> Main_view::create_open_folder_view() {
     return std::make_unique<Open_folder_view>(this);
+}
+
+std::unique_ptr<IProgress_view> Main_view::create_progress_view() {
+    return std::make_unique<Progress_view>(this);
 }
 
 void Main_view::set_startup_menu_bar() {

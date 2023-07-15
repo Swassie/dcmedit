@@ -1,5 +1,6 @@
 #include "common/Exceptions.h"
 #include "models/Dicom_files.h"
+#include "mocks/Progress_token_stub.h"
 #include "test_constants.h"
 #include "test_utils/Check_event.h"
 #include "test_utils/Temp_dir.h"
@@ -141,7 +142,8 @@ TEST_CASE("Save all files. Event is triggered and all files are saved.") {
     files.create_new_file(path_2);
     files.get_current_file()->set_unsaved_changes(true);
     Check_event check_event(files.file_saved);
-    files.save_all_files();
+    Progress_token_stub progress_stub;
+    files.save_all_files(progress_stub);
 
     CHECK(!files.has_unsaved_changes());
 }

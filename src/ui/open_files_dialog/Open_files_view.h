@@ -10,6 +10,7 @@ public:
 
     std::vector<fs::path> show_file_dialog() override;
     void show_error(const std::vector<std::string>&) override;
+    std::unique_ptr<IProgress_view> create_progress_view() override;
 
 private:
     QWidget* m_parent;

@@ -5,6 +5,7 @@
 #include "ui/new_file_dialog/INew_file_view.h"
 #include "ui/open_files_dialog/IOpen_files_view.h"
 #include "ui/open_folder_dialog/IOpen_folder_view.h"
+#include "ui/progressbar/IProgress_view.h"
 #include "ui/split_view/ISplit_view.h"
 
 #include <filesystem>
@@ -47,6 +48,7 @@ public:
     virtual std::unique_ptr<IOpen_files_view> create_open_files_view() = 0;
     virtual std::unique_ptr<IOpen_folder_view> create_open_folder_view() = 0;
     virtual std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() = 0;
+    virtual std::unique_ptr<IProgress_view> create_progress_view() = 0;
 
     virtual ISplit_view& get_split_view() = 0;
     virtual IFile_tree_view& get_file_tree_view() = 0;

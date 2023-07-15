@@ -5,6 +5,7 @@
 #include "mocks/Image_view_mock.h"
 #include "mocks/Main_view_mock.h"
 #include "mocks/Open_files_view_mock.h"
+#include "mocks/Progress_view_mock.h"
 #include "mocks/Split_view_mock.h"
 #include "test_constants.h"
 
@@ -57,10 +58,23 @@ public:
     }
 
     void open_file(const fs::path& path, bool require_show_editor_view) {
-        auto create_open_files_view_mock = [&path] {
+        auto create_progress_view_mock = [] {
+            auto view_mock = std::make_unique<Progress_view_mock>();
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, set_max(_))
+                .TIMES(2));
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, set_value(_))
+                .TIMES(2));
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, set_text("Opening files")));
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, show()));
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, close()));
+            return view_mock;
+        };
+        auto create_open_files_view_mock = [path, create_progress_view_mock] {
             auto view_mock = std::make_unique<Open_files_view_mock>();
             view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, show_file_dialog())
                 .RETURN(std::vector<fs::path>{path}));
+            view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, create_progress_view())
+                .RETURN(create_progress_view_mock()));
             return view_mock;
         };
         REQUIRE_CALL(m_main_view_mock, create_open_files_view())

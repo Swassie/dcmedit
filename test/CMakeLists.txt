@@ -71,6 +71,8 @@ add_executable(unit-test
   ../src/ui/open_files_dialog/Open_files_presenter.h
   ../src/ui/open_folder_dialog/Open_folder_presenter.cpp
   ../src/ui/open_folder_dialog/Open_folder_presenter.h
+  ../src/ui/progressbar/Progress_presenter.cpp
+  ../src/ui/progressbar/Progress_presenter.h
   ../src/ui/split_view/ISplit_view.h
   ../src/ui/split_view/Split_presenter.cpp
   ../src/ui/split_view/Split_presenter.h

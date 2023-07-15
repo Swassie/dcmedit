@@ -1,5 +1,6 @@
 #pragma once
 #include "common/Event.h"
+#include "common/Progress_token.h"
 #include "Dicom_file.h"
 
 #include <filesystem>
@@ -24,7 +25,7 @@ public:
     void clear_all_files();
 
     void save_current_file_as(const fs::path&);
-    bool save_all_files();
+    bool save_all_files(Progress_token&);
 
     Dicom_file* get_current_file() {return m_current_file;}
     void set_current_file(Dicom_file*);

@@ -9,6 +9,7 @@ public:
     Open_folder_view(QWidget*);
 
     fs::path show_dir_dialog() override;
+    std::unique_ptr<IProgress_view> create_progress_view() override;
 
 private:
     QWidget* m_parent;

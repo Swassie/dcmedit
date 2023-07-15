@@ -58,16 +58,21 @@ void Dicom_files::save_current_file_as(const fs::path& new_path) {
     file_saved();
 }
 
-bool Dicom_files::save_all_files() {
+bool Dicom_files::save_all_files(Progress_token& progress_token) {
     bool ok = true;
+    progress_token.set_max_progress(static_cast<int>(m_files.size()));
 
     for(auto& file : m_files) {
+        if(progress_token.cancelled()) {
+            break;
+        }
         try {
             file->save_file();
         }
         catch(const std::exception&) {
             ok = false;
         }
+        progress_token.increment_progress();
     }
     file_saved();
     return ok;

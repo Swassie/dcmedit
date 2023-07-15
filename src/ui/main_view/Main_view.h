@@ -29,6 +29,7 @@ public:
     std::unique_ptr<IOpen_files_view> create_open_files_view() override;
     std::unique_ptr<IOpen_folder_view> create_open_folder_view() override;
     std::unique_ptr<IEdit_all_files_view> create_edit_all_files_view() override;
+    std::unique_ptr<IProgress_view> create_progress_view() override;
 
     ISplit_view& get_split_view() override {return *m_split_view;}
     IFile_tree_view& get_file_tree_view() override {return *m_file_tree_view;}

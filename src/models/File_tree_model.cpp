@@ -53,9 +53,11 @@ void File_tree_model::setup_event_callbacks() {
 }
 
 void File_tree_model::update_model() {
-    add_items();
-    prune_items();
-    Log::debug("File tree model updated");
+    QMetaObject::invokeMethod(this, [this] {
+        add_items();
+        prune_items();
+        Log::debug("File tree model updated");
+    });
 }
 
 void File_tree_model::add_items() {

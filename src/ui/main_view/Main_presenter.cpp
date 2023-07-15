@@ -10,6 +10,7 @@
 #include "ui/open_files_dialog/IOpen_files_view.h"
 #include "ui/open_files_dialog/Open_files_presenter.h"
 #include "ui/open_folder_dialog/Open_folder_presenter.h"
+#include "ui/progressbar/Progress_presenter.h"
 
 #include <QCoreApplication>
 #include <memory>
@@ -112,11 +113,17 @@ void Main_presenter::save_file_as(const fs::path& path) {
 }
 
 void Main_presenter::save_all_files() {
-    bool ok = m_files.save_all_files();
+    std::unique_ptr<IProgress_view> progress_view = m_view.create_progress_view();
+    Progress_presenter progress_presenter(*progress_view, "Saving all files");
+    auto thread_func = [&] {
+        bool ok = m_files.save_all_files(progress_presenter);
 
-    if(!ok) {
-        m_view.show_error("Error", "At least one file failed to save.");
-    }
+        if(!ok) {
+            m_view.show_error("Error", "At least one file failed to save.");
+        }
+        progress_presenter.close();
+    };
+    progress_presenter.execute(thread_func);
 }
 
 void Main_presenter::clear_all_files() {

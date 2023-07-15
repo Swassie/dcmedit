@@ -4,6 +4,7 @@
 #include "logging/Log.h"
 #include "models/Dicom_files.h"
 #include "ui/open_folder_dialog/IOpen_folder_view.h"
+#include "ui/progressbar/Progress_presenter.h"
 
 #include <exception>
 #include <filesystem>
@@ -22,16 +23,25 @@ void Open_folder_presenter::show_dialog() {
         return;
     }
     Scoped_defer defer(m_dicom_files.current_file_set);
-
-    for(const fs::directory_entry& entry : fs::recursive_directory_iterator(dir)) {
-        try {
-            if(entry.is_regular_file()) {
-                m_dicom_files.open_file(entry);
+    std::unique_ptr<IProgress_view> progress_view = m_view.create_progress_view();
+    Progress_presenter progress_presenter(*progress_view, "Opening folder");
+    auto thread_func = [&] {
+        const auto options = fs::directory_options::skip_permission_denied;
+        for(const fs::directory_entry& entry : fs::recursive_directory_iterator(dir, options)) {
+            if(progress_presenter.cancelled()) {
+                break;
+            }
+            try {
+                if(entry.is_regular_file()) {
+                    m_dicom_files.open_file(entry);
+                }
+            }
+            catch(const std::exception& e) {
+                Log::error("Failed to open file: " + entry.path().string() +
+                    "\nReason: " + std::string(e.what()));
             }
         }
-        catch(const std::exception& e) {
-            Log::error("Failed to open file: " + entry.path().string() +
-                "\nReason: " + std::string(e.what()));
-        }
-    }
+        progress_presenter.close();
+    };
+    progress_presenter.execute(thread_func);
 }

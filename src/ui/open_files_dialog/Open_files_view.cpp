@@ -1,5 +1,7 @@
 #include "ui/open_files_dialog/Open_files_view.h"
 
+#include "ui/progressbar/Progress_view.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -26,4 +28,8 @@ void Open_files_view::show_error(const std::vector<std::string>& file_errors) {
     }
     dialog.setDetailedText(details);
     dialog.exec();
+}
+
+std::unique_ptr<IProgress_view> Open_files_view::create_progress_view() {
+    return std::make_unique<Progress_view>(m_parent);
 }
