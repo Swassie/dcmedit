@@ -14,10 +14,11 @@ static QStandardItem* find_or_create_item(QStandardItem* parent, const QString& 
 
         if(id == child->data().value<T>()) {
             item = child;
+            item->setText(text);
             break;
         }
     }
-    if(!item) {
+    if(item == nullptr) {
         item = new QStandardItem(text);
         item->setData(QVariant::fromValue(id));
         parent->appendRow(item);
@@ -25,21 +26,33 @@ static QStandardItem* find_or_create_item(QStandardItem* parent, const QString& 
     return item;
 }
 
-static const char* get_patient_text(DcmDataset& dataset) {
+static QString get_patient_text(DcmDataset& dataset) {
     const char* text = nullptr;
-    dataset.findAndGetString(DCM_PatientID, text);
+    dataset.findAndGetString(DCM_PatientName, text);
+
+    if(text == nullptr) {
+        dataset.findAndGetString(DCM_PatientID, text);
+    }
     return text != nullptr ? text : "<No Patient ID>";
 }
 
-static const char* get_study_text(DcmDataset& dataset) {
+static QString get_study_text(DcmDataset& dataset) {
     const char* text = nullptr;
-    dataset.findAndGetString(DCM_StudyInstanceUID, text);
+    dataset.findAndGetString(DCM_StudyDescription, text);
+
+    if(text == nullptr) {
+        dataset.findAndGetString(DCM_StudyInstanceUID, text);
+    }
     return text != nullptr ? text : "<No Study UID>";
 }
 
-static const char* get_series_text(DcmDataset& dataset) {
+static QString get_series_text(DcmDataset& dataset) {
     const char* text = nullptr;
-    dataset.findAndGetString(DCM_SeriesInstanceUID, text);
+    dataset.findAndGetString(DCM_SeriesDescription, text);
+
+    if(text == nullptr) {
+        dataset.findAndGetString(DCM_SeriesInstanceUID, text);
+    }
     return text != nullptr ? text : "<No Series UID>";
 }
 
@@ -61,22 +74,23 @@ void File_tree_model::update_model() {
 }
 
 void File_tree_model::add_items() {
-    const char* text = nullptr;
+    QString text;
     const char* id = nullptr;
 
     for(auto& file : m_files.get_files()) {
         DcmDataset& dataset = file->get_dataset();
+
         text = get_patient_text(dataset);
         dataset.findAndGetString(DCM_PatientID, id);
-        QStandardItem* patient_item = find_or_create_item<QString>(invisibleRootItem(), {text}, {id});
+        QStandardItem* patient_item = find_or_create_item<QString>(invisibleRootItem(), text, id);
 
         text = get_study_text(dataset);
         dataset.findAndGetString(DCM_StudyInstanceUID, id);
-        QStandardItem* study_item = find_or_create_item<QString>(patient_item, {text}, {id});
+        QStandardItem* study_item = find_or_create_item<QString>(patient_item, text, id);
 
         text = get_series_text(dataset);
         dataset.findAndGetString(DCM_SeriesInstanceUID, id);
-        QStandardItem* series_item = find_or_create_item<QString>(study_item, {text}, {id});
+        QStandardItem* series_item = find_or_create_item<QString>(study_item, text, id);
 
         std::string file_path = file->get_path().string();
         QStandardItem* file_item = find_or_create_item<Dicom_file*>(series_item, QString::fromStdString(file_path), file.get());
