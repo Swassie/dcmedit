@@ -107,7 +107,7 @@ void Main_view::set_startup_menu_bar() {
     QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
-    file_menu->addAction("Open folder", [this] {open_folder_clicked();});
+    file_menu->addAction("Open folder", [this] {open_folder_clicked();}, {Qt::CTRL + Qt::SHIFT + Qt::Key_O});
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
 
     QMenu* help_menu = menu_bar->addMenu("&Help");
@@ -121,10 +121,10 @@ void Main_view::set_editor_menu_bar() {
     QMenu* file_menu = menu_bar->addMenu("&File");
     file_menu->addAction("New file", [this] {new_file_clicked();}, QKeySequence::New);
     file_menu->addAction("Open files", [this] {open_files_clicked();}, QKeySequence::Open);
-    file_menu->addAction("Open folder", [this] {open_folder_clicked();});
+    file_menu->addAction("Open folder", [this] {open_folder_clicked();}, {Qt::CTRL + Qt::SHIFT + Qt::Key_O});
     file_menu->addAction("Save file", [this] {save_file_clicked();}, QKeySequence::Save);
-    file_menu->addAction("Save file as", [this] {save_file_as_clicked();}, QKeySequence::SaveAs);
-    file_menu->addAction("Save all files", [this] {save_all_files_clicked();});
+    file_menu->addAction("Save file as", [this] {save_file_as_clicked();});
+    file_menu->addAction("Save all files", [this] {save_all_files_clicked();}, {Qt::CTRL + Qt::SHIFT + Qt::Key_S});
     file_menu->addAction("Clear all files", [this] {clear_all_files_clicked();});
     file_menu->addAction("Quit", [this] {quit_clicked();}, QKeySequence::Quit);
 
