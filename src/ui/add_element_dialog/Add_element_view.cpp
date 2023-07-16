@@ -18,6 +18,7 @@ Add_element_view::Add_element_view(QWidget* parent)
     layout->addWidget(m_tag_edit);
 
     m_value_edit->setPlaceholderText("Enter value. If VM > 1, separate values with '\\'.");
+    m_value_edit->setTabChangesFocus(true);
     layout->addWidget(m_value_edit);
 
     auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

@@ -9,6 +9,7 @@ Edit_value_view::Edit_value_view(QWidget* parent)
     : QDialog(parent),
       m_value_edit(new QPlainTextEdit()) {
     auto layout = new QVBoxLayout(this);
+    m_value_edit->setTabChangesFocus(true);
     layout->addWidget(m_value_edit);
 
     auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

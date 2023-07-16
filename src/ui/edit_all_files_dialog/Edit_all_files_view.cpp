@@ -35,6 +35,7 @@ Edit_all_files_view::Edit_all_files_view(QWidget* parent)
     layout->addWidget(m_delete_button);
 
     m_value_edit->setPlaceholderText("Enter value. If VM > 1, separate values with '\\'.");
+    m_value_edit->setTabChangesFocus(true);
     layout->addWidget(m_value_edit);
 
     auto button_box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
