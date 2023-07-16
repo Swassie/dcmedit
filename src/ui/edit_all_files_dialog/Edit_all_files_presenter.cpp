@@ -45,8 +45,10 @@ void Edit_all_files_presenter::apply() {
             }
         }
         catch(const Tag_path_not_found_error& e) {
-            file_errors.push_back(file->get_path().string() +
-                "\nReason: " + std::string(e.what()));
+            if(mode == IEdit_all_files_view::Mode::add_edit) {
+                file_errors.push_back(file->get_path().string() +
+                    "\nReason: " + std::string(e.what()));
+            }
             continue;
         }
         catch(const std::exception& e) {
