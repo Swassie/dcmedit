@@ -81,6 +81,9 @@ std::unique_ptr<IEdit_value_view> Dataset_view::create_edit_value_view() {
 }
 
 QModelIndex Dataset_view::get_model_index(const QPoint& pos) {
+    if(!m_tree_view->geometry().contains(pos)) {
+        return QModelIndex();
+    }
     QPoint tree_pos = m_tree_view->viewport()->mapFrom(this, pos);
     QModelIndex proxy_index = m_tree_view->indexAt(tree_pos);
     return m_proxy_model->mapToSource(proxy_index);
