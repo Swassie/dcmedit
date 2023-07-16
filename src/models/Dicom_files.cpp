@@ -23,6 +23,9 @@ void Dicom_files::open_file(const fs::path& path) {
     }
     auto file = std::make_unique<Dicom_file>(path);
 
+    if(file->is_dicomdir()) {
+        throw std::runtime_error("DICOMDIR is not supported");
+    }
     if(replace_file != m_files.end()) {
         m_files.erase(replace_file);
     }

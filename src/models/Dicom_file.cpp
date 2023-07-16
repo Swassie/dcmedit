@@ -2,6 +2,9 @@
 
 #include "logging/Log.h"
 
+#include <dcmtk/dcmdata/dcdeftag.h>
+#include <dcmtk/dcmdata/dcmetinf.h>
+#include <dcmtk/dcmdata/dcuid.h>
 #include <dcmtk/dcmdata/dcxfer.h>
 #include <stdexcept>
 
@@ -17,6 +20,19 @@ Dicom_file::Dicom_file(const fs::path& path)
         throw std::runtime_error(status.text());
     }
     Log::debug("Loaded file: " + m_path.string());
+}
+
+bool Dicom_file::is_dicomdir() {
+    DcmMetaInfo* meta_info = m_file.getMetaInfo();
+
+    if(meta_info == nullptr) {
+        return false;
+    }
+
+    OFString media_storage;
+    meta_info->findAndGetOFString(DCM_MediaStorageSOPClassUID, media_storage);
+
+    return media_storage == UID_MediaStorageDirectoryStorage;
 }
 
 void Dicom_file::save_file() {
