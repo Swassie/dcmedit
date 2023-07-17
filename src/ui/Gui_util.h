@@ -4,4 +4,5 @@
 namespace Gui_util
 {
     inline bool is_left_mouse_pressed(const QMouseEvent& event) {return event.buttons() & Qt::LeftButton;}
+    QString get_tag_path_help();
 }

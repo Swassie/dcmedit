@@ -16,7 +16,7 @@ public:
     DcmObject* get_object(const QModelIndex&) const;
     DcmEVR get_vr(const QModelIndex&) const;
 
-    void add_element(const QModelIndex&, const DcmTag&, const std::string&);
+    void add_element(const QModelIndex&, const std::string& tag_path, const std::string& value);
     void add_item(const QModelIndex&);
     void delete_index(const QModelIndex&);
     void set_value(const QModelIndex&, const std::string&);

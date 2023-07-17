@@ -13,7 +13,7 @@ public:
     IMPLEMENT_MOCK0(show_dialog);
     IMPLEMENT_MOCK0(close_dialog);
     IMPLEMENT_MOCK2(show_error);
-    IMPLEMENT_MOCK0(tag);
+    IMPLEMENT_MOCK0(tag_path);
     IMPLEMENT_MOCK0(value);
 
     std::vector<std::unique_ptr<trompeloeil::expectation>> expect;

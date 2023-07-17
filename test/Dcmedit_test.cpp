@@ -131,7 +131,7 @@ TEST_CASE_METHOD(Dcmedit_test_fixture, "Update() is called on image view when th
         Add_element_view_mock* view_mock_ptr = view_mock.get();
         view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, show_dialog())
             .SIDE_EFFECT(view_mock_ptr->ok_clicked()));
-        view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, tag())
+        view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, tag_path())
             .RETURN("PatientID"));
         view_mock->expect.push_back(NAMED_REQUIRE_CALL(*view_mock, value())
             .RETURN("foo"));

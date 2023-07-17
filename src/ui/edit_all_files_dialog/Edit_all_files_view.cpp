@@ -1,4 +1,5 @@
 #include "ui/edit_all_files_dialog/Edit_all_files_view.h"
+#include "ui/Gui_util.h"
 
 #include <QDialogButtonBox>
 #include <QLabel>
@@ -22,6 +23,7 @@ Edit_all_files_view::Edit_all_files_view(QWidget* parent)
     connect(tag_path_label, &QLabel::linkActivated, [this] {show_tag_path_help();});
     layout->addWidget(tag_path_label);
 
+    m_tag_path_edit->setPlaceholderText("E.g. PatientName or 10,10");
     layout->addWidget(m_tag_path_edit);
 
     m_add_edit_button->setChecked(true);
@@ -94,11 +96,5 @@ Edit_all_files_view::Mode Edit_all_files_view::mode() {
 }
 
 void Edit_all_files_view::show_tag_path_help() {
-    QString text("Enter tag path. The syntax is '{sequence[item-nr].}*element', "
-        "e.g. '(0010,0010)' or '(0008,1111)[0].PatientName'. "
-        "The item number starts from zero and can be replaced by a wildcard '*', "
-        "which selects all items in a sequence. More info can be found "
-        "on https://support.dcmtk.org/docs/dcmodify.html");
-
-    QMessageBox::information(this, "Tag path", text);
+    QMessageBox::information(this, "Tag path", Gui_util::get_tag_path_help());
 }

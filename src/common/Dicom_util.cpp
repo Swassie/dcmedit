@@ -35,30 +35,30 @@ static void set_element_value(const OFList<DcmPath*>& paths, const std::string& 
 }
 
 void Dicom_util::add_or_edit_element(const std::string& tag_path, const std::string& value,
-                                     bool only_edit, DcmDataset& dataset) {
+                                     bool only_edit, DcmObject& object) {
     DcmPathProcessor path_proc;
-    OFCondition status = path_proc.findOrCreatePath(&dataset, tag_path.c_str(), !only_edit);
+    OFCondition status = path_proc.findOrCreatePath(&object, tag_path.c_str(), !only_edit);
 
     if(status.bad()) {
         throw Tag_path_not_found_error(status.text());
     }
     OFList<DcmPath*> found_paths;
     path_proc.getResults(found_paths);
-    DcmObject* object = get_object(found_paths.front());
+    DcmObject* path_object = get_object(found_paths.front());
 
-    if(object == nullptr) {
+    if(path_object == nullptr) {
         throw std::runtime_error("failed to get object");
     }
-    else if(!object->isLeaf() && (only_edit || !value.empty())) {
+    else if(!path_object->isLeaf() && (only_edit || !value.empty())) {
         throw std::runtime_error("can't set value for non-leaf element");
     }
     set_element_value(found_paths, value);
 }
 
-void Dicom_util::delete_element(const std::string& tag_path, DcmDataset& dataset) {
+void Dicom_util::delete_element(const std::string& tag_path, DcmObject& object) {
     DcmPathProcessor path_proc;
     unsigned int result_count = 0;
-    OFCondition status = path_proc.findOrDeletePath(&dataset, tag_path.c_str(), result_count);
+    OFCondition status = path_proc.findOrDeletePath(&object, tag_path.c_str(), result_count);
 
     if(status.bad()) {
         throw Tag_path_not_found_error(status.text());

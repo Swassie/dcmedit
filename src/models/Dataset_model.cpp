@@ -103,35 +103,16 @@ DcmEVR Dataset_model::get_vr(const QModelIndex& index) const {
     return object ? object->ident() : EVR_UNKNOWN;
 }
 
-void Dataset_model::add_element(const QModelIndex& index, const DcmTag& tag, const std::string& value) {
-    auto item = dynamic_cast<DcmItem*>(get_object(index));
+void Dataset_model::add_element(const QModelIndex& index, const std::string& tag_path, const std::string& value) {
+    DcmObject* object = get_object(index);
 
-    if(item == nullptr) {
-        throw std::runtime_error("failed to get item");
-    }
-    else if(tag.getEVR() == EVR_SQ && !value.empty()) {
-        throw std::runtime_error("SQ elements can't have a value");
+    if(object == nullptr) {
+        throw std::runtime_error("failed to get object");
     }
     layoutAboutToBeChanged({QPersistentModelIndex(index)});
-
-    DcmElement* element = nullptr;
-    OFCondition status = DcmItem::newDicomElement(element, tag);
-
-    if(status.good() && !value.empty()) {
-        status = element->putString(value.c_str());
-    }
-    if(status.good()) {
-        status = item->insert(element);
-    }
+    Dicom_util::add_or_edit_element(tag_path, value, false, *object);
     layoutChanged({QPersistentModelIndex(index)});
-
-    if(status.good()) {
-        mark_as_modified();
-    }
-    else {
-        delete element;
-        throw std::runtime_error(status.text());
-    }
+    mark_as_modified();
 }
 
 void Dataset_model::add_item(const QModelIndex& index) {

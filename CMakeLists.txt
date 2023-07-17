@@ -48,6 +48,7 @@ add_executable(dcmedit WIN32 MACOSX_BUNDLE
   src/models/Tool_bar.h
   src/models/Transform_tool.cpp
   src/models/Transform_tool.h
+  src/ui/Gui_util.cpp
   src/ui/Gui_util.h
   src/ui/IPresenter.h
   src/ui/IView.h

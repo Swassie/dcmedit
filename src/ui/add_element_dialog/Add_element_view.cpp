@@ -1,6 +1,9 @@
 #include "ui/add_element_dialog/Add_element_view.h"
 
+#include "ui/Gui_util.h"
+
 #include <QDialogButtonBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPlainTextEdit>
@@ -12,9 +15,12 @@ Add_element_view::Add_element_view(QWidget* parent)
       m_value_edit(new QPlainTextEdit()) {
     auto layout = new QVBoxLayout(this);
 
-    QString tag_text("Enter tag. Either by keyword (e.g. \"PatientName\") or "
-        "by group and element number (e.g. \"0010,0010\").");
-    m_tag_edit->setPlaceholderText(tag_text);
+    auto tag_path_label = new QLabel("Tag path [?](.)");
+    tag_path_label->setTextFormat(Qt::MarkdownText);
+    connect(tag_path_label, &QLabel::linkActivated, [this] {show_tag_path_help();});
+    layout->addWidget(tag_path_label);
+
+    m_tag_edit->setPlaceholderText("E.g. PatientName or 10,10");
     layout->addWidget(m_tag_edit);
 
     m_value_edit->setPlaceholderText("Enter value. If VM > 1, separate values with '\\'.");
@@ -40,10 +46,14 @@ void Add_element_view::show_error(const std::string& title, const std::string& t
     QMessageBox::critical(this, QString::fromStdString(title), QString::fromStdString(text));
 }
 
-std::string Add_element_view::tag() {
+std::string Add_element_view::tag_path() {
     return m_tag_edit->text().toStdString();
 }
 
 std::string Add_element_view::value() {
     return m_value_edit->toPlainText().toStdString();
+}
+
+void Add_element_view::show_tag_path_help() {
+    QMessageBox::information(this, "Tag path", Gui_util::get_tag_path_help());
 }
