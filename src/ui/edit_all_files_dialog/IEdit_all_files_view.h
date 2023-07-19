@@ -6,7 +6,7 @@ class IEdit_all_files_view
 public:
     virtual ~IEdit_all_files_view() = default;
 
-    enum class Mode {add_edit, edit, remove};
+    enum class Mode {set, set_existing, remove};
 
     Event<> ok_clicked;
     Event<> cancel_clicked;

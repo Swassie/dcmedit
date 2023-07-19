@@ -26,7 +26,7 @@ private:
 
     QLineEdit* m_tag_path_edit;
     QPlainTextEdit* m_value_edit;
-    QRadioButton* m_add_edit_button;
-    QRadioButton* m_edit_button;
+    QRadioButton* m_set_button;
+    QRadioButton* m_set_existing_button;
     QRadioButton* m_delete_button;
 };

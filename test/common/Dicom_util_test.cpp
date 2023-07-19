@@ -10,21 +10,21 @@
 #include <dcmtk/dcmdata/dcsequen.h>
 #include <stdexcept>
 
-TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=false") {
+TEST_CASE("Testing Dicom_util::set_element with create_if_needed=true") {
 
     DcmDataset dataset;
 
     SECTION("an empty tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("", "value", false, dataset), std::runtime_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("", "value", true, dataset), std::runtime_error);
 	}
     SECTION("an invalid tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("foo", "value", false, dataset), Tag_path_not_found_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("foo", "value", true, dataset), Tag_path_not_found_error);
 	}
     SECTION("setting a value for a non-leaf element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,6)", "value", false, dataset), std::runtime_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("(8,6)", "value", true, dataset), std::runtime_error);
     }
     SECTION("adding a new element works") {
-        Dicom_util::add_or_edit_element("(10,10)", "Marcus", false, dataset);
+        Dicom_util::set_element("(10,10)", "Marcus", true, dataset);
         const char* name = nullptr;
         OFCondition status = dataset.findAndGetString(DCM_PatientName, name);
         REQUIRE(status.good());
@@ -33,14 +33,14 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=false") {
     SECTION("changing an element works") {
         OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
         REQUIRE(status.good());
-        Dicom_util::add_or_edit_element("PatientName", "Marcus", false, dataset);
+        Dicom_util::set_element("PatientName", "Marcus", true, dataset);
         const char* name = nullptr;
         status = dataset.findAndGetString(DCM_PatientName, name);
         REQUIRE(status.good());
         CHECK(std::strcmp(name, "Marcus") == 0);
     }
     SECTION("adding a new sequence, item and element works") {
-        Dicom_util::add_or_edit_element("(8,6)[0].PatientName", "Marcus", false, dataset);
+        Dicom_util::set_element("(8,6)[0].PatientName", "Marcus", true, dataset);
         DcmItem* item = nullptr;
         OFCondition status = dataset.findAndGetSequenceItem(DCM_LanguageCodeSequence, item, 0);
         REQUIRE(status.good());
@@ -51,26 +51,26 @@ TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=false") {
     }
 }
 
-TEST_CASE("Testing Dicom_util::add_or_edit_element with only_edit=true") {
+TEST_CASE("Testing Dicom_util::set_element with create_if_needed=false") {
 
     DcmDataset dataset;
 
     SECTION("an empty tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("", "value", true, dataset), std::runtime_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("", "value", false, dataset), std::runtime_error);
 	}
     SECTION("an invalid tag path causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("foo", "value", true, dataset), Tag_path_not_found_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("foo", "value", false, dataset), Tag_path_not_found_error);
 	}
     SECTION("editing a non-leaf element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,6)", "", true, dataset), std::runtime_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("(8,6)", "", false, dataset), std::runtime_error);
     }
     SECTION("editing a non-existent element causes an exception to be thrown") {
-        CHECK_THROWS_AS(Dicom_util::add_or_edit_element("(8,8)", "value", true, dataset), Tag_path_not_found_error);
+        CHECK_THROWS_AS(Dicom_util::set_element("(8,8)", "value", false, dataset), Tag_path_not_found_error);
     }
     SECTION("editing an element works") {
         OFCondition status = dataset.putAndInsertString(DCM_PatientName, "John Doe");
         REQUIRE(status.good());
-        Dicom_util::add_or_edit_element("PatientName", "Marcus", true, dataset);
+        Dicom_util::set_element("PatientName", "Marcus", false, dataset);
         const char* name = nullptr;
         status = dataset.findAndGetString(DCM_PatientName, name);
         REQUIRE(status.good());

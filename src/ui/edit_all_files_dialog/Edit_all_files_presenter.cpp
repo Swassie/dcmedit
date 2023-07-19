@@ -34,18 +34,18 @@ void Edit_all_files_presenter::apply() {
 
     for(auto& file : m_files.get_files()) {
         try {
-            if(mode == IEdit_all_files_view::Mode::add_edit) {
-                Dicom_util::add_or_edit_element(tag_path, value, false, file->get_dataset());
+            if(mode == IEdit_all_files_view::Mode::set) {
+                Dicom_util::set_element(tag_path, value, true, file->get_dataset());
             }
-            else if(mode == IEdit_all_files_view::Mode::edit) {
-                Dicom_util::add_or_edit_element(tag_path, value, true, file->get_dataset());
+            else if(mode == IEdit_all_files_view::Mode::set_existing) {
+                Dicom_util::set_element(tag_path, value, false, file->get_dataset());
             }
             else {
                 Dicom_util::delete_element(tag_path, file->get_dataset());
             }
         }
         catch(const Tag_path_not_found_error& e) {
-            if(mode == IEdit_all_files_view::Mode::add_edit) {
+            if(mode == IEdit_all_files_view::Mode::set) {
                 file_errors.push_back(file->get_path().string() +
                     "\nReason: " + std::string(e.what()));
             }

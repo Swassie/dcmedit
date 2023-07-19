@@ -110,7 +110,7 @@ void Dataset_model::add_element(const QModelIndex& index, const std::string& tag
         throw std::runtime_error("failed to get object");
     }
     layoutAboutToBeChanged({QPersistentModelIndex(index)});
-    Dicom_util::add_or_edit_element(tag_path, value, false, *object);
+    Dicom_util::set_element(tag_path, value, true, *object);
     layoutChanged({QPersistentModelIndex(index)});
     mark_as_modified();
 }

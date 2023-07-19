@@ -13,9 +13,9 @@ Edit_all_files_view::Edit_all_files_view(QWidget* parent)
     : QDialog(parent),
       m_tag_path_edit(new QLineEdit()),
       m_value_edit(new QPlainTextEdit()),
-      m_add_edit_button(new QRadioButton("Add/edit elements")),
-      m_edit_button(new QRadioButton("Edit elements")),
-      m_delete_button(new QRadioButton("Delete elements")) {
+      m_set_button(new QRadioButton("Set element")),
+      m_set_existing_button(new QRadioButton("Set existing element")),
+      m_delete_button(new QRadioButton("Delete element")) {
     auto layout = new QVBoxLayout(this);
 
     auto tag_path_label = new QLabel("Tag path [?](.)");
@@ -26,12 +26,12 @@ Edit_all_files_view::Edit_all_files_view(QWidget* parent)
     m_tag_path_edit->setPlaceholderText("E.g. PatientName or 10,10");
     layout->addWidget(m_tag_path_edit);
 
-    m_add_edit_button->setChecked(true);
-    connect(m_add_edit_button, &QRadioButton::toggled, [this] {mode_changed();});
-    layout->addWidget(m_add_edit_button);
+    m_set_button->setChecked(true);
+    connect(m_set_button, &QRadioButton::toggled, [this] {mode_changed();});
+    layout->addWidget(m_set_button);
 
-    connect(m_edit_button, &QRadioButton::toggled, [this] {mode_changed();});
-    layout->addWidget(m_edit_button);
+    connect(m_set_existing_button, &QRadioButton::toggled, [this] {mode_changed();});
+    layout->addWidget(m_set_existing_button);
 
     connect(m_delete_button, &QRadioButton::toggled, [this] {mode_changed();});
     layout->addWidget(m_delete_button);
@@ -84,11 +84,11 @@ std::string Edit_all_files_view::value() {
 }
 
 Edit_all_files_view::Mode Edit_all_files_view::mode() {
-    if(m_add_edit_button->isChecked()) {
-        return Mode::add_edit;
+    if(m_set_button->isChecked()) {
+        return Mode::set;
     }
-    else if(m_edit_button->isChecked()) {
-        return Mode::edit;
+    else if(m_set_existing_button->isChecked()) {
+        return Mode::set_existing;
     }
     else {
         return Mode::remove;
