@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-class Progress_presenter : public Progress_token
+class Progress_presenter final : public Progress_token
 {
 public:
     Progress_presenter(IProgress_view&, const std::string& text = "");
