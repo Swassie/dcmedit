@@ -47,7 +47,7 @@ Dataset_view::Dataset_view()
     layout->addLayout(header_layout);
     layout->addWidget(m_tree_view);
 
-    auto image_action = new QAction("Image view");
+    auto image_action = new QAction("Image view", this);
     image_action->setShortcut({"1"});
     image_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(image_action, &QAction::triggered, [this] {switch_to_image_view();});

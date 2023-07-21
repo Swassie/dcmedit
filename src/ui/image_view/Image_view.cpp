@@ -10,7 +10,7 @@ Image_view::Image_view() {
     setMouseTracking(true);
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    auto dataset_action = new QAction("Dataset view");
+    auto dataset_action = new QAction("Dataset view", this);
     dataset_action->setShortcut({"2"});
     dataset_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(dataset_action, &QAction::triggered, [this] {switch_to_dataset_view();});
