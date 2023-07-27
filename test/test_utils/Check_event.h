@@ -1,13 +1,12 @@
 #pragma once
-#include "common/Event.h"
-
 #include <catch2/catch.hpp>
+#include <eventi/Event.h>
 
 template<class ... Parameters>
 class Check_event
 {
 public:
-    Check_event(Event<Parameters...>& event)
+    Check_event(eventi::Event<Parameters...>& event)
         : m_counter(0) {
         event.add_callback([this] {m_counter++;});
     }

@@ -1,10 +1,10 @@
 #include "ui/open_files_dialog/Open_files_presenter.h"
 
-#include "common/Scoped_defer.h"
 #include "models/Dicom_files.h"
 #include "ui/open_files_dialog/IOpen_files_view.h"
 #include "ui/progressbar/Progress_presenter.h"
 
+#include <eventi/Scoped_defer.h>
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -23,7 +23,7 @@ void Open_files_presenter::show_dialog() {
         return;
     }
     std::vector<std::string> file_errors;
-    Scoped_defer defer(m_dicom_files.current_file_set);
+    eventi::Scoped_defer defer(m_dicom_files.current_file_set);
     std::unique_ptr<IProgress_view> progress_view = m_view.create_progress_view();
     Progress_presenter progress_presenter(*progress_view, "Opening files");
     auto thread_func = [&] {

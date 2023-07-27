@@ -1,18 +1,18 @@
 #pragma once
-#include "common/Event.h"
 #include "ui/IView.h"
 
 #include <QMouseEvent>
 #include <QTransform>
 #include <cstdint>
+#include <eventi/Event.h>
 #include <string>
 
 class IImage_view : public IView
 {
 public:
-    Event<> draw_requested;
-    Event<QMouseEvent*> mouse_moved;
-    Event<QMouseEvent*> mouse_pressed;
+    eventi::Event<> draw_requested;
+    eventi::Event<QMouseEvent*> mouse_moved;
+    eventi::Event<QMouseEvent*> mouse_pressed;
 
     virtual void update() = 0;
     virtual void draw(const uint8_t* pixel_data, int width, int height, bool monochrome, const QTransform&) = 0;

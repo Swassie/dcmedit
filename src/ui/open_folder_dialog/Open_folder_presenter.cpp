@@ -1,11 +1,11 @@
 #include "ui/open_folder_dialog/Open_folder_presenter.h"
 
-#include "common/Scoped_defer.h"
 #include "logging/Log.h"
 #include "models/Dicom_files.h"
 #include "ui/open_folder_dialog/IOpen_folder_view.h"
 #include "ui/progressbar/Progress_presenter.h"
 
+#include <eventi/Scoped_defer.h>
 #include <exception>
 #include <filesystem>
 #include <string>
@@ -22,7 +22,7 @@ void Open_folder_presenter::show_dialog() {
     if (dir.empty()) {
         return;
     }
-    Scoped_defer defer(m_dicom_files.current_file_set);
+    eventi::Scoped_defer defer(m_dicom_files.current_file_set);
     std::unique_ptr<IProgress_view> progress_view = m_view.create_progress_view();
     Progress_presenter progress_presenter(*progress_view, "Opening folder");
     auto thread_func = [&] {

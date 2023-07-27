@@ -1,11 +1,11 @@
 #pragma once
-#include "common/Scoped_callbacks.h"
 #include "models/Dataset_model.h"
 #include "models/Tool_bar.h"
 #include "models/Transform_tool.h"
 #include "ui/IPresenter.h"
 #include "ui/image_view/IImage_view.h"
 
+#include <eventi/Scoped_callbacks.h>
 #include <QMouseEvent>
 
 class Image_presenter : public IPresenter
@@ -25,5 +25,5 @@ private:
     Dataset_model& m_dataset_model;
     Tool_bar& m_tool_bar;
     Transform_tool m_transform_tool;
-    Scoped_callbacks m_scoped_callbacks;
+    eventi::Scoped_callbacks m_scoped_callbacks;
 };

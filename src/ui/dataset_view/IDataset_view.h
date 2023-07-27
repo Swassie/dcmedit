@@ -1,10 +1,11 @@
 #pragma once
-#include "common/Event.h"
 #include "models/Dataset_model.h"
 #include "ui/IView.h"
 #include "ui/add_element_dialog/IAdd_element_view.h"
 #include "ui/edit_value_dialog/IEdit_value_view.h"
 
+
+#include <eventi/Event.h>
 #include <memory>
 #include <QModelIndex>
 #include <QPoint>
@@ -12,16 +13,16 @@
 class IDataset_view : public IView
 {
 public:
-    Event<const QModelIndex&> add_element_clicked;
-    Event<const QModelIndex&> add_item_clicked;
-    Event<const QModelIndex&> delete_item_clicked;
-    Event<const QModelIndex&> delete_sq_clicked;
-    Event<const QModelIndex&> delete_element_clicked;
-    Event<const QModelIndex&> edit_value_clicked;
-    Event<const QModelIndex&> save_value_to_file_clicked;
-    Event<const QModelIndex&> load_value_from_file_clicked;
-    Event<const QModelIndex&> element_activated;
-    Event<const QPoint&> context_menu_requested;
+    eventi::Event<const QModelIndex&> add_element_clicked;
+    eventi::Event<const QModelIndex&> add_item_clicked;
+    eventi::Event<const QModelIndex&> delete_item_clicked;
+    eventi::Event<const QModelIndex&> delete_sq_clicked;
+    eventi::Event<const QModelIndex&> delete_element_clicked;
+    eventi::Event<const QModelIndex&> edit_value_clicked;
+    eventi::Event<const QModelIndex&> save_value_to_file_clicked;
+    eventi::Event<const QModelIndex&> load_value_from_file_clicked;
+    eventi::Event<const QModelIndex&> element_activated;
+    eventi::Event<const QPoint&> context_menu_requested;
 
     virtual void set_model(Dataset_model&) = 0;
     virtual void show_error(const std::string& title, const std::string& text) = 0;

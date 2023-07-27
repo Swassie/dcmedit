@@ -1,11 +1,11 @@
 #pragma once
-#include "common/Event.h"
+#include <eventi/Event.h>
 
 class IView
 {
 public:
     virtual ~IView() = default;
 
-    Event<> switch_to_dataset_view;
-    Event<> switch_to_image_view;
+    eventi::Event<> switch_to_dataset_view;
+    eventi::Event<> switch_to_image_view;
 };

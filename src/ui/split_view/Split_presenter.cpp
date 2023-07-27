@@ -1,5 +1,6 @@
 #include "ui/split_view/Split_presenter.h"
 
+#include "logging/Log.h"
 #include "ui/dataset_view/Dataset_presenter.h"
 #include "ui/image_view/Image_presenter.h"
 #include "ui/split_view/ISplit_view.h"

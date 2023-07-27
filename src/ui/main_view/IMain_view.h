@@ -1,5 +1,4 @@
 #pragma once
-#include "common/Event.h"
 #include "ui/edit_all_files_dialog/IEdit_all_files_view.h"
 #include "ui/file_tree_view/IFile_tree_view.h"
 #include "ui/new_file_dialog/INew_file_view.h"
@@ -8,6 +7,7 @@
 #include "ui/progressbar/IProgress_view.h"
 #include "ui/split_view/ISplit_view.h"
 
+#include <eventi/Event.h>
 #include <filesystem>
 #include <string>
 
@@ -18,21 +18,21 @@ class IMain_view
 public:
     virtual ~IMain_view() = default;
 
-    Event<> new_file_clicked;
-    Event<> open_files_clicked;
-    Event<> open_folder_clicked;
-    Event<> save_file_clicked;
-    Event<> save_file_as_clicked;
-    Event<> save_all_files_clicked;
-    Event<> clear_all_files_clicked;
-    Event<> quit_clicked;
-    Event<int> set_view_count_clicked;
-    Event<> edit_all_files_clicked;
-    Event<> about_clicked;
+    eventi::Event<> new_file_clicked;
+    eventi::Event<> open_files_clicked;
+    eventi::Event<> open_folder_clicked;
+    eventi::Event<> save_file_clicked;
+    eventi::Event<> save_file_as_clicked;
+    eventi::Event<> save_all_files_clicked;
+    eventi::Event<> clear_all_files_clicked;
+    eventi::Event<> quit_clicked;
+    eventi::Event<int> set_view_count_clicked;
+    eventi::Event<> edit_all_files_clicked;
+    eventi::Event<> about_clicked;
 
-    Event<> reset_layout_clicked;
-    Event<> pan_tool_selected;
-    Event<> zoom_tool_selected;
+    eventi::Event<> reset_layout_clicked;
+    eventi::Event<> pan_tool_selected;
+    eventi::Event<> zoom_tool_selected;
 
     virtual void set_startup_view() = 0;
     virtual void set_editor_view() = 0;

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "configurePresets": [
+    {
+      "name": "gcc-clang",
+      "displayName": "GCC/Clang",
+      "description": "Default build options for GCC/Clang",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -pedantic -Werror"
+      }
+    },
+    {
+      "name": "msvc",
+      "displayName": "MSVC",
+      "description": "Default build options for MSVC",
+      "generator": "Visual Studio 16 2019",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "/W4 /WX /EHsc"
+      }
+    }
+  ]
+}

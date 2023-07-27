@@ -1,13 +1,13 @@
 #pragma once
-#include "common/Event.h"
+#include <eventi/Event.h>
 
 class IAdd_element_view
 {
 public:
     virtual ~IAdd_element_view() = default;
 
-    Event<> ok_clicked;
-    Event<> cancel_clicked;
+    eventi::Event<> ok_clicked;
+    eventi::Event<> cancel_clicked;
 
     virtual void show_dialog() = 0;
     virtual void close_dialog() = 0;

@@ -1,24 +1,12 @@
-find_package(Catch2 REQUIRED)
-find_package(trompeloeil REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
+find_package(trompeloeil CONFIG REQUIRED)
 
 add_executable(unit-test
   ../src/common/App_info.h
-  ../src/common/Callback_ref.cpp
-  ../src/common/Callback_ref.h
   ../src/common/Dicom_util.cpp
   ../src/common/Dicom_util.h
-  ../src/common/Event.h
-  ../src/common/Event_exceptions.cpp
-  ../src/common/Event_exceptions.h
   ../src/common/Exceptions.cpp
   ../src/common/Exceptions.h
-  ../src/common/IEvent.h
-  ../src/common/Scoped_callbacks.cpp
-  ../src/common/Scoped_callbacks.h
-  ../src/common/Scoped_defer.cpp
-  ../src/common/Scoped_defer.h
-  ../src/common/Scoped_disable.cpp
-  ../src/common/Scoped_disable.h
   ../src/logging/Console_logger.cpp
   ../src/logging/Console_logger.h
   ../src/logging/Log.cpp
@@ -82,11 +70,6 @@ add_executable(unit-test
   Dcmedit_test.cpp
   Fake_version.cpp
   common/Dicom_util_test.cpp
-  common/Callback_ref_test.cpp
-  common/Event_test.cpp
-  common/Scoped_callbacks_test.cpp
-  common/Scoped_defer_test.cpp
-  common/Scoped_disable_test.cpp
   models/Dicom_files_test.cpp
   models/Transform_tool_test.cpp
   test_constants.h
@@ -96,13 +79,7 @@ add_executable(unit-test
 )
 
 target_compile_definitions(unit-test PRIVATE DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test_data/")
-
-if(MSVC)
-  target_compile_options(unit-test PRIVATE /W4 /WX)
-else()
-  target_compile_options(unit-test PRIVATE -Wall -Wextra -pedantic -Werror)
-endif()
-
+target_compile_features(unit-test PRIVATE cxx_std_17)
 target_include_directories(unit-test PRIVATE
   .
   ../src
@@ -110,6 +87,7 @@ target_include_directories(unit-test PRIVATE
 )
 
 target_link_libraries(unit-test
+  eventi
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
   Catch2::Catch2

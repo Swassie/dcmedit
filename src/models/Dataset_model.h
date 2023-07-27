@@ -2,6 +2,7 @@
 #include "models/Dicom_files.h"
 
 #include <dcmtk/dcmdata/dcvr.h>
+#include <eventi/Event.h>
 #include <QAbstractItemModel>
 
 class Dataset_model : public QAbstractItemModel
@@ -10,7 +11,7 @@ class Dataset_model : public QAbstractItemModel
 public:
     Dataset_model(Dicom_files&);
 
-    Event<> dataset_changed;
+    eventi::Event<> dataset_changed;
 
     DcmItem* get_dataset() const;
     DcmObject* get_object(const QModelIndex&) const;

@@ -1,6 +1,5 @@
 #include "ui/image_view/Image_presenter.h"
 
-#include "common/Callback_ref.h"
 #include "models/Dataset_model.h"
 #include "models/Tool_bar.h"
 #include "ui/image_view/IImage_view.h"
@@ -8,6 +7,7 @@
 #include <dcmtk/dcmdata/dcitem.h>
 #include <dcmtk/dcmimage/diregist.h>
 #include <dcmtk/dcmimgle/dcmimage.h>
+#include <eventi/Callback_ref.h>
 #include <QTransform>
 #include <string>
 
@@ -21,7 +21,7 @@ Image_presenter::Image_presenter(IImage_view& view,
 }
 
 void Image_presenter::setup_event_callbacks() {
-    Callback_ref callback = m_dataset_model.dataset_changed.add_callback([this] {update();});
+    eventi::Callback_ref callback = m_dataset_model.dataset_changed.add_callback([this] {update();});
     m_scoped_callbacks.add_to_scope(callback);
 
     m_view.draw_requested.add_callback([this] {draw();});

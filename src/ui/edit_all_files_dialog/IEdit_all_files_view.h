@@ -1,5 +1,5 @@
 #pragma once
-#include "common/Event.h"
+#include <eventi/Event.h>
 
 class IEdit_all_files_view
 {
@@ -8,9 +8,9 @@ public:
 
     enum class Mode {set, set_existing, remove};
 
-    Event<> ok_clicked;
-    Event<> cancel_clicked;
-    Event<> mode_changed;
+    eventi::Event<> ok_clicked;
+    eventi::Event<> cancel_clicked;
+    eventi::Event<> mode_changed;
 
     virtual void show_dialog() = 0;
     virtual void close_dialog() = 0;

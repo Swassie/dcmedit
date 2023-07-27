@@ -1,8 +1,8 @@
 #pragma once
-#include "common/Event.h"
 #include "common/Progress_token.h"
 #include "Dicom_file.h"
 
+#include <eventi/Event.h>
 #include <filesystem>
 #include <memory>
 #include <vector>
@@ -14,9 +14,9 @@ class Dicom_files
 public:
     Dicom_files();
 
-    Event<> current_file_set;
-    Event<> file_saved;
-    Event<> all_files_edited;
+    eventi::Event<> current_file_set;
+    eventi::Event<> file_saved;
+    eventi::Event<> all_files_edited;
 
     void create_new_file(const fs::path&);
     void open_file(const fs::path&);

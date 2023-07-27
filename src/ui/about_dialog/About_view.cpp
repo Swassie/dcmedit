@@ -60,6 +60,9 @@ This program includes the following free and open-source software (FOSS) librari
 Copyright (C) 1994-2019, OFFIS e.V.<br>
 All rights reserved.
 
+<h3>eventi</h3>
+Copyright 2023 Marcus Swanson
+
 <h3>Material icons</h3>
 The Material icons are available under Apache license version 2.0.
 

@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15)
 project(dcmedit)
 
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -9,26 +8,23 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(DCMTK CONFIG REQUIRED)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    eventi
+    GIT_REPOSITORY https://github.com/Swassie/eventi.git
+    GIT_TAG e74332bdf7f1e9159014934f310b4579024eba54)
+
+FetchContent_MakeAvailable(eventi)
+
 add_executable(dcmedit WIN32 MACOSX_BUNDLE
   assets/assets.qrc
   src/common/App_info.cpp
   src/common/App_info.h
-  src/common/Callback_ref.cpp
-  src/common/Callback_ref.h
   src/common/Dicom_util.cpp
   src/common/Dicom_util.h
-  src/common/Event.h
-  src/common/Event_exceptions.cpp
-  src/common/Event_exceptions.h
   src/common/Exceptions.cpp
   src/common/Exceptions.h
-  src/common/IEvent.h
-  src/common/Scoped_callbacks.cpp
-  src/common/Scoped_callbacks.h
-  src/common/Scoped_defer.cpp
-  src/common/Scoped_defer.h
-  src/common/Scoped_disable.cpp
-  src/common/Scoped_disable.h
   src/logging/Console_logger.cpp
   src/logging/Console_logger.h
   src/logging/Log.cpp
@@ -129,15 +125,10 @@ add_custom_command(
   VERBATIM
 )
 
+target_compile_features(dcmedit PRIVATE cxx_std_17)
 set_target_properties(dcmedit PROPERTIES
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/macOS.plist"
 )
-
-if(MSVC)
-  target_compile_options(dcmedit PRIVATE /W4 /WX)
-else()
-  target_compile_options(dcmedit PRIVATE -Wall -Wextra -pedantic -Werror)
-endif()
 
 target_include_directories(dcmedit PRIVATE
   src
@@ -145,6 +136,7 @@ target_include_directories(dcmedit PRIVATE
 )
 
 target_link_libraries(dcmedit
+  eventi
   Qt5::Widgets
   "${DCMTK_LIBRARIES}"
 )
